@@ -22,9 +22,6 @@
 
 package at.univie.seattlesensors.sensors;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -43,6 +40,13 @@ public class LocationSensor extends AbstractSensor {
 
 	public LocationSensor(Context context) {
 		super(context);
+
+		enable();
+	}
+	
+
+	@Override
+	public void enable() {
 
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {
@@ -80,20 +84,17 @@ public class LocationSensor extends AbstractSensor {
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 				0, locationListener);
 		// locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-		// 0, 0, locationListener);
+		// 0, 0, locationListener);	
+		
+		enabled = true;
+		
 	}
 
 	@Override
 	public void disable() {
 		if (locationManager != null)
 			locationManager.removeUpdates(locationListener);
-	}
-
-	@Override
-	public List<String> getMethods() {
-		List<String> methods = new LinkedList<String>();
-		methods.add("locationInformation");
-		return methods;
+		enabled = false;
 	}
 
 	@Override
@@ -112,7 +113,15 @@ public class LocationSensor extends AbstractSensor {
 		
 		return new Object[]{};
 	}
-
+	
+	@XMLRPCMethod
+	public Object[] locationInformation(){
+		if(location != null){
+			return new Object[] {"timestamp", timestamp, "provider", location.getProvider(), "timestamp_fix", location.getTime(), "long", location.getLongitude(), "lat", location.getLatitude(), "alt", location.getAltitude(), "bearing", location.getBearing(), "speed", location.getSpeed(), "accuracy", location.getAccuracy()};
+		}
+		return null;
+	}
+			
 	@Override
 	public Object[] callMethod(String methodname) {
 		if(methodname.equals("locationInformation")){
@@ -120,5 +129,6 @@ public class LocationSensor extends AbstractSensor {
 		}
 		return new Object[]{};
 	}
+
 
 }

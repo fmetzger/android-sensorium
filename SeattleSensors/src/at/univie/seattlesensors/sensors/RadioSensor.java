@@ -46,6 +46,14 @@ public class RadioSensor extends AbstractSensor {
 	public RadioSensor(Context context){
 		super(context);
 		
+		enable();
+
+	}
+
+
+	@Override
+	public void enable() {
+		
 		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
 		
 		SensorRegistry.getInstance().debugOut("RadioSensor starting");
@@ -75,9 +83,9 @@ public class RadioSensor extends AbstractSensor {
 		telephonyManager.listen(phoneStateListener,
 				PhoneStateListener.LISTEN_CELL_LOCATION
 						| PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		
+		this.enabled = true;
 	}
-
-	
 
 	@Override
 	public void disable() {
@@ -86,17 +94,9 @@ public class RadioSensor extends AbstractSensor {
 			telephonyManager.listen(phoneStateListener,
 					PhoneStateListener.LISTEN_NONE);
 		}
+		
+		this.enabled = false;
 
-	}
-
-	/**
-	 * Hardcoded method list, should be dynamic in the future
-	 */
-	@Override
-	public List<String> getMethods() {
-		List<String> methods = new LinkedList<String>();
-		methods.add("cellInformation");
-		return methods;
 	}
 
 	
@@ -116,6 +116,14 @@ public class RadioSensor extends AbstractSensor {
 		}
 		
 		return new Object[]{};
+	}
+	
+	
+	@XMLRPCMethod
+	public Object[] cellInformation(){
+		if(telephonyManager != null && gsmCell != null)
+			return new Object[] {"timestamp", timestamp, "mcc+mnc", telephonyManager.getNetworkOperator(), "lac", gsmCell.getLac(), "cid", gsmCell.getCid()};
+		return null;
 	}
 
 	/**

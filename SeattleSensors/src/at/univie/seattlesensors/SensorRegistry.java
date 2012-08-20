@@ -22,11 +22,14 @@
 
 package at.univie.seattlesensors;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
+import at.univie.seattlesensors.sensors.XMLRPCMethod;
 
 public class SensorRegistry {
 
@@ -62,11 +65,28 @@ public class SensorRegistry {
 		}
 	}
 	
+//	public List<String> getSensorMethods(){
+//		List<String> out = new LinkedList<String>();
+//		
+//		for (AbstractSensor sensor: sensors){
+//			out.addAll(sensor.getMethods());
+//		}
+//		
+//		return out;
+//	}
+	
 	public List<String> getSensorMethods(){
 		List<String> out = new LinkedList<String>();
 		
 		for (AbstractSensor sensor: sensors){
-			out.addAll(sensor.getMethods());
+			if (sensor.isEnabled()){
+				Method [] methods = sensor.getClass().getMethods();
+				for (Method m: methods){
+					Log.d("REFLECTIONTEST",m.getName());
+					if (m.isAnnotationPresent(XMLRPCMethod.class))
+						out.add(m.getName());
+				}
+			}
 		}
 		
 		return out;

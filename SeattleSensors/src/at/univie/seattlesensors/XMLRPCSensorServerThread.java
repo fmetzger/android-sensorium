@@ -84,12 +84,7 @@ public class XMLRPCSensorServerThread  implements Runnable{
 				}
 
 				else if (name.equals("system.listMethods")){
-					ArrayList<Object> params = call.getParams();
-					if (params.size() > 0 )
-					{
-						server.respond(client, sensorregistry.getSensorMethodSignature((String) params.get(0)));
-					} else
-						server.respond(client, new Object[]{"Too few arguments"});
+					server.respond(client, sensorregistry.getSensorMethods().toArray());
 				}
 				else {
 					Object [] methodresult = sensorregistry.callSensorMethod(name);

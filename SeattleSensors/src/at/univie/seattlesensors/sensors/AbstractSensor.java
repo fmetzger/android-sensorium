@@ -29,19 +29,24 @@ import android.content.Context;
 public abstract class AbstractSensor {
 	
 	protected Context context;
+	protected boolean enabled = false;
 	
 	public AbstractSensor(Context context){
 		this.context = context;
 	}
 	
-	public abstract void disable();
+	public abstract void enable();
 	
-	public abstract List<String> getMethods();
+	public abstract void disable();
 	
 	public abstract boolean hasMethod(String methodname);
 	
 	public abstract Object[] methodSignature(String methodname);
 	
 	public abstract Object[] callMethod(String methodname);
+	
+	public boolean isEnabled(){
+		return enabled;
+	}
 
 }
