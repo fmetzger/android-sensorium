@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">SeattleSensors</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">SeattleSensors</string>
+    <string name="enable_sensors">Enable</string>
+    <string name="disable_sensors">Disable</string>
+    <string name="sensoroutput">Sensor output TextView</string>
+
+</resources>
