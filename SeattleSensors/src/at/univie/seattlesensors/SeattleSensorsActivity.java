@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
+import at.univie.seattlesensors.sensors.LocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
 public class SeattleSensorsActivity extends Activity {
@@ -48,6 +49,7 @@ public class SeattleSensorsActivity extends Activity {
 		
 
 		sensorregistry.registerSensor(new RadioSensor(context));
+		sensorregistry.registerSensor(new LocationSensor(context));
 		
 		
 		Thread localServerThread = new Thread(new XMLRPCSensorServerThread());

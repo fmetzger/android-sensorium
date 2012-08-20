@@ -34,11 +34,10 @@ import at.univie.seattlesensors.sensors.XMLRPCMethod;
 public class SensorRegistry {
 
 	private static SensorRegistry instance = null;
-	
+
 	private List<AbstractSensor> sensors;
 	private TextView textoutput;
-	
-	
+
 	protected SensorRegistry() {
 		sensors = new LinkedList<AbstractSensor>();
 
@@ -50,70 +49,98 @@ public class SensorRegistry {
 		}
 		return instance;
 	}
-	
-	public void registerSensor(AbstractSensor sensor){
+
+	public void registerSensor(AbstractSensor sensor) {
 		sensors.add(sensor);
 	}
-	
-	public void disableSensor(AbstractSensor sensor){
+
+	public void disableSensor(AbstractSensor sensor) {
 		// NYI
 	}
-	
-	public void disableAllSensors(){
-		for (AbstractSensor sensor: sensors){
+
+	public void disableAllSensors() {
+		for (AbstractSensor sensor : sensors) {
 			sensor.disable();
 		}
 	}
-	
-//	public List<String> getSensorMethods(){
-//		List<String> out = new LinkedList<String>();
-//		
-//		for (AbstractSensor sensor: sensors){
-//			out.addAll(sensor.getMethods());
-//		}
-//		
-//		return out;
-//	}
-	
-	public List<String> getSensorMethods(){
+
+	// public List<String> getSensorMethods(){
+	// List<String> out = new LinkedList<String>();
+	//
+	// for (AbstractSensor sensor: sensors){
+	// out.addAll(sensor.getMethods());
+	// }
+	//
+	// return out;
+	// }
+
+	public List<String> getSensorMethods() {
 		List<String> out = new LinkedList<String>();
-		
-		for (AbstractSensor sensor: sensors){
-			if (sensor.isEnabled()){
-				Method [] methods = sensor.getClass().getMethods();
-				for (Method m: methods){
-					Log.d("REFLECTIONTEST",m.getName());
+
+		for (AbstractSensor sensor : sensors) {
+			if (sensor.isEnabled()) {
+				Method[] methods = sensor.getClass().getMethods();
+				for (Method m : methods) {
+					Log.d("REFLECTIONTEST", m.getName());
 					if (m.isAnnotationPresent(XMLRPCMethod.class))
 						out.add(m.getName());
 				}
 			}
 		}
-		
+
 		return out;
 	}
-	
-	public Object[] getSensorMethodSignature(String methodname){
-		for (AbstractSensor sensor: sensors){
-			if (sensor.hasMethod(methodname))
-				return sensor.methodSignature(methodname);
+
+	public Object[] getSensorMethodSignature(String methodname) {
+
+		List<String> signature = new LinkedList<String>();
+
+		for (AbstractSensor sensor : sensors) {
+			if (sensor.isEnabled()) {
+				Method[] methods = sensor.getClass().getMethods();
+				for (Method m : methods) {
+					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
+						if (m.getName().equals(methodname)) {
+							Class<?>[] params = m.getParameterTypes();
+							Class<?> rettype = m.getReturnType();
+							
+							if(rettype.toString().equals("class [Ljava.lang.Object;")){
+								signature.add("array");
+							} else {
+								signature.add(rettype.toString());
+							}
+							
+							if(params != null && params.length != 0){
+								for (Class<?> c : params) {
+									signature.add(c.toString());
+								}								
+							} else {
+								signature.add("nil");
+							}
+
+							return signature.toArray();
+						}
+					}
+				}
+			}
 		}
 		return null;
 	}
-	
-	public Object[] callSensorMethod(String methodname){
-		
-		for (AbstractSensor sensor: sensors){
+
+	public Object[] callSensorMethod(String methodname) {
+
+		for (AbstractSensor sensor : sensors) {
 			if (sensor.hasMethod(methodname))
 				return sensor.callMethod(methodname);
 		}
 		return null;
 	}
-	
-	public void debugOut(String out){
+
+	public void debugOut(String out) {
 		textoutput.append(out);
 	}
-	
-	public void setDebugView(TextView t){
+
+	public void setDebugView(TextView t) {
 		this.textoutput = t;
 	}
 }
