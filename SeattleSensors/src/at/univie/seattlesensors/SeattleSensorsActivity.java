@@ -33,6 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
+import at.univie.seattlesensors.sensors.BatterySensor;
 import at.univie.seattlesensors.sensors.LocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
@@ -55,6 +56,7 @@ public class SeattleSensorsActivity extends Activity {
 
 		sensorregistry.registerSensor(new RadioSensor(context));
 		sensorregistry.registerSensor(new LocationSensor(context));
+		sensorregistry.registerSensor(new BatterySensor(context));
 		
 		
 		ListView sensorConfigList = (ListView) findViewById(R.id.sensorConfigListView);

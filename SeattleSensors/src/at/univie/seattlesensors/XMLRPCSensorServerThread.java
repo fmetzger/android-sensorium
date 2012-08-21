@@ -45,14 +45,10 @@ public class XMLRPCSensorServerThread  implements Runnable{
 
 		try {
 			InetAddress localhost = InetAddress.getLocalHost();
-			//Log.d("SeattleSensors:", localhost.getHostAddress());
-
 			ServerSocket socket = new ServerSocket(SOCKET_PORT, 10, localhost);
-
 			XMLRPCServer server = new XMLRPCServer();
 			
 			SensorRegistry sensorregistry = SensorRegistry.getInstance();
-			
 			
 			while (true) {
 				Socket client = socket.accept();

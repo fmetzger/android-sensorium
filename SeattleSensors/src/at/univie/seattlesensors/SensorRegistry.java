@@ -68,7 +68,7 @@ public class SensorRegistry {
 			if (sensor.isEnabled()) {
 				Method[] methods = sensor.getClass().getMethods();
 				for (Method m : methods) {
-					Log.d("REFLECTIONTEST", m.getName());
+//					Log.d("REFLECTIONTEST", m.getName());
 					if (m.isAnnotationPresent(XMLRPCMethod.class))
 						out.add(m.getName());
 				}

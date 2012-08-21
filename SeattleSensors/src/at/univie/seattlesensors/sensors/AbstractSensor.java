@@ -27,7 +27,7 @@ import android.content.Context;
 public abstract class AbstractSensor {
 	
 	protected Context context;
-	protected boolean enabled = false;
+	private boolean enabled = false;
 	protected String description = "";
 	protected String name = "";
 	
@@ -35,9 +35,13 @@ public abstract class AbstractSensor {
 		this.context = context;
 	}
 	
-	public abstract void enable();
+	public void enable(){
+		enabled = true;
+	}
 	
-	public abstract void disable();
+	public void disable(){
+		enabled = false;
+	}
 	
 	public void toggle(){
 		if(enabled)

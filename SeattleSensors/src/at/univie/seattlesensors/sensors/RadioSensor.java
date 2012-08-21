@@ -82,7 +82,7 @@ public class RadioSensor extends AbstractSensor {
 				PhoneStateListener.LISTEN_CELL_LOCATION
 						| PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 		
-		this.enabled = true;
+		super.enable();
 	}
 
 	@Override
@@ -93,8 +93,7 @@ public class RadioSensor extends AbstractSensor {
 					PhoneStateListener.LISTEN_NONE);
 		}
 		
-		this.enabled = false;
-
+		super.disable();
 	}
 
 	@XMLRPCMethod

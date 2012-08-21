@@ -48,7 +48,7 @@ public class LocationSensor extends AbstractSensor {
 
 	@Override
 	public void enable() {
-
+		
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {
 				location = loc;
@@ -86,16 +86,15 @@ public class LocationSensor extends AbstractSensor {
 				0, locationListener);
 		// locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
 		// 0, 0, locationListener);	
-		
-		enabled = true;
-		
+		super.enable();
 	}
 
 	@Override
 	public void disable() {
+		super.disable();
 		if (locationManager != null)
 			locationManager.removeUpdates(locationListener);
-		enabled = false;
+		super.disable();
 	}
 
 	@XMLRPCMethod
