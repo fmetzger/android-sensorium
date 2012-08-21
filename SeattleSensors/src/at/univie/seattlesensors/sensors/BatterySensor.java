@@ -16,7 +16,7 @@ public class BatterySensor extends AbstractSensor {
 	private int scale = -1;
 	private int plugged = -1;
 	private int temperature = -1;
-	private double voltage = -1;
+	private int voltage = -1;
 	private String technology = "";
 
 	public BatterySensor(Context context) {
@@ -55,8 +55,28 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public Object [] batteryVoltage(){
-		return new Object [] {voltage};
+	public int batteryVoltage(){
+		return voltage;
+	}
+	
+	@XMLRPCMethod
+	public String batteryTechnology(){
+		return technology;
+	}
+	
+	@XMLRPCMethod
+	public int batteryTemperature(){
+		return temperature;
+	}
+	
+	@XMLRPCMethod
+	public int batteryPlugged(){
+		return plugged;
+	}
+	
+	@XMLRPCMethod
+	public int batteryLevel(){
+		return rawlevel;
 	}
 	
 	@XMLRPCMethod
