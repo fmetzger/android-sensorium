@@ -52,6 +52,12 @@ public class SensorRegistry {
 	}
 
 	public void registerSensor(AbstractSensor sensor) {
+		for(AbstractSensor s: sensors){
+			if(s.getClass().equals(sensor.getClass())){
+				Log.d("SeattleSensors", "Sensor of this class already present, not registering.");
+				return;
+			}
+		}
 		sensors.add(sensor);
 	}
 
