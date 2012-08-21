@@ -22,9 +22,6 @@
 
 package at.univie.seattlesensors.sensors;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
@@ -45,6 +42,7 @@ public class RadioSensor extends AbstractSensor {
 	
 	public RadioSensor(Context context){
 		super(context);
+		name = "Radio Cell Info Sensor";
 		
 		enable();
 
@@ -99,41 +97,10 @@ public class RadioSensor extends AbstractSensor {
 
 	}
 
-	
-	@Override
-	public boolean hasMethod(String methodname) {
-		if(methodname.equals("cellInformation")){
-			return true;
-		}
-		return false;
-	}
-	
-	
-	@Override
-	public Object[] methodSignature(String methodname) {
-		if(methodname.equals("cellInformation")){
-			return new Object[]{"array", "nil"};
-		}
-		
-		return new Object[]{};
-	}
-	
-	
 	@XMLRPCMethod
 	public Object[] cellInformation(){
 		if(telephonyManager != null && gsmCell != null)
 			return new Object[] {"timestamp", timestamp, "mcc+mnc", telephonyManager.getNetworkOperator(), "lac", gsmCell.getLac(), "cid", gsmCell.getCid()};
 		return null;
-	}
-
-	/**
-	 * Hardcoded switch'd method calling, should use introspection in the future
-	 */
-	@Override
-	public Object[] callMethod(String methodname) {
-		if(methodname.equals("cellInformation")){
-			return new Object[] {"timestamp", timestamp, "mcc+mnc", telephonyManager.getNetworkOperator(), "lac", gsmCell.getLac(), "cid", gsmCell.getCid()};
-		}
-		return new Object[]{};
 	}
 }

@@ -41,6 +41,7 @@ public class LocationSensor extends AbstractSensor {
 	public LocationSensor(Context context) {
 		super(context);
 
+		name = "GPS/Network Loc Sensor";
 		enable();
 	}
 	
@@ -97,23 +98,6 @@ public class LocationSensor extends AbstractSensor {
 		enabled = false;
 	}
 
-	@Override
-	public boolean hasMethod(String methodname) {
-		if(methodname.equals("locationInformation")){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public Object[] methodSignature(String methodname) {
-		if(methodname.equals("locationInformation")){
-			return new Object[]{"array", "nil"};
-		}
-		
-		return new Object[]{};
-	}
-	
 	@XMLRPCMethod
 	public Object[] locationInformation(){
 		if(location != null){
@@ -121,14 +105,4 @@ public class LocationSensor extends AbstractSensor {
 		}
 		return null;
 	}
-			
-	@Override
-	public Object[] callMethod(String methodname) {
-		if(methodname.equals("locationInformation")){
-			return new Object[] {"timestamp", timestamp, "provider", location.getProvider(), "timestamp_fix", location.getTime(), "long", location.getLongitude(), "lat", location.getLatitude(), "alt", location.getAltitude(), "bearing", location.getBearing(), "speed", location.getSpeed(), "accuracy", location.getAccuracy()};
-		}
-		return new Object[]{};
-	}
-
-
 }

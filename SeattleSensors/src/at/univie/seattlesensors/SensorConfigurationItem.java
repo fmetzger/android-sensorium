@@ -20,49 +20,35 @@
  * 
  */
 
-package at.univie.seattlesensors.sensors;
 
-import android.content.Context;
+package at.univie.seattlesensors;
 
-public abstract class AbstractSensor {
-	
-	protected Context context;
-	protected boolean enabled = false;
-	protected String description = "";
-	protected String name = "";
-	
-	public AbstractSensor(Context context){
-		this.context = context;
-	}
-	
-	public abstract void enable();
-	
-	public abstract void disable();
-	
-	public void toggle(){
-		if(enabled)
-			disable();
-		else
-			enable();
-	}
-	
-	public void setState(boolean newState){
-		if(newState && !enabled)
-			enable();
-		else if (!newState && enabled)
-			disable();
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+public class SensorConfigurationItem {
+
+	private CheckBox checkBox;
+	private TextView textView;
+
+	public SensorConfigurationItem(TextView textView, CheckBox checkBox) {
+		this.checkBox = checkBox;
+		this.textView = textView;
 	}
 
-	public boolean isEnabled(){
-		return enabled;
-	}
-	
-	public String getDescription(){
-		return description;
-	}
-	
-	public String getName(){
-		return name;
+	public CheckBox getCheckBox() {
+		return checkBox;
 	}
 
+	public void setCheckBox(CheckBox checkBox) {
+		this.checkBox = checkBox;
+	}
+
+	public TextView getTextView() {
+		return textView;
+	}
+
+	public void setTextView(TextView textView) {
+		this.textView = textView;
+	}
 }

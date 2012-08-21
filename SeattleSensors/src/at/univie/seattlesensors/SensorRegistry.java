@@ -22,6 +22,7 @@
 
 package at.univie.seattlesensors;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,16 +64,6 @@ public class SensorRegistry {
 			sensor.disable();
 		}
 	}
-
-	// public List<String> getSensorMethods(){
-	// List<String> out = new LinkedList<String>();
-	//
-	// for (AbstractSensor sensor: sensors){
-	// out.addAll(sensor.getMethods());
-	// }
-	//
-	// return out;
-	// }
 
 	public List<String> getSensorMethods() {
 		List<String> out = new LinkedList<String>();
@@ -126,12 +117,31 @@ public class SensorRegistry {
 		}
 		return null;
 	}
-
+	
 	public Object[] callSensorMethod(String methodname) {
 
 		for (AbstractSensor sensor : sensors) {
-			if (sensor.hasMethod(methodname))
-				return sensor.callMethod(methodname);
+			if (sensor.isEnabled()) {
+				Method[] methods = sensor.getClass().getMethods();
+				for (Method m : methods) {
+					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
+						if (m.getName().equals(methodname)) {
+							try {
+								return (Object[]) m.invoke(sensor);
+							} catch (IllegalArgumentException e) {
+								Log.d("SeattleSensors", e.toString());
+								e.printStackTrace();
+							} catch (IllegalAccessException e) {
+								Log.d("SeattleSensors", e.toString());
+								e.printStackTrace();
+							} catch (InvocationTargetException e) {
+								Log.d("SeattleSensors", e.toString());
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
 		}
 		return null;
 	}
@@ -142,5 +152,9 @@ public class SensorRegistry {
 
 	public void setDebugView(TextView t) {
 		this.textoutput = t;
+	}
+	
+	public List<AbstractSensor> getSensors(){
+		return this.sensors;
 	}
 }
