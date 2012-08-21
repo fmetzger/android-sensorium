@@ -61,16 +61,6 @@ public class SensorRegistry {
 		sensors.add(sensor);
 	}
 
-	public void disableSensor(AbstractSensor sensor) {
-		// NYI
-	}
-
-	public void disableAllSensors() {
-		for (AbstractSensor sensor : sensors) {
-			sensor.disable();
-		}
-	}
-
 	public List<String> getSensorMethods() {
 		List<String> out = new LinkedList<String>();
 
