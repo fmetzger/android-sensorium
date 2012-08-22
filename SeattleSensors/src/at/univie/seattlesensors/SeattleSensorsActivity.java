@@ -26,7 +26,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,6 +56,10 @@ public class SeattleSensorsActivity extends Activity {
 		
 		Context context = getApplicationContext();
 		
+		List<Sensor> sensorlist = ((SensorManager) getSystemService(SENSOR_SERVICE)).getSensorList(Sensor.TYPE_ALL);
+		for(Sensor s: sensorlist)
+			Log.d("SENSORS", s.getName());
+		
 
 		sensorregistry.registerSensor(new RadioSensor(context));
 		sensorregistry.registerSensor(new LocationSensor(context));
@@ -76,7 +83,7 @@ public class SeattleSensorsActivity extends Activity {
 		
 		
 		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
-		listAdapter = new SensorArrayAdapter(this, sensors);
+		listAdapter = new SensorConfigurationArrayAdapter(this, sensors);
 		sensorConfigList.setAdapter(listAdapter);	
 		
 		

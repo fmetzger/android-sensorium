@@ -1,12 +1,10 @@
 package org.xmlrpc.android;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.net.Socket;
 
@@ -18,12 +16,14 @@ import android.util.Log;
 
 public class XMLRPCServer extends XMLRPCCommon {
 
+    private static final String CRLF = "\r\n";
 	private static final String RESPONSE =
-		"HTTP/1.1 200 OK\n" +
-		"Connection: close\n" +
-		"Content-Type: text/xml\n" +
+		"HTTP/1.1 200 OK" + CRLF +
+		"Connection: close" + CRLF +
+		"Content-Type: text/xml" + CRLF +
 		"Content-Length: ";
-	private static final String NEWLINES = "\r\n\r\n";
+
+	private static final String NEWLINES = CRLF + CRLF;
 	private XMLRPCSerializer iXMLRPCSerializer;
 
 	public XMLRPCServer() {
@@ -47,49 +47,23 @@ public class XMLRPCServer extends XMLRPCCommon {
 		pullParser.nextTag();
 		
 		if (XmlPullParser.START_TAG == pullParser.getEventType()
-				&& Tag.PARAMS.equals( pullParser.getName() ) ) {// if we have params tag
+				&& Tag.PARAMS.equals( pullParser.getName() ) ) {// if we have <params>
 			
-			
-			pullParser.require(XmlPullParser.START_TAG, null, Tag.PARAMS);
 			pullParser.nextTag(); // <param>
-			
-			if (XmlPullParser.START_TAG == pullParser.getEventType()
-					&& Tag.PARAM.equals( pullParser.getName() ) ) // if we have param tags
-				
-				do {
-					//Log.d(Tag.LOG, "type=" + pullParser.getEventType() + ", tag=" + pullParser.getName());
-					pullParser.require(XmlPullParser.START_TAG, null, Tag.PARAM);
-					pullParser.nextTag(); // <value>
-	
-					Object param = iXMLRPCSerializer.deserialize(pullParser);
-					methodCall.params.add(param); // add to return value
-	
-					pullParser.nextTag();
-					pullParser.require(XmlPullParser.END_TAG, null, Tag.PARAM);
-					pullParser.nextTag(); // <param> or </params>
 					
-				} while (!pullParser.getName().equals(Tag.PARAMS)); // </params>
-			
-			else if (XmlPullParser.START_TAG != pullParser.getEventType()
-					&& !Tag.PARAM.equals( pullParser.getName() ) ) {// no params
-				pullParser.require(XmlPullParser.END_TAG, null, Tag.PARAMS); // we require the next tag to be the closing tag
-				Log.d(Tag.LOG, "MethodCall without param tags");
-			
-			}
-		}
-		else if (XmlPullParser.START_TAG != pullParser.getEventType()
-				&& !Tag.PARAMS.equals( pullParser.getName() ) ) {// no params
-			
-			Log.d(Tag.LOG, "MethodCall without params tag");
-			
-		}
-		else // neither
-				throw new XmlPullParserException( "expected "+ XmlPullParser.TYPES[ XmlPullParser.START_TAG ]+pullParser.getPositionDescription());
-		  
+			while (pullParser.getName().equals(Tag.PARAM)) {
+				pullParser.require(XmlPullParser.START_TAG, null, Tag.PARAM);
+				pullParser.nextTag(); // <value>
 
-//		pullParser.nextTag();
-//		pullParser.require(XmlPullParser.END_TAG, null, Tag.METHOD_CALL); // we require the final tag to be the closing tag
-		
+				Object param = iXMLRPCSerializer.deserialize(pullParser);
+				methodCall.params.add(param); // add to return value
+
+				pullParser.nextTag();
+				pullParser.require(XmlPullParser.END_TAG, null, Tag.PARAM);
+				pullParser.nextTag(); // <param> or </params>
+				
+			}
+		}	
 		return methodCall;
 	}
 	

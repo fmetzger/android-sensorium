@@ -33,11 +33,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 
-public class SensorArrayAdapter extends ArrayAdapter<AbstractSensor> {
+public class SensorConfigurationArrayAdapter extends ArrayAdapter<AbstractSensor> {
 
 	private LayoutInflater inflater;
 
-	public SensorArrayAdapter(Context context, List<AbstractSensor> sensorList) {
+	public SensorConfigurationArrayAdapter(Context context, List<AbstractSensor> sensorList) {
 		super(context, R.layout.sensor_config_item, R.id.sensorConfigText,
 				sensorList);
 		inflater = LayoutInflater.from(context);
