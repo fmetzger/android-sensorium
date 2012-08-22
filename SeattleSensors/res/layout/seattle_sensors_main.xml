@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <EditText
+        android:id="@+id/seattle_donate_thanks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:text="@string/seattle_donate_thanks" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/debug_out_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/debug_out_button" />
+
+    <Button
+        android:id="@+id/sensor_config_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/debug_out_button"
+        android:layout_alignParentLeft="true"
+        android:text="@string/sensor_config" />
+
+    <Button
+        android:id="@+id/sensor_view_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor_config_button"
+        android:layout_alignParentLeft="true"
+        android:text="@string/sensor_view_button" />
+
+    <LinearLayout
+        android:id="@+id/autostart_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sensor_view_button"
+        android:layout_alignParentLeft="true" >
+
+        <EditText
+            android:id="@+id/autostartToggleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/service_autostart"
+            android:text="@string/service_autostart" />
+
+        <ToggleButton
+            android:id="@+id/autostartToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/autostart_button" />
+    </LinearLayout>
+
+</RelativeLayout>

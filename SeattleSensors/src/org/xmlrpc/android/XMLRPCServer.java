@@ -77,7 +77,7 @@ public class XMLRPCServer extends XMLRPCCommon {
         return pullParser;
     }
 	
-	public void respond(Socket socket, Object[] params) throws IOException {
+	public void respond(Socket socket, Object... params) throws IOException {
 
 		String content = methodResponse(params);
 		String response = RESPONSE + (content.length()) + NEWLINES + content;
@@ -89,7 +89,7 @@ public class XMLRPCServer extends XMLRPCCommon {
 		Log.d(Tag.LOG, "response:" + response);
 	}
 	
-	private String methodResponse(Object[] params)
+	private String methodResponse(Object... params)
 	throws IllegalArgumentException, IllegalStateException, IOException {
 		StringWriter bodyWriter = new StringWriter();
 		serializer.setOutput(bodyWriter);
