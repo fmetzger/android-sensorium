@@ -27,6 +27,13 @@ import java.lang.annotation.Target;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 
+
+/**
+ * Use this annotation to tag methods in AbstractSensor implementations, that
+ * should be callable through the XMLRPC server.
+ *
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface XMLRPCMethod {}
+public @interface XMLRPCMethod {
+}

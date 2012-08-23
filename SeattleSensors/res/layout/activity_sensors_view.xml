@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Spinner
+        android:id="@+id/sensorViewSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="20pt"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+
+    <ListView
+        android:id="@+id/sensorValues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp" >
+    </ListView>
+
+</RelativeLayout>

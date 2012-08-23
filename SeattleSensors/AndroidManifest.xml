@@ -43,6 +43,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="at.univie.seattlesensors.SeattleSensorsActivity" />
         </activity>
+        <activity
+            android:name=".SensorsViewActivity"
+            android:label="@string/title_activity_sensors_view" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.univie.seattlesensors.SeattleSensorsActivity" />
+        </activity>
     </application>
 
 </manifest>

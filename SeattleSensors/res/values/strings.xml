@@ -18,5 +18,6 @@
     <string name="sensor_config_string">Enable/Disable Sensors</string>
     <string name="title_activity_sensor_debug">SensorDebugActivity</string>
     <string name="debug_out">Sensors Debug Output</string>
+    <string name="title_activity_sensors_view">SensorsViewActivity</string>
 
 </resources>
