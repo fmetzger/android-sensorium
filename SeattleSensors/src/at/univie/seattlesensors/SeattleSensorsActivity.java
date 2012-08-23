@@ -64,8 +64,10 @@ public class SeattleSensorsActivity extends Activity {
 		
 		
 		// start the XMLRPC server
-		Thread localServerThread = new Thread(new XMLRPCSensorServerThread());
-		localServerThread.start();
+		if (!XMLRPCSensorServerThread.running)
+			(new Thread(new XMLRPCSensorServerThread())).start();
+		else
+			Log.d("SeattleSensors", "Thread already running, not spawning another one.");
 		
     }
     

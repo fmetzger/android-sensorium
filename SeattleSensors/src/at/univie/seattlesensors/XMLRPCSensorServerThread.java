@@ -34,15 +34,17 @@ import android.util.Log;
 
 public class XMLRPCSensorServerThread  implements Runnable{
 
-	public static String SOCKET_ADDRESS = "127.0.0.1";
-	public static int SOCKET_PORT = 63090;
+	public static final String SOCKET_ADDRESS = "127.0.0.1";
+	public static final int SOCKET_PORT = 63090;
+	
+	public static boolean running = false;
 
 
 	public XMLRPCSensorServerThread() {
 	}
 
 	public void run() {
-
+		running = true;
 		try {
 			InetAddress localhost = InetAddress.getLocalHost();
 			ServerSocket socket = new ServerSocket(SOCKET_PORT, 10, localhost);
