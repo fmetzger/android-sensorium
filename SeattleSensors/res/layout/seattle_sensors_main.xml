@@ -3,16 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <EditText
+    <TextView
         android:id="@+id/seattle_donate_thanks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textMultiLine"
-        android:text="@string/seattle_donate_thanks" >
-
-        <requestFocus />
-    </EditText>
+        android:enabled="false"
+        android:textStyle="bold"
+        android:text="@string/seattle_donate_thanks"  />
 
     <Button
         android:id="@+id/debug_out_button"
@@ -20,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/debug_out_button" />
+        android:text="@string/debug_out_button" 
+    	android:onClick="startDebugView"/>
 
     <Button
         android:id="@+id/sensor_config_button"
@@ -28,7 +27,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/debug_out_button"
         android:layout_alignParentLeft="true"
-        android:text="@string/sensor_config" />
+        android:text="@string/sensor_config" 
+    	android:onClick="startSensorConfigView"/>
 
     <Button
         android:id="@+id/sensor_view_button"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/sensor_config_button"
         android:layout_alignParentLeft="true"
-        android:text="@string/sensor_view_button" />
+        android:text="@string/sensor_view_button"/>
 
     <LinearLayout
         android:id="@+id/autostart_layout"

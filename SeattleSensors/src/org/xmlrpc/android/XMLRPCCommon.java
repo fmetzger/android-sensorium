@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.xmlpull.v1.XmlSerializer;
 
-import android.util.Log;
 import android.util.Xml;
 
 class XMLRPCCommon {
@@ -27,9 +26,18 @@ class XMLRPCCommon {
 		iXMLRPCSerializer = serializer;
 	}
 			
-	protected void serializeParams(Object[] params) throws IllegalArgumentException, IllegalStateException, IOException {
+	protected void serializeParams(Object... params) throws IllegalArgumentException, IllegalStateException, IOException {
 		if (params != null && params.length != 0)
 		{
+			serializer.startTag(null, Tag.PARAMS);
+			serializer.startTag(null, Tag.PARAM).startTag(null, IXMLRPCSerializer.TAG_VALUE);
+			if (params.length > 1)
+				iXMLRPCSerializer.serialize(serializer, params);
+			else
+				iXMLRPCSerializer.serialize(serializer, params[0]);
+			serializer.endTag(null, IXMLRPCSerializer.TAG_VALUE).endTag(null, Tag.PARAM);
+			serializer.endTag(null, Tag.PARAMS);
+		}
 //			// set method params
 //			serializer.startTag(null, Tag.PARAMS);
 //			for (int i=0; i<params.length; i++) {
@@ -41,23 +49,23 @@ class XMLRPCCommon {
 			
 			
 			// set method params
-			if (params.length > 1){
-				serializer.startTag(null, Tag.PARAMS);
-				serializer.startTag(null, Tag.PARAM).startTag(null, IXMLRPCSerializer.TAG_VALUE);
-				iXMLRPCSerializer.serialize(serializer, params);
-				serializer.endTag(null, IXMLRPCSerializer.TAG_VALUE).endTag(null, Tag.PARAM);
-				serializer.endTag(null, Tag.PARAMS);
-				
-			} else{
-				serializer.startTag(null, Tag.PARAMS);
-				for (int i=0; i<params.length; i++) {
-					serializer.startTag(null, Tag.PARAM).startTag(null, IXMLRPCSerializer.TAG_VALUE);
-					iXMLRPCSerializer.serialize(serializer, params[i]);
-					serializer.endTag(null, IXMLRPCSerializer.TAG_VALUE).endTag(null, Tag.PARAM);
-				}
-				serializer.endTag(null, Tag.PARAMS);
-			}
-		}
+//			if (params.length > 1){
+//				serializer.startTag(null, Tag.PARAMS);
+//				serializer.startTag(null, Tag.PARAM).startTag(null, IXMLRPCSerializer.TAG_VALUE);
+//				iXMLRPCSerializer.serialize(serializer, params);
+//				serializer.endTag(null, IXMLRPCSerializer.TAG_VALUE).endTag(null, Tag.PARAM);
+//				serializer.endTag(null, Tag.PARAMS);
+//				
+//			} else{
+//				serializer.startTag(null, Tag.PARAMS);
+//				for (int i=0; i<params.length; i++) {
+//					serializer.startTag(null, Tag.PARAM).startTag(null, IXMLRPCSerializer.TAG_VALUE);
+//					iXMLRPCSerializer.serialize(serializer, params[i]);
+//					serializer.endTag(null, IXMLRPCSerializer.TAG_VALUE).endTag(null, Tag.PARAM);
+//				}
+//				serializer.endTag(null, Tag.PARAMS);
+//			}
+
 	}
 
 }

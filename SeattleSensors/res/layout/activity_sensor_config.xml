@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/seattle_sensor_config_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:textStyle="bold"
+            android:text="@string/sensor_config_string" />
+
+    
+    <ListView
+        android:id="@+id/sensorConfigListView"
+        android:layout_width="match_parent"
+        android:layout_height="373dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/seattle_sensor_config_text" >
+
+    </ListView>
+</RelativeLayout>

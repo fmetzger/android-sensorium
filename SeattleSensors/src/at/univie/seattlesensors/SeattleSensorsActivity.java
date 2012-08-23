@@ -26,33 +26,26 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import at.univie.seattlesensors.sensors.AbstractSensor;
 import at.univie.seattlesensors.sensors.BatterySensor;
 import at.univie.seattlesensors.sensors.LocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
 public class SeattleSensorsActivity extends Activity {
 	
-	private ArrayAdapter<AbstractSensor> listAdapter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.seattle_sensors_main);
 
-		TextView t = (TextView) findViewById(R.id.sensoroutput);
 
-		SensorRegistry sensorregistry = SensorRegistry.getInstance();
-		sensorregistry.setDebugView(t);
 		
 		Context context = getApplicationContext();
 		
@@ -61,30 +54,13 @@ public class SeattleSensorsActivity extends Activity {
 			Log.d("SENSORS", s.getName());
 		
 
-		sensorregistry.registerSensor(new RadioSensor(context));
-		sensorregistry.registerSensor(new LocationSensor(context));
+		SensorRegistry sensorregistry = SensorRegistry.getInstance();
+//		sensorregistry.registerSensor(new RadioSensor(context));
+//		sensorregistry.registerSensor(new LocationSensor(context));
 		sensorregistry.registerSensor(new BatterySensor(context));
 		
 		
-		ListView sensorConfigList = (ListView) findViewById(R.id.sensorConfigListView);
 
-		sensorConfigList
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View item,
-							int position, long id) {
-						AbstractSensor sensor = listAdapter.getItem(position);
-						sensor.toggle();
-						SensorConfigurationItem configItem = (SensorConfigurationItem) item
-								.getTag();
-						configItem.getCheckBox().setChecked(sensor.isEnabled());
-					}
-				});
-		
-		
-		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
-		listAdapter = new SensorConfigurationArrayAdapter(this, sensors);
-		sensorConfigList.setAdapter(listAdapter);	
 		
 		
 		// start the XMLRPC server
@@ -92,6 +68,20 @@ public class SeattleSensorsActivity extends Activity {
 		localServerThread.start();
 		
     }
+    
+    
+    public void startDebugView(View view) {
+        Intent intentExercise = new Intent(view.getContext(), SensorDebugActivity.class);
+        startActivityForResult(intentExercise, 0);
+    } 
 
-
+//    public void startSensorsView(View view) {
+//        Intent intentExercise = new Intent(view.getContext(), SensorDebugActivity.class);
+//        startActivityForResult(intentExercise, 0);
+//    } 
+    
+    public void startSensorConfigView(View view) {
+        Intent intentExercise = new Intent(view.getContext(), SensorConfigActivity.class);
+        startActivityForResult(intentExercise, 0);
+    } 
 }

@@ -14,5 +14,9 @@
     <string name="autostart_button">AutostartButton</string>
     <string name="debug_out_button">Debug Output</string>
     <string name="sensor_view_button">Sensor Views</string>
+    <string name="title_activity_sensor_config">SensorConfigActivity</string>
+    <string name="sensor_config_string">Enable/Disable Sensors</string>
+    <string name="title_activity_sensor_debug">SensorDebugActivity</string>
+    <string name="debug_out">Sensors Debug Output</string>
 
 </resources>

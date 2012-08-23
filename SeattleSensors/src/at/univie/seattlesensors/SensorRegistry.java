@@ -148,7 +148,8 @@ public class SensorRegistry {
 	}
 
 	public void debugOut(String out) {
-		textoutput.append(out);
+		if(textoutput != null)
+			textoutput.append(out);
 	}
 
 	public void setDebugView(TextView t) {
