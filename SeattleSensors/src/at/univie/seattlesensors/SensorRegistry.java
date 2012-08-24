@@ -114,7 +114,7 @@ public class SensorRegistry {
 		return null;
 	}
 	
-	public Object[] callSensorMethod(String methodname) {
+	public Object callSensorMethod(String methodname) {
 
 		for (AbstractSensor sensor : sensors) {
 			if (sensor.isEnabled()) {
@@ -123,12 +123,7 @@ public class SensorRegistry {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (m.getName().equals(methodname)) {
 							try {
-								Object ret = m.invoke(sensor);
-								if (ret instanceof Object[])
-									return (Object[]) ret;
-								else{
-									return new Object[]{ret};
-								}
+								return m.invoke(sensor);
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
 								e.printStackTrace();
@@ -149,7 +144,7 @@ public class SensorRegistry {
 
 	public void debugOut(String out) {
 		if(textoutput != null)
-			textoutput.append(out);
+			textoutput.append(out+"\n");
 	}
 
 	public void setDebugView(TextView t) {

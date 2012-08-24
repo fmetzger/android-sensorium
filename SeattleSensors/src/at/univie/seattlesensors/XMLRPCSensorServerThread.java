@@ -75,21 +75,21 @@ public class XMLRPCSensorServerThread  implements Runnable{
 						if (methodsignature != null)
 							server.respond(client, methodsignature);
 						else{
-							server.respond(client, new Object[]{"Unknown method"});
+							server.respond(client, "Unknown method");
 						}
 					} else
-						server.respond(client, new Object[]{"Too few arguments"});
+						server.respond(client, "Too few arguments");
 				}
 
 				else if (name.equals("system.listMethods")){
 					server.respond(client, sensorregistry.getSensorMethods().toArray());
 				}
 				else {
-					Object [] methodresult = sensorregistry.callSensorMethod(name);
+					Object methodresult = sensorregistry.callSensorMethod(name);
 					if (methodresult != null){
 						server.respond(client, methodresult);
 					} else {
-						server.respond(client, new Object[] {"Input not recognized"});
+						server.respond(client,"Input not recognized");
 					}
 					
 				}

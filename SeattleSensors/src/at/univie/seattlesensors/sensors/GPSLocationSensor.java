@@ -30,7 +30,7 @@ import android.os.Bundle;
 import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
-public class LocationSensor extends AbstractSensor {
+public class GPSLocationSensor extends AbstractSensor {
 
 	private LocationManager locationManager;
 	private LocationListener locationListener;
@@ -38,10 +38,10 @@ public class LocationSensor extends AbstractSensor {
 	private Location location;
 	private long timestamp;
 
-	public LocationSensor(Context context) {
+	public GPSLocationSensor(Context context) {
 		super(context);
 
-		name = "GPS/Network Loc Sensor";
+		name = "GPS Loc Sensor";
 		enable();
 	}
 	
@@ -80,12 +80,8 @@ public class LocationSensor extends AbstractSensor {
 
 		locationManager = ((LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE));
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 				0, locationListener);
-		// locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-		// 0, 0, locationListener);	
 		super.enable();
 	}
 
@@ -98,9 +94,9 @@ public class LocationSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object[] locationInformation(){
+	public Object[] gpslocationInformation(){
 		if(location != null){
-			return new Object[] {"timestamp", timestamp, "provider", location.getProvider(), "timestamp_fix", location.getTime(), "long", location.getLongitude(), "lat", location.getLatitude(), "alt", location.getAltitude(), "bearing", location.getBearing(), "speed", location.getSpeed(), "accuracy", location.getAccuracy()};
+			return new Object[] {"timestamp", timestamp, "timestamp_fix", location.getTime(), "long", location.getLongitude(), "lat", location.getLatitude(), "alt", location.getAltitude(), "bearing", location.getBearing(), "speed", location.getSpeed(), "accuracy", location.getAccuracy()};
 		}
 		return null;
 	}

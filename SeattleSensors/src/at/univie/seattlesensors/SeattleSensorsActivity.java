@@ -33,7 +33,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import at.univie.seattlesensors.sensors.BatterySensor;
-import at.univie.seattlesensors.sensors.LocationSensor;
+import at.univie.seattlesensors.sensors.NetworkLocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
 public class SeattleSensorsActivity extends Activity {
@@ -55,8 +55,8 @@ public class SeattleSensorsActivity extends Activity {
 		
 
 		SensorRegistry sensorregistry = SensorRegistry.getInstance();
-//		sensorregistry.registerSensor(new RadioSensor(context));
-//		sensorregistry.registerSensor(new LocationSensor(context));
+		sensorregistry.registerSensor(new RadioSensor(context));
+		sensorregistry.registerSensor(new NetworkLocationSensor(context));
 		sensorregistry.registerSensor(new BatterySensor(context));
 		
 		
