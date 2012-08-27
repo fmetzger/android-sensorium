@@ -59,9 +59,7 @@ public class XMLRPCSensorServerThread  implements Runnable{
 				
 				
 				if (name.equals("isSeattleSensor")){
-					server.respond(client, new Object[] {true});
-					
-					
+					server.respond(client, true);
 				}
 				
 				else if (name.equals("system.methodSignature")){

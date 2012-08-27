@@ -93,6 +93,8 @@ public class SensorRegistry {
 							
 							if(rettype.toString().equals("class [Ljava.lang.Object;")){
 								signature.add("array");
+							} else if (rettype.toString().equals("class java.lang.String")){
+								signature.add("string");
 							} else {
 								signature.add(rettype.toString());
 							}
