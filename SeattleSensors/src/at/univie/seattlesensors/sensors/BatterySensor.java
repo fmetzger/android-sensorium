@@ -39,7 +39,7 @@ public class BatterySensor extends AbstractSensor {
                 if (rawlevel >= 0 && scale > 0) {
                     level = (rawlevel * 100) / scale;
                 }
-                SensorRegistry.getInstance().debugOut("Battery Level: " + level + "%");
+                SensorRegistry.getInstance().log("BATTERY", level + "%, plugged: "+plugged+" volt: "+ voltage);
             }
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);

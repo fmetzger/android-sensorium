@@ -53,14 +53,12 @@ public class RadioSensor extends AbstractSensor {
 	public void enable() {
 		
 		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
-		
-		SensorRegistry.getInstance().debugOut("RadioSensor starting");
-		
+
 		gsmCell = (GsmCellLocation) telephonyManager
 				.getCellLocation();
 		timestamp = System.currentTimeMillis();
 		
-		SensorRegistry.getInstance().debugOut("MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
+		SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
 		
 		phoneStateListener = new PhoneStateListener() {
 			@Override
@@ -68,13 +66,13 @@ public class RadioSensor extends AbstractSensor {
 				gsmCell = (GsmCellLocation) location;
 				timestamp = System.currentTimeMillis();
 				
-				SensorRegistry.getInstance().debugOut("MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
+				SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
 			}
 
 			@Override
 			public void onSignalStrengthsChanged(SignalStrength sStrength) {
 				signalStrength = sStrength;
-				SensorRegistry.getInstance().debugOut("BER: " + signalStrength.getGsmBitErrorRate() + " Signal Strength: " + signalStrength.getGsmSignalStrength());
+				SensorRegistry.getInstance().log("RADIO", "BER: " + signalStrength.getGsmBitErrorRate() + " Signal Strength: " + signalStrength.getGsmSignalStrength());
 			}
 		};
 		

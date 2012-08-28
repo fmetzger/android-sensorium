@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
@@ -37,10 +38,15 @@ public class SensorRegistry {
 	private static SensorRegistry instance = null;
 
 	private List<AbstractSensor> sensors;
+	
+	private StringBuffer debugBuffer;
+	private int bufferedLines = 0;
+	private static final int MAXDEBUGLINES = 200;
 	private TextView textoutput;
 
 	protected SensorRegistry() {
 		sensors = new LinkedList<AbstractSensor>();
+		debugBuffer = new StringBuffer();
 
 	}
 
@@ -144,9 +150,14 @@ public class SensorRegistry {
 		return null;
 	}
 
-	public void debugOut(String out) {
+	public void log(String tag, String out) {
+		if(bufferedLines >= MAXDEBUGLINES){
+			debugBuffer.delete(0,debugBuffer.indexOf("\n")+1);
+		}
+		debugBuffer.append("<b>"+tag + ": </b>"+ out+"<br>\n");
+		bufferedLines++;
 		if(textoutput != null)
-			textoutput.append(out+"\n");
+			textoutput.setText(Html.fromHtml(debugBuffer.toString()), TextView.BufferType.SPANNABLE);
 	}
 
 	public void setDebugView(TextView t) {

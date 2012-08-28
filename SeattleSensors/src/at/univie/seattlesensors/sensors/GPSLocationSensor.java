@@ -44,23 +44,23 @@ public class GPSLocationSensor extends AbstractSensor {
 		name = "GPS Loc Sensor";
 		enable();
 	}
-	
 
 	@Override
 	public void enable() {
-		
+
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {
 				location = loc;
 				timestamp = System.currentTimeMillis();
 
-				SensorRegistry.getInstance().debugOut(
-						"t_fix: " + location.getTime() + "long: "
-								+ location.getLongitude() + " lat: "
-								+ location.getLatitude() + " alt: " + location.getAltitude()
-								+ "spd: " + location.getSpeed() + "bearing: " + location.getBearing()
-								+ "accuracy: " + location.getAccuracy() + "provider: "
-								+ location.getProvider());
+				SensorRegistry.getInstance().log(
+						"GPS",
+						"long: " + location.getLongitude() + " lat: "
+								+ location.getLatitude() + " alt: "
+								+ location.getAltitude() + "spd: "
+								+ location.getSpeed() + "bearing: "
+								+ location.getBearing() + "accuracy: "
+								+ location.getAccuracy());
 			}
 
 			public void onStatusChanged(String provider, int status,
@@ -94,9 +94,13 @@ public class GPSLocationSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object[] gpslocationInformation(){
-		if(location != null){
-			return new Object[] {"timestamp", timestamp, "timestamp_fix", location.getTime(), "long", location.getLongitude(), "lat", location.getLatitude(), "alt", location.getAltitude(), "bearing", location.getBearing(), "speed", location.getSpeed(), "accuracy", location.getAccuracy()};
+	public Object[] gpslocationInformation() {
+		if (location != null) {
+			return new Object[] { "timestamp", timestamp, "timestamp_fix",
+					location.getTime(), "long", location.getLongitude(), "lat",
+					location.getLatitude(), "alt", location.getAltitude(),
+					"bearing", location.getBearing(), "speed",
+					location.getSpeed(), "accuracy", location.getAccuracy() };
 		}
 		return null;
 	}
