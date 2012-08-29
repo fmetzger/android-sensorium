@@ -28,6 +28,7 @@ public abstract class AbstractSensor {
 	
 	protected Context context;
 	private boolean enabled = false;
+	private boolean available = true;
 	protected String description = "";
 	protected String name = "";
 	
