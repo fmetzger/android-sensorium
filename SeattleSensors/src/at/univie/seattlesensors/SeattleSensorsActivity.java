@@ -50,10 +50,10 @@ public class SeattleSensorsActivity extends Activity {
 
 		
 		Context context = getApplicationContext();
-		
-		List<Sensor> sensorlist = ((SensorManager) getSystemService(SENSOR_SERVICE)).getSensorList(Sensor.TYPE_ALL);
-		for(Sensor s: sensorlist)
-			Log.d("SENSORS", s.getName());
+//		
+//		List<Sensor> sensorlist = ((SensorManager) getSystemService(SENSOR_SERVICE)).getSensorList(Sensor.TYPE_ALL);
+//		for(Sensor s: sensorlist)
+//			Log.d("SENSORS", s.getName());
 		
 
 		SensorRegistry sensorregistry = SensorRegistry.getInstance();
@@ -63,10 +63,7 @@ public class SeattleSensorsActivity extends Activity {
 		sensorregistry.registerSensor(new BatterySensor(context));
 		sensorregistry.registerSensor(new DummySensor(context));
 		sensorregistry.startup();
-		
 
-		
-		
 		// start the XMLRPC server
 		if (!XMLRPCSensorServerThread.running)
 			(new Thread(new XMLRPCSensorServerThread())).start();
