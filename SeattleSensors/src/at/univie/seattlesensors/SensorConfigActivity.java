@@ -31,10 +31,12 @@ public class SensorConfigActivity extends Activity {
 					public void onItemClick(AdapterView<?> parent, View item,
 							int position, long id) {
 						AbstractSensor sensor = listAdapter.getItem(position);
-						sensor.toggle();
-						SensorConfigurationItem configItem = (SensorConfigurationItem) item
-								.getTag();
-						configItem.getCheckBox().setChecked(sensor.isEnabled());
+						if(sensor.available()){
+							sensor.toggle();
+							SensorConfigurationItem configItem = (SensorConfigurationItem) item
+									.getTag();
+							configItem.getCheckBox().setChecked(sensor.isEnabled());
+						}
 					}
 				});
 		

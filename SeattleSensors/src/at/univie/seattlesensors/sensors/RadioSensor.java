@@ -43,9 +43,6 @@ public class RadioSensor extends AbstractSensor {
 	public RadioSensor(Context context){
 		super(context);
 		name = "Radio Cell Info Sensor";
-		
-		enable();
-
 	}
 
 

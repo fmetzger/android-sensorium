@@ -32,9 +32,6 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
-import at.univie.seattlesensors.sensors.BatterySensor;
-import at.univie.seattlesensors.sensors.NetworkLocationSensor;
-import at.univie.seattlesensors.sensors.RadioSensor;
 import at.univie.seattlesensors.sensors.XMLRPCMethod;
 
 public class SensorRegistry {
@@ -62,16 +59,12 @@ public class SensorRegistry {
 	}
 
 	public void startup(Context context) {
-
-		registerSensor(new RadioSensor(context));
-		registerSensor(new NetworkLocationSensor(context));
-		registerSensor(new BatterySensor(context));
-
 		for (AbstractSensor sensor : sensors) {
 			try {
 				sensor.enable();
 			} catch (Exception e) {
 				sensor.disable();
+				sensor.setUnavailable();
 				Log.d("SeattleSensors", e.toString());
 			}
 

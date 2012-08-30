@@ -69,5 +69,13 @@ public abstract class AbstractSensor {
 	public String getName(){
 		return name;
 	}
+	
+	public void setUnavailable(){
+		this.available = false;
+	}
+	
+	public boolean available(){
+		return this.available;
+	}
 
 }

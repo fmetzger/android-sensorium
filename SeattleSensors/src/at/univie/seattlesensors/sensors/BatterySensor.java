@@ -22,7 +22,6 @@ public class BatterySensor extends AbstractSensor {
 	public BatterySensor(Context context) {
 		super(context);
 		name = "Battery Sensor";
-		enable();
 	}
 
 	@Override

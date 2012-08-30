@@ -42,7 +42,6 @@ public class NetworkLocationSensor extends AbstractSensor {
 		super(context);
 
 		name = "Network Loc Sensor";
-		enable();
 	}
 
 	@Override

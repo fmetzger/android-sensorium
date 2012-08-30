@@ -58,7 +58,14 @@ public class SensorConfigurationArrayAdapter extends ArrayAdapter<AbstractSensor
 			checkBox = (CheckBox) convertView
 					.findViewById(R.id.sensorConfigToggle);
 
+			if (!sensor.available()){
+				checkBox.setEnabled(false);
+				textView.setEnabled(false);
+				convertView.setEnabled(false);
+			}
+				
 
+			
 			convertView.setTag(new SensorConfigurationItem(textView, checkBox));
 
 			checkBox.setOnClickListener(new View.OnClickListener() {

@@ -42,7 +42,6 @@ public class GPSLocationSensor extends AbstractSensor {
 		super(context);
 
 		name = "GPS Loc Sensor";
-		enable();
 	}
 
 	@Override
