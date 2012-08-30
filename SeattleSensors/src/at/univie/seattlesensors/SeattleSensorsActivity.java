@@ -62,7 +62,7 @@ public class SeattleSensorsActivity extends Activity {
 		sensorregistry.registerSensor(new GPSLocationSensor(context));
 		sensorregistry.registerSensor(new BatterySensor(context));
 		sensorregistry.registerSensor(new DummySensor(context));
-		sensorregistry.startup(context);
+		sensorregistry.startup();
 		
 
 		

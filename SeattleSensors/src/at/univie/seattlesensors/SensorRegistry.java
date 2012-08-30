@@ -58,7 +58,7 @@ public class SensorRegistry {
 		return instance;
 	}
 
-	public void startup(Context context) {
+	public void startup() {
 		for (AbstractSensor sensor : sensors) {
 			try {
 				sensor.enable();
