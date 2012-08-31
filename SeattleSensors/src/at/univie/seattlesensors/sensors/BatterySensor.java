@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
 public class BatterySensor extends AbstractSensor {
@@ -18,6 +19,8 @@ public class BatterySensor extends AbstractSensor {
 	private int temperature = -1;
 	private int voltage = -1;
 	private String technology = "";
+	
+	private Intent batteryIntent;
 
 	public BatterySensor(Context context) {
 		super(context);
@@ -42,14 +45,16 @@ public class BatterySensor extends AbstractSensor {
             }
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        context.registerReceiver(batteryReceiver, batteryLevelFilter);
+        batteryIntent = context.registerReceiver(batteryReceiver, batteryLevelFilter);
+        Log.d("BATT", batteryIntent.toString());
         
         super.enable();
 	}
 
 	@Override
 	public void disable() {
-		context.unregisterReceiver(batteryReceiver);
+		if(batteryIntent != null)
+			context.unregisterReceiver(batteryReceiver);
 		super.disable();
 	}
 	

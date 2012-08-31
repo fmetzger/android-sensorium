@@ -10,7 +10,7 @@ import at.univie.seattlesensors.sensors.GPSLocationSensor;
 import at.univie.seattlesensors.sensors.NetworkLocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
-public class SensorAutoStart extends BroadcastReceiver {
+public class SensorBootCompletedReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

@@ -53,7 +53,7 @@
         </activity>
 
         <receiver
-            android:name=".SensorAutoStart"
+            android:name=".SensorBootCompletedReceiver"
             android:enabled="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>

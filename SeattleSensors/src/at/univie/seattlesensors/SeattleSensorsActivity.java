@@ -25,13 +25,17 @@ package at.univie.seattlesensors;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 import at.univie.seattlesensors.sensors.BatterySensor;
 import at.univie.seattlesensors.sensors.DummySensor;
 import at.univie.seattlesensors.sensors.GPSLocationSensor;
@@ -39,22 +43,21 @@ import at.univie.seattlesensors.sensors.NetworkLocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
 
 public class SeattleSensorsActivity extends Activity {
-	
 
+	private SensorService mBoundService;
+	private boolean mIsBound;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.seattle_sensors_main);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.seattle_sensors_main);
 
-
-		
 		Context context = getApplicationContext();
-//		
-//		List<Sensor> sensorlist = ((SensorManager) getSystemService(SENSOR_SERVICE)).getSensorList(Sensor.TYPE_ALL);
-//		for(Sensor s: sensorlist)
-//			Log.d("SENSORS", s.getName());
-		
+		//
+		// List<Sensor> sensorlist = ((SensorManager)
+		// getSystemService(SENSOR_SERVICE)).getSensorList(Sensor.TYPE_ALL);
+		// for(Sensor s: sensorlist)
+		// Log.d("SENSORS", s.getName());
 
 		SensorRegistry sensorregistry = SensorRegistry.getInstance();
 		sensorregistry.registerSensor(new RadioSensor(context));
@@ -68,23 +71,72 @@ public class SeattleSensorsActivity extends Activity {
 		if (!XMLRPCSensorServerThread.running)
 			(new Thread(new XMLRPCSensorServerThread())).start();
 		else
-			Log.d("SeattleSensors", "Thread already running, not spawning another one.");
-		
-    }
-    
-    
-    public void startDebugView(View view) {
-        Intent intentExercise = new Intent(view.getContext(), SensorDebugActivity.class);
-        startActivityForResult(intentExercise, 0);
-    } 
+			Log.d("SeattleSensors",
+					"Thread already running, not spawning another one.");
 
-//    public void startSensorsView(View view) {
-//        Intent intentExercise = new Intent(view.getContext(), SensorDebugActivity.class);
-//        startActivityForResult(intentExercise, 0);
-//    } 
-    
-    public void startSensorConfigView(View view) {
-        Intent intentExercise = new Intent(view.getContext(), SensorConfigActivity.class);
-        startActivityForResult(intentExercise, 0);
-    } 
+	}
+	
+
+	public void startDebugView(View view) {
+		Intent intentExercise = new Intent(view.getContext(),
+				SensorDebugActivity.class);
+		startActivityForResult(intentExercise, 0);
+	}
+
+	// public void startSensorsView(View view) {
+	// Intent intentExercise = new Intent(view.getContext(),
+	// SensorDebugActivity.class);
+	// startActivityForResult(intentExercise, 0);
+	// }
+
+	public void startSensorConfigView(View view) {
+		Intent intentExercise = new Intent(view.getContext(),
+				SensorConfigActivity.class);
+		startActivityForResult(intentExercise, 0);
+	}
+	
+/*
+	private ServiceConnection mConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// This is called when the connection with the service has been
+			// established, giving us the service object we can use to
+			// interact with the service. Because we have bound to a explicit
+			// service that we know is running in our own process, we can
+			// cast its IBinder to a concrete class and directly access it.
+			mBoundService = ((SensorService.LocalBinder) service).getService();
+
+			// Tell the user about this for our demo.
+			Toast.makeText(SeattleSensorsActivity.this, "service connected",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			// This is called when the connection with the service has been
+			// unexpectedly disconnected -- that is, its process crashed.
+			// Because it is running in our same process, we should never
+			// see this happen.
+			mBoundService = null;
+			Toast.makeText(SeattleSensorsActivity.this, "service disconnected",
+					Toast.LENGTH_SHORT).show();
+		}
+	};
+
+	void doBindService() {
+		// Establish a connection with the service. We use an explicit
+		// class name because we want a specific service implementation that
+		// we know will be running in our own process (and thus won't be
+		// supporting component replacement by other applications).
+		bindService(new Intent(SeattleSensorsActivity.this, SensorService.class), mConnection,
+				Context.BIND_AUTO_CREATE);
+		mIsBound = true;
+	}
+
+	void doUnbindService() {
+		if (mIsBound) {
+			// Detach our existing connection.
+			unbindService(mConnection);
+			mIsBound = false;
+		}
+	}
+*/
 }
