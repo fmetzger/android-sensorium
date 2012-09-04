@@ -93,7 +93,7 @@ public class GPSLocationSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object[] gpslocationInformation() {
+	public Object gpslocationInformation() {
 		if (location != null) {
 			return new Object[] { "timestamp", timestamp, "timestamp_fix",
 					location.getTime(), "long", location.getLongitude(), "lat",
@@ -101,6 +101,6 @@ public class GPSLocationSensor extends AbstractSensor {
 					"bearing", location.getBearing(), "speed",
 					location.getSpeed(), "accuracy", location.getAccuracy() };
 		}
-		return null;
+		return "no gps location info available";
 	}
 }

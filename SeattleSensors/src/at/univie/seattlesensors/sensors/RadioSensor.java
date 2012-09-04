@@ -55,7 +55,8 @@ public class RadioSensor extends AbstractSensor {
 				.getCellLocation();
 		timestamp = System.currentTimeMillis();
 		
-		SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
+		if(gsmCell != null)
+			SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
 		
 		phoneStateListener = new PhoneStateListener() {
 			@Override
@@ -92,9 +93,9 @@ public class RadioSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object[] cellInformation(){
+	public Object cellInformation(){
 		if(telephonyManager != null && gsmCell != null)
 			return new Object[] {"timestamp", timestamp, "mcc+mnc", telephonyManager.getNetworkOperator(), "lac", gsmCell.getLac(), "cid", gsmCell.getCid()};
-		return null;
+		return "no cell info available";
 	}
 }

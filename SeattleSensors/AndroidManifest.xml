@@ -25,7 +25,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" 
-        android:debuggable="true">
+        android:debuggable="true" android:name="SeattleSensorsApplication">
         <activity
             android:name=".SeattleSensorsActivity"
             android:label="@string/title_activity_main" >
@@ -67,6 +67,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+        <service android:name="SensorService"></service>
     </application>
 
 </manifest>
