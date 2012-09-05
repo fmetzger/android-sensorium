@@ -12,6 +12,7 @@ public class BatterySensor extends AbstractSensor {
 	
 	private BroadcastReceiver batteryReceiver;
 	
+	private long timestamp;
 	private int rawlevel = -1;
 	private int level = -1;
 	private int scale = -1;
@@ -32,6 +33,7 @@ public class BatterySensor extends AbstractSensor {
         batteryReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 
+            	timestamp = System.currentTimeMillis();
             	plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
                 rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
                 scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
@@ -85,7 +87,7 @@ public class BatterySensor extends AbstractSensor {
 	
 	@XMLRPCMethod
 	public Object[] batteryInformation(){
-		return new Object[]{"technology", technology, "voltage", voltage, "temperature", temperature, "plugged", plugged, "rawlevel", rawlevel, "scale", scale, "level", level};
+		return new Object[]{"timestamp", timestamp, "technology", technology, "voltage", voltage, "temperature", temperature, "plugged", plugged, "rawlevel", rawlevel, "scale", scale, "level", level};
 	}
 
 }

@@ -9,10 +9,12 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import at.univie.seattlesensors.sensors.BatterySensor;
+import at.univie.seattlesensors.sensors.BluetoothSensor;
 import at.univie.seattlesensors.sensors.DummySensor;
 import at.univie.seattlesensors.sensors.GPSLocationSensor;
 import at.univie.seattlesensors.sensors.NetworkLocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
+import at.univie.seattlesensors.sensors.WifiSensor;
 
 public class SensorService extends Service {
 	private SensorRegistry registry;
@@ -46,6 +48,8 @@ public class SensorService extends Service {
 		registry.registerSensor(new GPSLocationSensor(this));
 		registry.registerSensor(new BatterySensor(this));
 		registry.registerSensor(new DummySensor(this));
+		registry.registerSensor(new WifiSensor(this));
+		registry.registerSensor(new BluetoothSensor(this));
 		registry.startup();
 
 		// start the XMLRPC server

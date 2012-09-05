@@ -25,6 +25,8 @@ package at.univie.seattlesensors;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class SeattleSensorsActivity extends Activity {
@@ -47,21 +49,40 @@ public class SeattleSensorsActivity extends Activity {
 	}
 
 	public void startDebugView(View view) {
-		Intent intentExercise = new Intent(view.getContext(),
-				SensorDebugActivity.class);
-		startActivityForResult(intentExercise, 0);
+		startActivityForResult(new Intent(view.getContext(),
+				SensorDebugActivity.class), 0);
 	}
 
-	// public void startSensorsView(View view) {
-	// Intent intentExercise = new Intent(view.getContext(),
-	// SensorDebugActivity.class);
-	// startActivityForResult(intentExercise, 0);
-	// }
+//	 public void startSensorsView(View view) {
+//	 startActivityForResult(new Intent(view.getContext(),
+//			 SensorDebugActivity.class), 0);
+//	 }
 
 	public void startSensorConfigView(View view) {
-		Intent intentExercise = new Intent(view.getContext(),
-				SensorConfigActivity.class);
-		startActivityForResult(intentExercise, 0);
+		startActivityForResult(new Intent(view.getContext(),
+				SensorConfigActivity.class), 0);
 	}
-
+	
+//	public void startSensorConfigView(View view) {
+//		startActivityForResult(new Intent(view.getContext(),
+//				SensorPreferenceActivity.class), 0);
+//	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+        		startActivityForResult(new Intent(this,
+        				SensorPreferenceActivity.class), 0);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
