@@ -25,8 +25,7 @@ public class BluetoothSensor extends AbstractSensor {
 	}
 	
 	@Override
-	public void enable() {
-		super.enable();
+	protected void _enable() {
 		
 		bluetoothAdapter =  BluetoothAdapter.getDefaultAdapter();
 		bluetooth = "Local device\n\tName: " + bluetoothAdapter.getName() + "\n\tAddress: " 
@@ -75,8 +74,7 @@ public class BluetoothSensor extends AbstractSensor {
 	}
 	
 	@Override
-	public void disable() {
-		super.disable();
+	protected void _disable() {
 		context.unregisterReceiver(bluetoothReceiver);
 	}
 	

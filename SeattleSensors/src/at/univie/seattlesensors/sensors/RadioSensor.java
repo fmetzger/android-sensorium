@@ -47,7 +47,7 @@ public class RadioSensor extends AbstractSensor {
 
 
 	@Override
-	public void enable() {
+	protected void _enable() {
 		
 		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
 
@@ -77,19 +77,15 @@ public class RadioSensor extends AbstractSensor {
 		telephonyManager.listen(phoneStateListener,
 				PhoneStateListener.LISTEN_CELL_LOCATION
 						| PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-		
-		super.enable();
 	}
 
 	@Override
-	public void disable() {
+	protected void _disable() {
 
 		if (telephonyManager != null) {
 			telephonyManager.listen(phoneStateListener,
 					PhoneStateListener.LISTEN_NONE);
 		}
-		
-		super.disable();
 	}
 
 	@XMLRPCMethod

@@ -62,6 +62,7 @@ public class SensorRegistry {
 
 	public void startup() {
 		for (AbstractSensor sensor : sensors) {
+			//TODO: exceptions will now be caught in the abstractsensor class, need to change this
 			try {
 				sensor.enable();
 			} catch (Exception e) {

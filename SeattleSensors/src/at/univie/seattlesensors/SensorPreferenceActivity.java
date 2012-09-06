@@ -13,29 +13,31 @@ import android.util.Log;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {
-	
+
 	SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setPreferenceScreen(createPreferenceHierarchy());
-		
-		SharedPreferences prefs = 
-			    PreferenceManager.getDefaultSharedPreferences(this);
-		
-		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-			  public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-			   Log.d("SeattleSensors",key + " changed");
-				List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
-				for(AbstractSensor sensor: sensors){
-					if (sensor.getClass().getName().equals(key))
-							sensor.toggle();
-				}
-			  }
-			};
 
-			prefs.registerOnSharedPreferenceChangeListener(listener);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			public void onSharedPreferenceChanged(SharedPreferences prefs,
+					String key) {
+				Log.d("SeattleSensors", key + " changed");
+				List<AbstractSensor> sensors = SensorRegistry.getInstance()
+						.getSensors();
+				for (AbstractSensor sensor : sensors) {
+					if (sensor.getClass().getName().equals(key))
+						sensor.toggle();
+				}
+			}
+		};
+
+		prefs.registerOnSharedPreferenceChangeListener(listener);
 	}
 
 	private PreferenceScreen createPreferenceHierarchy() {
@@ -65,35 +67,15 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		sensorsCat.setTitle("Individual Sensors");
 		root.addPreference(sensorsCat);
 
-		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
-		for(AbstractSensor sensor: sensors){
+		List<AbstractSensor> sensors = SensorRegistry.getInstance()
+				.getSensors();
+		for (AbstractSensor sensor : sensors) {
 			CheckBoxPreference tmpPref = new CheckBoxPreference(this);
 			tmpPref.setKey(sensor.getClass().getName());
 			tmpPref.setTitle(sensor.getName());
 			tmpPref.setSummary(sensor.getName());
 			sensorsCat.addPreference(tmpPref);
 		}
-//		
-//		CheckBoxPreference sensor1Pref = new CheckBoxPreference(this);
-//		sensor1Pref.setKey("sensor_1");
-//		sensor1Pref.setTitle("Sensor starts on boot");
-//		sensor1Pref
-//				.setSummary("Keeps the sensor service running at all times.");
-//		sensorsCat.addPreference(sensor1Pref);
-//
-//		CheckBoxPreference sensor2Pref = new CheckBoxPreference(this);
-//		sensor2Pref.setKey("sensor_2");
-//		sensor2Pref.setTitle("Sensor starts on boot");
-//		sensor2Pref
-//				.setSummary("Keeps the sensor service running at all times.");
-//		sensorsCat.addPreference(sensor2Pref);
-//
-//		CheckBoxPreference sensor3Pref = new CheckBoxPreference(this);
-//		sensor3Pref.setKey("sensor_3");
-//		sensor3Pref.setTitle("Sensor starts on boot");
-//		sensor3Pref
-//				.setSummary("Keeps the sensor service running at all times.");
-//		sensorsCat.addPreference(sensor3Pref);
 		return root;
 	}
 }

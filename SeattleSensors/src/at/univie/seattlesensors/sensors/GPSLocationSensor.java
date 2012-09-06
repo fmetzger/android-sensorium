@@ -45,7 +45,7 @@ public class GPSLocationSensor extends AbstractSensor {
 	}
 
 	@Override
-	public void enable() {
+	protected void _enable() {
 
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {
@@ -81,15 +81,12 @@ public class GPSLocationSensor extends AbstractSensor {
 				.getSystemService(Context.LOCATION_SERVICE));
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 				0, locationListener);
-		super.enable();
 	}
 
 	@Override
-	public void disable() {
-		super.disable();
+	protected void _disable() {
 		if (locationManager != null)
 			locationManager.removeUpdates(locationListener);
-		super.disable();
 	}
 
 	@XMLRPCMethod

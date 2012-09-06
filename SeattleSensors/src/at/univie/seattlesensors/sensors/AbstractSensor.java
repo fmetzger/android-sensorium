@@ -22,7 +22,11 @@
 
 package at.univie.seattlesensors.sensors;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import android.content.Context;
+import android.util.Log;
 
 public abstract class AbstractSensor {
 	
@@ -37,12 +41,36 @@ public abstract class AbstractSensor {
 	}
 	
 	public void enable(){
-		enabled = true;
+		try{
+			_enable();
+			enabled = true;
+		} catch (Exception e){
+			disable();
+			Log.d("SeattleSensors", "Caught exception while enabling " + name + ": " + e.toString());
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
+		}
 	}
 	
+	protected abstract void _enable();
+	
 	public void disable(){
-		enabled = false;
+		try{
+			_disable();
+			enabled = false;
+		} catch (Exception e){
+			Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
+		}
+		
 	}
+	
+	protected abstract void _disable();
 	
 	public void toggle(){
 		if(enabled)

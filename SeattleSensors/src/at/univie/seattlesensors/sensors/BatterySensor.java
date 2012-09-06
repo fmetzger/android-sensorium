@@ -29,7 +29,7 @@ public class BatterySensor extends AbstractSensor {
 	}
 
 	@Override
-	public void enable() {
+	protected void _enable() {
         batteryReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 
@@ -49,15 +49,12 @@ public class BatterySensor extends AbstractSensor {
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryIntent = context.registerReceiver(batteryReceiver, batteryLevelFilter);
         Log.d("BATT", batteryIntent.toString());
-        
-        super.enable();
 	}
 
 	@Override
-	public void disable() {
+	protected void _disable() {
 		if(batteryIntent != null)
 			context.unregisterReceiver(batteryReceiver);
-		super.disable();
 	}
 	
 	@XMLRPCMethod

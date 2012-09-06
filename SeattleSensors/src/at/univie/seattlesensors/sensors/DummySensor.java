@@ -17,11 +17,16 @@ public class DummySensor extends AbstractSensor {
 	}
 	
 	@Override
-	public void enable(){
+	protected void _enable(){
 		// force an exception
 		String x = null;
 		System.out.print(x);
 		Log.d("TEST", x);
+	}
+
+	@Override
+	protected void _disable() {
+		return;
 	}
 
 }

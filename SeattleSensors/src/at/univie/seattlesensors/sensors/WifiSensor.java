@@ -26,8 +26,7 @@ public class WifiSensor extends AbstractSensor {
 	}
 	
 	@Override
-	public void enable() {
-		super.enable();
+	protected void _enable() {
 		mainWifi =  (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		
 		wifiReceiver = new BroadcastReceiver() {
@@ -58,8 +57,7 @@ public class WifiSensor extends AbstractSensor {
 	}
 	
 	@Override
-	public void disable() {
-		super.disable();
+	protected void _disable() {
 		context.unregisterReceiver(wifiReceiver);
 	}
 	
