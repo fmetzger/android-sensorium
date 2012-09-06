@@ -34,6 +34,7 @@ public class SeattleSensorsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.seattle_sensors_main);
+		SensorServiceSingleton.getInstance().bindService(this);
 	}
 
 	public void onDestroy() {
@@ -57,16 +58,11 @@ public class SeattleSensorsActivity extends Activity {
 //	 startActivityForResult(new Intent(view.getContext(),
 //			 SensorDebugActivity.class), 0);
 //	 }
-
+	
 	public void startSensorConfigView(View view) {
 		startActivityForResult(new Intent(view.getContext(),
-				SensorConfigActivity.class), 0);
+				SensorPreferenceActivity.class), 0);
 	}
-	
-//	public void startSensorConfigView(View view) {
-//		startActivityForResult(new Intent(view.getContext(),
-//				SensorPreferenceActivity.class), 0);
-//	}
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

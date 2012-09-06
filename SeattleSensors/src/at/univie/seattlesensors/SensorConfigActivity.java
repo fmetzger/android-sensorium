@@ -21,7 +21,8 @@ public class SensorConfigActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_config);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SensorServiceSingleton.getInstance().bindService(this);
         
 		ListView sensorConfigList = (ListView) findViewById(R.id.sensorConfigListView);
 

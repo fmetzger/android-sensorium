@@ -26,83 +26,95 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public abstract class AbstractSensor {
-	
+
 	protected Context context;
 	private boolean enabled = false;
 	private boolean available = true;
 	protected String description = "";
 	protected String name = "";
-	
-	public AbstractSensor(Context context){
+
+	public AbstractSensor(Context context) {
 		this.context = context;
 	}
-	
-	public void enable(){
-		try{
-			_enable();
-			enabled = true;
-		} catch (Exception e){
-			disable();
-			Log.d("SeattleSensors", "Caught exception while enabling " + name + ": " + e.toString());
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+
+	public void enable() {
+		if (!enabled) {
+			try {
+				_enable();
+
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+				prefs.edit().putBoolean(this.getClass().getName(), true).apply();
+
+				enabled = true;
+			} catch (Exception e) {
+				disable();
+				Log.d("SeattleSensors", "Caught exception while enabling " + name + ": " + e.toString());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			}
 		}
 	}
-	
+
 	protected abstract void _enable();
-	
-	public void disable(){
-		try{
-			_disable();
-			enabled = false;
-		} catch (Exception e){
-			Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
-		}
-		
+
+	public void disable() {
+//		if(enabled){
+			try {
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+				prefs.edit().putBoolean(this.getClass().getName(), false).apply();
+				enabled = false;
+
+				_disable();
+			} catch (Exception e) {
+				Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			}
+//		}
 	}
-	
+
 	protected abstract void _disable();
-	
-	public void toggle(){
-		if(enabled)
+
+	public void toggle() {
+		if (enabled)
 			disable();
 		else
 			enable();
 	}
-	
-	public void setState(boolean newState){
-		if(newState && !enabled)
+
+	public void setState(boolean newState) {
+		if (newState && !enabled)
 			enable();
 		else if (!newState && enabled)
 			disable();
 	}
 
-	public boolean isEnabled(){
+	public boolean isEnabled() {
 		return enabled;
 	}
-	
-	public String getDescription(){
+
+	public String getDescription() {
 		return description;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	
-	public void setUnavailable(){
+
+	public void setUnavailable() {
 		this.available = false;
 	}
-	
-	public boolean available(){
+
+	public boolean available() {
 		return this.available;
 	}
 

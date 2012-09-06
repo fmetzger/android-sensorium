@@ -50,7 +50,7 @@ public class SensorService extends Service {
 		registry.registerSensor(new DummySensor(this));
 		registry.registerSensor(new WifiSensor(this));
 		registry.registerSensor(new BluetoothSensor(this));
-		registry.startup();
+		registry.startup(this);
 
 		// start the XMLRPC server
 		if (!XMLRPCSensorServerThread.running)

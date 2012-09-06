@@ -30,6 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
@@ -60,11 +63,16 @@ public class SensorRegistry {
 		return instance;
 	}
 
-	public void startup() {
+	public void startup(Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		
 		for (AbstractSensor sensor : sensors) {
 			//TODO: exceptions will now be caught in the abstractsensor class, need to change this
 			try {
-				sensor.enable();
+				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), false);
+				Log.d("SeattleSensors", sensor.getClass().getName()+ ": " + savedstate);
+				if(savedstate)
+					sensor.enable();
 			} catch (Exception e) {
 				sensor.disable();
 				sensor.setUnavailable();
@@ -192,5 +200,13 @@ public class SensorRegistry {
 
 	public List<AbstractSensor> getSensors() {
 		return this.sensors;
+	}
+	
+	public AbstractSensor getSensorForClassname(String classname){
+		for(AbstractSensor sensor: sensors){
+			if(sensor.getClass().getName().equals(classname))
+				return sensor;
+		}
+		return null;
 	}
 }
