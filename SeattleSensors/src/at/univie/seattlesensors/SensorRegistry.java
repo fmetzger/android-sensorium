@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,11 +104,17 @@ public class SensorRegistry {
 
 		for (AbstractSensor sensor : sensors) {
 			if (sensor.isEnabled()) {
+				String name = sensor.getClass().getName();
 				Method[] methods = sensor.getClass().getMethods();
 				for (Method m : methods) {
-					// Log.d("REFLECTIONTEST", m.getName());
-					if (m.isAnnotationPresent(XMLRPCMethod.class))
-						out.add(m.getName());
+					if (m.isAnnotationPresent(XMLRPCMethod.class)){
+						if (name.lastIndexOf('.') > 0) {
+						    name = name.substring(name.lastIndexOf('.')+1);
+						    //get the last of at.univie.seattlesensors.sensors."RadioSensor"
+						} 
+						out.add(name + "." + m.getName());
+						//Log.d("REFLECTIONTEST", name + "." + m.getName());
+					}
 				}
 			}
 		}
@@ -125,8 +132,15 @@ public class SensorRegistry {
 				for (Method m : methods) {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (m.getName().equals(methodname)) {
+							String name = sensor.getClass().getName();
+							if (name.lastIndexOf('.') > 0) {
+							    name = name.substring(name.lastIndexOf('.')+1);
+							    //get the last of at.univie.seattlesensors.sensors."RadioSensor"
+							}
+							signature.add(name + "." + m.getName());
+							
 							Class<?>[] params = m.getParameterTypes();
-							Class<?> rettype = m.getReturnType();
+							Class<?> rettype = m.getReturnType();							
 
 							if (rettype.toString().equals(
 									"class [Ljava.lang.Object;")) {
@@ -146,16 +160,18 @@ public class SensorRegistry {
 								signature.add("nil");
 							}
 
-							return signature.toArray();
+							//return signature.toArray();
 						}
 					}
 				}
 			}
 		}
-		return null;
+		if (!signature.isEmpty()) return signature.toArray();
+		else return null;
 	}
 
-	public Object callSensorMethod(String methodname) {
+	public Object[] callSensorMethod(String methodname) {
+		List<Object> result = new LinkedList<Object>();
 
 		for (AbstractSensor sensor : sensors) {
 			if (sensor.isEnabled()) {
@@ -164,7 +180,9 @@ public class SensorRegistry {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (m.getName().equals(methodname)) {
 							try {
-								return m.invoke(sensor);
+								result.add(m.invoke(sensor));
+								String time = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+								result.add(time);
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
 								e.printStackTrace();
@@ -180,7 +198,8 @@ public class SensorRegistry {
 				}
 			}
 		}
-		return null;
+		if (!result.isEmpty()) return result.toArray();
+		else return null;
 	}
 
 	public void log(String tag, String out) {
