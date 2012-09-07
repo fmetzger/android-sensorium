@@ -32,16 +32,19 @@ public class SensorDebugActivity extends Activity {
 		Object [] methodsignature = sensorregistry.getSensorMethodSignature("batteryVoltage");
 		for (Object o : methodsignature) Log.d("getSensorMethodSignature", o.toString());
 		
-		Object [] results = sensorregistry.callSensorMethod("batteryVoltage");
-		for (Object o : results) Log.d("callSensorMethod", o.toString());
+		//Object [] results = sensorregistry.callSensorMethod("batteryVoltage");
+		//for (Object o : results) Log.d("callSensorMethod", o.toString());
 		
-		results = sensorregistry.callSensorMethod("getScannedDev");
-		List<Device> dev = (List<Device>) results[0];
-		if (!dev.isEmpty()) {
-			for (Device d : dev) {
-				Log.d("getScannedDev", d.getDevName() + "\t" + d.getMAC() + "\t" + String.valueOf(d.getRSSI()));
+		Object [] results = sensorregistry.callSensorMethod("getScannedDev");
+		if (results != null) {
+			List<Device> dev = (List<Device>) results[0];
+			if (!dev.isEmpty()) {
+				for (Device d : dev) {
+					Log.d("getScannedDev", d.getDevName() + "\t" + d.getMAC() + "\t" + String.valueOf(d.getRSSI()));
+				}
 			}
+			Log.d("getScannedDev", results[1].toString()); // timestamp
 		}
-		Log.d("getScannedDev", results[1].toString()); // timestamp
+		
     }
 }
