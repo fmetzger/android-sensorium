@@ -39,6 +39,7 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 import at.univie.seattlesensors.sensors.XMLRPCMethod;
+import at.univie.seattlesensors.sensors.BluetoothSensor.Device;
 
 public class SensorRegistry {
 
@@ -172,7 +173,8 @@ public class SensorRegistry {
 
 	public Object[] callSensorMethod(String methodname) {
 		List<Object> result = new LinkedList<Object>();
-
+		result.clear();
+		
 		for (AbstractSensor sensor : sensors) {
 			if (sensor.isEnabled()) {
 				Method[] methods = sensor.getClass().getMethods();
@@ -180,9 +182,10 @@ public class SensorRegistry {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (m.getName().equals(methodname)) {
 							try {
-								result.add(m.invoke(sensor));
-								String time = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-								result.add(time);
+								Object obj = m.invoke(sensor);
+								if (obj != null) result.add(obj);
+								else continue;
+								Log.d("getScannedDev", result.toString());
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
 								e.printStackTrace();
@@ -198,8 +201,15 @@ public class SensorRegistry {
 				}
 			}
 		}
-		if (!result.isEmpty()) return result.toArray();
-		else return null;
+		if (!result.isEmpty()) {
+			String time = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+			result.add(time);			
+			return result.toArray();
+		}
+		else {
+			Log.d("callSensorMethod!!", "sending back null");
+			return null;
+		}
 	}
 
 	public void log(String tag, String out) {
