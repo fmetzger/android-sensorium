@@ -80,8 +80,23 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		allsensorsPref = new CheckBoxPreference(this);
 		allsensorsPref.setKey("all_sensors_override");
 		allsensorsPref.setTitle("Sensors Privacy");
-		allsensorsPref
-				.setSummary("Keeps the sensor service running at all times.");
+		allsensorsPref.setSummary("Enable/disable all sensors at once");
+		allsensorsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener(){
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				Log.d("SeattleSensors", "Preference" + preference.getTitle() + "changed to " + newValue);
+				if(preference.getKey().equals("all_sensors_override")){
+					Log.d("SeattleSensors", "overriding individual sensor settings");
+					for(CheckBoxPreference pref: sensorPrefs.values()){
+						pref.setChecked((Boolean) newValue);
+					}
+				}
+				return true;
+			}
+			
+		});
 		generalCat.addPreference(allsensorsPref);
 
 		PreferenceCategory sensorsCat = new PreferenceCategory(this);
