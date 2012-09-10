@@ -1,30 +1,47 @@
 package at.univie.seattlesensors;
 
+import android.text.Html;
 import android.widget.TextView;
+import at.univie.seattlesensors.sensors.SensorChangeListener;
+import at.univie.seattlesensors.sensors.SensorValue;
 
-public class SensorViewItem {
+public class SensorViewItem implements SensorChangeListener{
+	
+	private TextView textViewSensorValues;
+	private TextView textViewSensorName;
 
-	public SensorViewItem(TextView sValue, TextView sUnit) {
-		this.textViewSensorValue = sValue;
-		this.textViewSensorUnit = sUnit;
+	public SensorViewItem(TextView sName, TextView sValues) {
+		this.textViewSensorValues = sValues;
+		this.textViewSensorName = sName;
 	}
 	
-	private TextView textViewSensorValue;
-	public TextView getTextViewSensorValue() {
-		return textViewSensorValue;
+	public TextView getTextViewSensorValues() {
+		return textViewSensorValues;
 	}
 
-	public void setTextViewSensorValue(TextView textViewSensorValue) {
-		this.textViewSensorValue = textViewSensorValue;
+	public void setTextViewSensorValues(TextView textViewSensorValues) {
+		this.textViewSensorValues = textViewSensorValues;
 	}
 
-	public TextView getTextViewSensorUnit() {
-		return textViewSensorUnit;
+	public TextView getTextViewSensorName() {
+		return textViewSensorName;
 	}
 
-	public void setTextViewSensorUnit(TextView textViewSensorUnit) {
-		this.textViewSensorUnit = textViewSensorUnit;
+	public void setTextViewSensorName(TextView textViewSensorName) {
+		this.textViewSensorName = textViewSensorName;
 	}
 
-	private TextView textViewSensorUnit;
+	@Override
+	public void sensorUpdated(SensorValue... values) {
+		StringBuffer sb = new StringBuffer();
+		
+		for (SensorValue v: values){
+//			sb.append("<p> <div align=\"left\">" +  v.getValue() + "<div align=\"right\"><b>" + v.getUnit() + "</b></div> </p>");
+			sb.append("<p> <div align=\"left\">" +  v.getValue() + " <b>" + v.getUnit() + "</b> </p>");
+		}
+		
+		textViewSensorValues.setText(Html.fromHtml(sb.toString()), TextView.BufferType.SPANNABLE);
+	}
+
+	
 }

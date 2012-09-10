@@ -31,67 +31,89 @@ import android.telephony.gsm.GsmCellLocation;
 import at.univie.seattlesensors.SensorRegistry;
 
 public class RadioSensor extends AbstractSensor {
-	
+
 	private TelephonyManager telephonyManager;
 	private PhoneStateListener phoneStateListener;
-	
-	private long timestamp = 0L;
-	private GsmCellLocation gsmCell;
-	private SignalStrength signalStrength;
-	
-	
-	public RadioSensor(Context context){
+
+	private SensorValue timestamp;
+	private SensorValue mccmnc;
+	private SensorValue cid;
+	private SensorValue lac;
+	private SensorValue signalstrength;
+
+	// private GsmCellLocation gsmCell;
+	// private SignalStrength signalStrength;
+
+	public RadioSensor(Context context) {
 		super(context);
 		name = "Radio Cell Info Sensor";
-	}
 
+		timestamp = new SensorValue("ms");
+		mccmnc = new SensorValue("mcc+mnc");
+		lac = new SensorValue("lac");
+		cid = new SensorValue("cid");
+		signalstrength = new SensorValue("signal strength");
+	}
 
 	@Override
 	protected void _enable() {
-		
-		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
 
-		gsmCell = (GsmCellLocation) telephonyManager
-				.getCellLocation();
-		timestamp = System.currentTimeMillis();
-		
-		if(gsmCell != null)
-			SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
-		
+		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
+		GsmCellLocation gsmCell = (GsmCellLocation) telephonyManager.getCellLocation();
+
+		timestamp.setValue(System.currentTimeMillis());
+		if (gsmCell != null){
+			mccmnc.setValue(telephonyManager.getNetworkOperator());
+			cid.setValue(gsmCell.getCid());
+			lac.setValue(gsmCell.getLac());
+		}
+		notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
+
 		phoneStateListener = new PhoneStateListener() {
 			@Override
 			public void onCellLocationChanged(CellLocation location) {
-				gsmCell = (GsmCellLocation) location;
-				timestamp = System.currentTimeMillis();
-				
-				SensorRegistry.getInstance().log("RADIO", "MCC+MNC: " + telephonyManager.getNetworkOperator() + "CID: " + gsmCell.getCid() + " LAC: " + gsmCell.getLac() + " PSC: " + gsmCell.getPsc());
+				GsmCellLocation gsmCell = (GsmCellLocation) location;
+				timestamp.setValue(System.currentTimeMillis());
+
+				mccmnc.setValue(telephonyManager.getNetworkOperator());
+				cid.setValue(gsmCell.getCid());
+				lac.setValue(gsmCell.getLac());
+				notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
+
 			}
 
 			@Override
 			public void onSignalStrengthsChanged(SignalStrength sStrength) {
-				signalStrength = sStrength;
-				SensorRegistry.getInstance().log("RADIO", "BER: " + signalStrength.getGsmBitErrorRate() + " Signal Strength: " + signalStrength.getGsmSignalStrength());
+
+				// TODO: values defined in TS27.007 chap 8.5, convert them!
+				// 0 ‑113 dBm or less
+				// 1 ‑111 dBm
+				// 2...30 ‑109... ‑53 dBm
+				// 31 ‑51 dBm or greater
+				// 99 not known or not detectable
+				// <ber>: integer type; channel bit error rate (in percent)
+				// 0...7 as RXQUAL values in the table in 3GPP TS 45.008 [20]
+				// subclause 8.2.4
+				// 99 not known or not detectable
+
+				signalstrength.setValue(sStrength.getGsmSignalStrength());
+				notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
 			}
 		};
-		
-		telephonyManager.listen(phoneStateListener,
-				PhoneStateListener.LISTEN_CELL_LOCATION
-						| PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
+		telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 	}
 
 	@Override
 	protected void _disable() {
 
 		if (telephonyManager != null) {
-			telephonyManager.listen(phoneStateListener,
-					PhoneStateListener.LISTEN_NONE);
+			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
 		}
 	}
 
 	@XMLRPCMethod
-	public Object cellInformation(){
-		if(telephonyManager != null && gsmCell != null)
-			return new Object[] {"timestamp", timestamp, "mcc+mnc", telephonyManager.getNetworkOperator(), "lac", gsmCell.getLac(), "cid", gsmCell.getCid()};
-		return "no cell info available";
+	public Object cellInformation() {
+		return new Object[] { "timestamp", timestamp.getValue(), "mcc+mnc", mccmnc.getValue(), "lac", lac.getValue(), "cid", cid.getValue() };
 	}
 }

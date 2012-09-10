@@ -24,11 +24,14 @@ package at.univie.seattlesensors.sensors;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.LinkedList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import at.univie.seattlesensors.SensorRegistry;
 
 public abstract class AbstractSensor {
 
@@ -37,9 +40,12 @@ public abstract class AbstractSensor {
 	private boolean available = true;
 	protected String description = "";
 	protected String name = "";
-
+	
+	private List<SensorChangeListener> listeners;
+	
 	public AbstractSensor(Context context) {
 		this.context = context;
+		this.listeners = new LinkedList<SensorChangeListener>();
 	}
 
 	public void enable() {
@@ -117,5 +123,26 @@ public abstract class AbstractSensor {
 	public boolean available() {
 		return this.available;
 	}
+	
+	public void addListener(SensorChangeListener s){
+		this.listeners.add(s);
+	}
 
+	public void removeListener(SensorChangeListener s){
+		this.listeners.remove(s);
+	}
+	
+	protected void notifyListeners(SensorValue... values){
+		for(SensorChangeListener l: listeners){
+			l.sensorUpdated(values);
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		for(SensorValue val: values){
+			sb.append(val.getValue() +" "+ val.getUnit() +"; ");
+		}
+		SensorRegistry.getInstance().log(this.getClass().getCanonicalName(), sb.toString());
+		
+		Log.d("SeattleSensors", sb.toString());
+	}
 }

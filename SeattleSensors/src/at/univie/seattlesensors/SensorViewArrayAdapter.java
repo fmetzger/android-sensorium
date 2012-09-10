@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 
@@ -26,28 +27,28 @@ public class SensorViewArrayAdapter  extends ArrayAdapter<AbstractSensor> {
 		AbstractSensor sensor = (AbstractSensor) this.getItem(position);
 
 		TextView sValue;
-		TextView sUnit;
 		TextView sName;
 
 		if (convertView == null) {
 			convertView = inflater.inflate(R.layout.sensor_view_item, null);
 
 			sValue = (TextView) convertView
-					.findViewById(R.id.sensorValue);
-			sUnit = (TextView) convertView
-					.findViewById(R.id.sensorUnit);
+					.findViewById(R.id.sensorValues);
 			sName = (TextView) convertView
 					.findViewById(R.id.sensorName);
+			
+			sName.setText(sensor.getName());
 
-
-			convertView.setTag(new SensorViewItem(sValue, sUnit));
+			SensorViewItem svi = new SensorViewItem(sName, sValue);
+			sensor.addListener(svi);
+			convertView.setTag(svi);
 
 
 		} else {
 			SensorViewItem viewItem = (SensorViewItem) convertView
 					.getTag();
-			sValue = viewItem.getTextViewSensorValue();
-			sUnit = viewItem.getTextViewSensorUnit();
+			sValue = viewItem.getTextViewSensorValues();
+			sName = viewItem.getTextViewSensorName();
 		}
 
 		// fill sensors values here

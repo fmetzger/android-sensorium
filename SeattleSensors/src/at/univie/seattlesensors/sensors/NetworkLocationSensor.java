@@ -28,20 +28,28 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import at.univie.seattlesensors.SensorRegistry;
 
 public class NetworkLocationSensor extends AbstractSensor {
 
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 
-	private Location location;
-	private long timestamp;
+	private SensorValue timestamp;
+	private SensorValue longitude;
+	private SensorValue latitude;
+	private SensorValue altitude;
+	private SensorValue accuracy;
 
 	public NetworkLocationSensor(Context context) {
 		super(context);
 
 		name = "Network Loc Sensor";
+		
+		timestamp = new SensorValue("ms");
+		longitude = new SensorValue("° lon");
+		latitude = new SensorValue("° lat");
+		altitude = new SensorValue("m alt");
+		accuracy = new SensorValue("accuracy");
 	}
 
 	@Override
@@ -49,36 +57,29 @@ public class NetworkLocationSensor extends AbstractSensor {
 
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {
-				location = loc;
-				timestamp = System.currentTimeMillis();
-
-				SensorRegistry.getInstance().log(
-						"NETLOC",
-						"long: " + location.getLongitude() + " lat: "
-								+ location.getLatitude() + " alt: "
-								+ location.getAltitude() + "accuracy: "
-								+ location.getAccuracy());
+				longitude.setValue(loc.getLongitude());
+				latitude.setValue(loc.getLatitude());
+				altitude.setValue(loc.getAltitude());
+				accuracy.setValue(loc.getAccuracy());
+				timestamp.setValue(System.currentTimeMillis());
+				
+				notifyListeners(timestamp, longitude, latitude, altitude, accuracy);
 			}
 
-			public void onStatusChanged(String provider, int status,
-					Bundle extras) {
+			public void onStatusChanged(String provider, int status, Bundle extras) {
 			}
 
 			public void onProviderEnabled(String provider) {
-				Log.d("LocationSensor", provider
-						+ " enabled, listening for updates.");
+				Log.d("LocationSensor", provider + " enabled, listening for updates.");
 			}
 
 			public void onProviderDisabled(String provider) {
-				Log.d("LocationSensor", provider
-						+ " disabled, no more updates.");
+				Log.d("LocationSensor", provider + " disabled, no more updates.");
 			}
 		};
 
-		locationManager = ((LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE));
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		locationManager = ((LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 	}
 
 	@Override
@@ -89,13 +90,6 @@ public class NetworkLocationSensor extends AbstractSensor {
 
 	@XMLRPCMethod
 	public Object[] networklocationInformation() {
-		if (location != null) {
-			return new Object[] { "timestamp", timestamp, "timestamp_fix",
-					location.getTime(), "long", location.getLongitude(), "lat",
-					location.getLatitude(), "alt", location.getAltitude(),
-					"bearing", location.getBearing(), "speed",
-					location.getSpeed(), "accuracy", location.getAccuracy() };
-		}
-		return null;
+			return new Object[] { "timestamp", timestamp.getValue(), "long", longitude.getValue(), "lat", latitude.getValue(), "alt", altitude.getValue(), "accuracy", accuracy.getValue() };
 	}
 }
