@@ -11,21 +11,27 @@ import at.univie.seattlesensors.SensorRegistry;
 public class BatterySensor extends AbstractSensor {
 	
 	private BroadcastReceiver batteryReceiver;
-	
-	private long timestamp;
-	private int rawlevel = -1;
-	private int level = -1;
-	private int scale = -1;
-	private int plugged = -1;
-	private int temperature = -1;
-	private int voltage = -1;
-	private String technology = "";
-	
 	private Intent batteryIntent;
+	
+	private SensorValue timestamp;
+	private SensorValue level;
+	private SensorValue temperature;
+	private SensorValue voltage;
+	private SensorValue technology;
+	private SensorValue plugged;
+	
+	
 
 	public BatterySensor(Context context) {
 		super(context);
 		name = "Battery Sensor";
+		
+		timestamp = new SensorValue("ms");
+		level = new SensorValue("%");
+		temperature = new SensorValue("°C");
+		voltage = new SensorValue("V");
+		technology = new SensorValue("type");
+		plugged = new SensorValue("plugged");
 	}
 
 	@Override
@@ -33,17 +39,33 @@ public class BatterySensor extends AbstractSensor {
         batteryReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 
-            	timestamp = System.currentTimeMillis();
-            	plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-                rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-                technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
-                temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
-                voltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
-                if (rawlevel >= 0 && scale > 0) {
-                    level = (rawlevel * 100) / scale;
+            	timestamp.setValue(System.currentTimeMillis());
+            	int plug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            	
+                if (plug == BatteryManager.BATTERY_PLUGGED_AC) {
+                    plugged.setValue("AC");
+                } else if (plug == BatteryManager.BATTERY_PLUGGED_USB) {
+                    plugged.setValue("USB");
+                } else if (plug == 0) {
+                    plugged.setValue("unplugged");
+                } else {
+                    plugged.setValue("n/a");
                 }
-                SensorRegistry.getInstance().log("BATTERY", level + "%, plugged: "+plugged+" volt: "+ voltage);
+                
+                technology.setValue(intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY));
+                Float f = Float.valueOf(intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0));
+                temperature.setValue(f/10);
+                f = Float.valueOf(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0));
+                voltage.setValue(f/1000);
+                
+                int rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                if (rawlevel >= 0 && scale > 0) {
+                    level.setValue((rawlevel * 100) / scale);
+                } else {
+                	level.setValue(rawlevel);
+                }
+                notifyListeners(timestamp, level, voltage, plugged, temperature, technology);
             }
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -58,33 +80,27 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public int batteryVoltage(){
-		return voltage;
+	public float batteryVoltage(){
+		return (Float) voltage.getValue();
 	}
 	
 	@XMLRPCMethod
 	public String batteryTechnology(){
-		return technology;
+		return (String) technology.getValue();
 	}
 	
 	@XMLRPCMethod
-	public int batteryTemperature(){
-		return temperature;
+	public float batteryTemperature(){
+		return (Float) temperature.getValue();
 	}
 	
 	@XMLRPCMethod
-	public int batteryPlugged(){
-		return plugged;
+	public String batteryPlugged(){
+		return (String) plugged.getValue();
 	}
 	
 	@XMLRPCMethod
 	public int batteryLevel(){
-		return rawlevel;
+		return (Integer) level.getValue();
 	}
-	
-	@XMLRPCMethod
-	public Object[] batteryInformation(){
-		return new Object[]{"timestamp", timestamp, "technology", technology, "voltage", voltage, "temperature", temperature, "plugged", plugged, "rawlevel", rawlevel, "scale", scale, "level", level};
-	}
-
 }
