@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Spinner
-        android:id="@+id/sensorViewSpinner"
+    <TextView
+        android:id="@+id/sensorValue"
         android:layout_width="wrap_content"
-        android:layout_height="20pt"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/current_values"
+        android:textSize="16sp" >
+
+    </TextView>
 
     <ListView
         android:id="@+id/sensorValues"

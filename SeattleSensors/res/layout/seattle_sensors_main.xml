@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent" >
 
     <TextView
         android:id="@+id/seattle_donate_thanks"
@@ -9,41 +9,27 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:enabled="false"
-        android:textStyle="bold"
-        android:text="@string/seattle_donate_thanks"  />
+        android:text="@string/seattle_donate_thanks"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/debug_out_button"
+    <ListView
+        android:id="@+id/sensorValues"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/sensorValue"
+        android:layout_centerHorizontal="true" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/sensorValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="@string/debug_out_button" 
-    	android:onClick="startDebugView"/>
-
-    <Button
-        android:id="@+id/sensor_config_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/debug_out_button"
-        android:layout_alignParentLeft="true"
-        android:text="@string/sensor_config" 
-    	android:onClick="startSensorConfigView"/>
-
-    <Button
-        android:id="@+id/sensor_view_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sensor_config_button"
-        android:layout_alignParentLeft="true"
-        android:text="@string/sensor_view_button"/>
-
-    <LinearLayout
-        android:id="@+id/autostart_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/sensor_view_button"
-        android:layout_alignParentLeft="true" >
-    </LinearLayout>
+        android:layout_below="@+id/seattle_donate_thanks"
+        android:layout_marginTop="17dp"
+        android:padding="10dp"
+        android:text="@string/current_values"
+        android:textSize="16sp" />
 
 </RelativeLayout>

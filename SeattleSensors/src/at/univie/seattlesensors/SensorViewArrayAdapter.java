@@ -27,14 +27,17 @@ public class SensorViewArrayAdapter  extends ArrayAdapter<AbstractSensor> {
 
 		TextView sValue;
 		TextView sUnit;
+		TextView sName;
 
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.sensor_config_item, null);
+			convertView = inflater.inflate(R.layout.sensor_view_item, null);
 
 			sValue = (TextView) convertView
 					.findViewById(R.id.sensorValue);
 			sUnit = (TextView) convertView
 					.findViewById(R.id.sensorUnit);
+			sName = (TextView) convertView
+					.findViewById(R.id.sensorName);
 
 
 			convertView.setTag(new SensorViewItem(sValue, sUnit));

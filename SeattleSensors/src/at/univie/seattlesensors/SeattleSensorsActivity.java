@@ -22,19 +22,31 @@
 
 package at.univie.seattlesensors;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import at.univie.seattlesensors.sensors.AbstractSensor;
 
 public class SeattleSensorsActivity extends Activity {
+
+	private ArrayAdapter<AbstractSensor> listAdapter;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.seattle_sensors_main);
 		SensorServiceSingleton.getInstance().bindService(this);
+
+		ListView sensorViewList = (ListView) findViewById(R.id.sensorValues);
+		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
+		listAdapter = new SensorViewArrayAdapter(this, sensors);
+		sensorViewList.setAdapter(listAdapter);
 	}
 
 	public void onDestroy() {
@@ -49,36 +61,23 @@ public class SeattleSensorsActivity extends Activity {
 		super.onResume();
 	}
 
-	public void startDebugView(View view) {
-		startActivityForResult(new Intent(view.getContext(),
-				SensorDebugActivity.class), 0);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
 	}
 
-//	 public void startSensorsView(View view) {
-//	 startActivityForResult(new Intent(view.getContext(),
-//			 SensorDebugActivity.class), 0);
-//	 }
-	
-	public void startSensorConfigView(View view) {
-		startActivityForResult(new Intent(view.getContext(),
-				SensorPreferenceActivity.class), 0);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			startActivityForResult(new Intent(this, SensorPreferenceActivity.class), 0);
+			return true;
+		case R.id.menu_debug:
+			startActivityForResult(new Intent(this, SensorDebugActivity.class), 0);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_settings:
-        		startActivityForResult(new Intent(this,
-        				SensorPreferenceActivity.class), 0);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

@@ -13,6 +13,9 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {
@@ -97,6 +100,10 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 			}
 			
 		});
+		
+//		SensorPreference sPref = new SensorPreference(this);
+//		generalCat.addPreference(sPref);
+		
 		generalCat.addPreference(allsensorsPref);
 
 		PreferenceCategory sensorsCat = new PreferenceCategory(this);

@@ -19,5 +19,8 @@
     <string name="title_activity_sensor_debug">SensorDebugActivity</string>
     <string name="debug_out">Sensors Debug Output</string>
     <string name="title_activity_sensors_view">SensorsViewActivity</string>
+    <string name="current_values">Current sensor values:</string>
+    <string name="sensor_name">Sensor Name</string>
+    <string name="menu_debug">Debug</string>
 
 </resources>
