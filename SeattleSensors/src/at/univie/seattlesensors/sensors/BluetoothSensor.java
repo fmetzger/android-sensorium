@@ -64,14 +64,15 @@ public class BluetoothSensor extends AbstractSensor {
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 							devices += "\nDiscovered: " + name + "\tMAC address: " + device.getAddress() 
 									+ "\tRSSI: " + String.valueOf(rssi);
-							//Log.d("Bluetooth FOUND", devices);
+							//Log.d("Bluetooth FOUND", devices + "\n");
 							scannedDevices.add(new Device(name, device.getAddress(), rssi));
 						}
 					}
 					else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 						SensorRegistry.getInstance().log("Bluetooth", bluetooth + devices);
-						//Log.d("Bluetooth FINISHED", "done");
+						Log.d("Bluetooth FINISHED", "done");
 						devices = "";
+						scannedDevices.clear();
 						bluetoothAdapter.startDiscovery();
 					}
 				}
