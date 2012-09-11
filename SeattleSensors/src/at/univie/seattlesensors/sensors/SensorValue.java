@@ -5,9 +5,18 @@ public class SensorValue {
 	private Object value;
 	private String unit;
 	
+	public static enum Type {
+		LONGITUDE, LATITUDE, TIMESTAMP, LIST, STATE, NAME, RELATIVE, DISTANCE 
+	}
+	
 	public SensorValue(Object value, String unit){
 		this.value = value;
 		this.unit = unit;
+	}
+	
+	public SensorValue(SensorValue copy){
+		this.value = copy.getValue();
+		this.unit = copy.getUnit();
 	}
 	
 	public SensorValue(String unit){

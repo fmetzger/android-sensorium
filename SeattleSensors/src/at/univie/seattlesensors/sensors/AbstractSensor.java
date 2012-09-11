@@ -31,21 +31,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import at.univie.seattlesensors.PrivacyHelper;
 import at.univie.seattlesensors.SensorRegistry;
 
 public abstract class AbstractSensor {
+	
+	private boolean enabled = false;
+	private List<SensorChangeListener> listeners;
+	private String description = "";
+	private PrivacyHelper.PrivacyLevel privacylevel;
 
 	protected Context context;
-	private boolean enabled = false;
-	private boolean available = true;
-	protected String description = "";
 	protected String name = "";
 	
-	private List<SensorChangeListener> listeners;
+	
 	
 	public AbstractSensor(Context context) {
 		this.context = context;
 		this.listeners = new LinkedList<SensorChangeListener>();
+		this.privacylevel = PrivacyHelper.PrivacyLevel.FULL;
 	}
 
 	public void enable() {
@@ -115,14 +119,6 @@ public abstract class AbstractSensor {
 	public String getName() {
 		return name;
 	}
-
-	public void setUnavailable() {
-		this.available = false;
-	}
-
-	public boolean available() {
-		return this.available;
-	}
 	
 	public void addListener(SensorChangeListener s){
 		this.listeners.add(s);
@@ -143,6 +139,15 @@ public abstract class AbstractSensor {
 		}
 		SensorRegistry.getInstance().log(this.getClass().getCanonicalName(), sb.toString());
 		
+		
 		Log.d("SeattleSensors", sb.toString());
+	}
+	
+	public PrivacyHelper.PrivacyLevel getPrivacylevel() {
+		return privacylevel;
+	}
+
+	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
+		this.privacylevel = privacylevel;
 	}
 }

@@ -28,6 +28,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import at.univie.seattlesensors.PrivacyHelper;
 
 public class NetworkLocationSensor extends AbstractSensor {
 
@@ -63,7 +64,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 				accuracy.setValue(loc.getAccuracy());
 				timestamp.setValue(System.currentTimeMillis());
 				
-				notifyListeners(timestamp, longitude, latitude, altitude, accuracy);
+				notifyListeners(timestamp, PrivacyHelper.anonymizelocation(longitude, getPrivacylevel()), PrivacyHelper.anonymizelocation(latitude, getPrivacylevel()), altitude, accuracy);
 			}
 
 			public void onStatusChanged(String provider, int status, Bundle extras) {

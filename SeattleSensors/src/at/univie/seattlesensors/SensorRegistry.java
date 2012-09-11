@@ -77,7 +77,6 @@ public class SensorRegistry {
 					sensor.enable();
 			} catch (Exception e) {
 				sensor.disable();
-				sensor.setUnavailable();
 				Log.d("SeattleSensors", e.toString());
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
