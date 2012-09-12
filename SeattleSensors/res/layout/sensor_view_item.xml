@@ -27,7 +27,6 @@
             android:layout_alignParentTop="true"
 
             android:layout_marginTop="2dp"
-            android:padding="2dp"
             android:textSize="12sp" />
 
         <TextView
@@ -37,7 +36,6 @@
 			android:layout_toLeftOf="@+id/sensorUnits"
             android:layout_marginTop="2dp"
             android:gravity="right"
-            android:padding="2dp"
             android:textSize="12sp" />
 
         <TextView
@@ -47,8 +45,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_marginTop="2dp"
-            
-            android:padding="2dp"
             android:textSize="12sp"
             android:textStyle="bold" />
     </RelativeLayout>
