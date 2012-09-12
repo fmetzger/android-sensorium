@@ -8,39 +8,54 @@ import at.univie.seattlesensors.sensors.SensorValue;
 public class SensorViewItem implements SensorChangeListener{
 	
 	private TextView textViewSensorValues;
+	private TextView textViewSensorUnits;
+	private TextView textViewSensorTypes;
 	private TextView textViewSensorName;
 
-	public SensorViewItem(TextView sName, TextView sValues) {
+	public SensorViewItem(TextView sName, TextView sValues, TextView sUnits, TextView sTypes) {
 		this.textViewSensorValues = sValues;
+		this.textViewSensorUnits = sUnits;
+		this.textViewSensorTypes = sTypes;
 		this.textViewSensorName = sName;
 	}
 	
 	public TextView getTextViewSensorValues() {
 		return textViewSensorValues;
 	}
-
-	public void setTextViewSensorValues(TextView textViewSensorValues) {
-		this.textViewSensorValues = textViewSensorValues;
+	
+	public TextView getTextViewSensorUnits() {
+		return textViewSensorUnits;
+	}
+	
+	public TextView getTextViewSensorTypes() {
+		return textViewSensorTypes;
 	}
 
 	public TextView getTextViewSensorName() {
 		return textViewSensorName;
 	}
 
-	public void setTextViewSensorName(TextView textViewSensorName) {
-		this.textViewSensorName = textViewSensorName;
-	}
-
 	@Override
 	public void sensorUpdated(SensorValue... values) {
-		StringBuffer sb = new StringBuffer();
+		StringBuffer sValues = new StringBuffer();
+		StringBuffer sUnits = new StringBuffer();
+		StringBuffer sTypes = new StringBuffer();
+		
+//		for (SensorValue v: values){
+////			sb.append("<p> <div align=\"left\">" +  v.getValue() + "<div align=\"right\"><b>" + v.getUnit() + "</b></div> </p>");
+//			sb.append("<p> <div align=\"left\">" +  v.getValue() + " <b>" + v.getUnit().getName() + "</b> </p>");
+//		}
 		
 		for (SensorValue v: values){
-//			sb.append("<p> <div align=\"left\">" +  v.getValue() + "<div align=\"right\"><b>" + v.getUnit() + "</b></div> </p>");
-			sb.append("<p> <div align=\"left\">" +  v.getValue() + " <b>" + v.getUnit() + "</b> </p>");
+			sValues.append(v.getValue()+"\n");
+			sUnits.append(v.getUnit().getName()+"\n");
+			sTypes.append(v.getType().getName()+"\n");
 		}
 		
-		textViewSensorValues.setText(Html.fromHtml(sb.toString()), TextView.BufferType.SPANNABLE);
+//		textViewSensorValuesc.setText(Html.fromHtml(sb.toString()), TextView.BufferType.SPANNABLE);
+		textViewSensorValues.setText(sValues.toString());
+		textViewSensorUnits.setText(sUnits.toString());
+		textViewSensorTypes.setText(sTypes.toString());
 	}
 
 	

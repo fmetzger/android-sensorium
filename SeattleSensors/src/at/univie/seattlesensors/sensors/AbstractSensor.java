@@ -135,7 +135,7 @@ public abstract class AbstractSensor {
 		
 		StringBuilder sb = new StringBuilder();
 		for(SensorValue val: values){
-			sb.append(val.getValue() +" "+ val.getUnit() +"; ");
+			sb.append(val.getValue() +" "+ val.getUnit().getName() +"; ");
 		}
 		SensorRegistry.getInstance().log(this.getClass().getCanonicalName(), sb.toString());
 		

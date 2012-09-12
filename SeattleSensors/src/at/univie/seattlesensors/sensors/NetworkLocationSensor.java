@@ -46,11 +46,11 @@ public class NetworkLocationSensor extends AbstractSensor {
 
 		name = "Network Loc Sensor";
 		
-		timestamp = new SensorValue("ms");
-		longitude = new SensorValue("° lon");
-		latitude = new SensorValue("° lat");
-		altitude = new SensorValue("m alt");
-		accuracy = new SensorValue("accuracy");
+		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
+		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
+		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);
+		altitude = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ALTITUDE);
+		accuracy = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.ACCURACY);
 	}
 
 	@Override

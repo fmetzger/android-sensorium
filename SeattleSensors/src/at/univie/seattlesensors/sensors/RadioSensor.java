@@ -22,12 +22,16 @@
 
 package at.univie.seattlesensors.sensors;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.Context;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
+import android.util.Log;
 
 public class RadioSensor extends AbstractSensor {
 
@@ -35,23 +39,23 @@ public class RadioSensor extends AbstractSensor {
 	private PhoneStateListener phoneStateListener;
 
 	private SensorValue timestamp;
-	private SensorValue mccmnc;
+	private SensorValue mcc;
+	private SensorValue mnc;
 	private SensorValue cid;
 	private SensorValue lac;
 	private SensorValue signalstrength;
 
-	// private GsmCellLocation gsmCell;
-	// private SignalStrength signalStrength;
 
 	public RadioSensor(Context context) {
 		super(context);
 		name = "Radio Cell Info Sensor";
 
-		timestamp = new SensorValue("ms");
-		mccmnc = new SensorValue("mcc+mnc");
-		lac = new SensorValue("lac");
-		cid = new SensorValue("cid");
-		signalstrength = new SensorValue("signal strength");
+		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
+		mcc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MCC);
+		mnc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MNC);
+		lac = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.LAC);
+		cid = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.CID);
+		signalstrength = new SensorValue(SensorValue.UNIT.DBM, SensorValue.TYPE.SIGNALSTRENGTH);
 	}
 
 	@Override
@@ -62,11 +66,13 @@ public class RadioSensor extends AbstractSensor {
 
 		timestamp.setValue(System.currentTimeMillis());
 		if (gsmCell != null){
-			mccmnc.setValue(telephonyManager.getNetworkOperator());
+			String mccmnc = telephonyManager.getNetworkOperator();
+			mcc.setValue(mccmnc.substring(0, 3));
+			mnc.setValue(mccmnc.substring(3));
 			cid.setValue(gsmCell.getCid());
 			lac.setValue(gsmCell.getLac());
 		}
-		notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
+		notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
 
 		phoneStateListener = new PhoneStateListener() {
 			@Override
@@ -74,17 +80,18 @@ public class RadioSensor extends AbstractSensor {
 				GsmCellLocation gsmCell = (GsmCellLocation) location;
 				timestamp.setValue(System.currentTimeMillis());
 
-				mccmnc.setValue(telephonyManager.getNetworkOperator());
+				String mccmnc = telephonyManager.getNetworkOperator();
+				mcc.setValue(mccmnc.substring(0, 3));
+				mnc.setValue(mccmnc.substring(3));
 				cid.setValue(gsmCell.getCid());
 				lac.setValue(gsmCell.getLac());
-				notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
+				notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
 
 			}
 
 			@Override
 			public void onSignalStrengthsChanged(SignalStrength sStrength) {
-
-				// TODO: values defined in TS27.007 chap 8.5, convert them!
+				// values defined in TS27.007 chap 8.5, convert them!
 				// 0 ‑113 dBm or less
 				// 1 ‑111 dBm
 				// 2...30 ‑109... ‑53 dBm
@@ -95,8 +102,17 @@ public class RadioSensor extends AbstractSensor {
 				// subclause 8.2.4
 				// 99 not known or not detectable
 
-				signalstrength.setValue(sStrength.getGsmSignalStrength());
-				notifyListeners(timestamp, mccmnc, lac, cid, signalstrength);
+				int asu = sStrength.getGsmSignalStrength();
+				if (asu < 31){
+					signalstrength.setValue(-113+(asu*2));
+				} else if(asu == 30){
+					signalstrength.setValue(">=51");
+				} else if(asu == 99){
+					signalstrength.setValue("not detectable");
+				} else {
+					Log.d("SeattleSensors", "unexpected GSM signal strength value");
+				}
+				notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
 			}
 		};
 
@@ -110,9 +126,34 @@ public class RadioSensor extends AbstractSensor {
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
 		}
 	}
-
+	
 	@XMLRPCMethod
-	public Object cellInformation() {
-		return new Object[] { "timestamp", timestamp.getValue(), "mcc+mnc", mccmnc.getValue(), "lac", lac.getValue(), "cid", cid.getValue() };
+	public Object mcc() {
+		return mcc.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Object mnc() {
+		return mnc.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Object lac() {
+		return lac.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Object cid() {
+		return cid.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Object signalstrength() {
+		return mnc.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Object timestamp() {
+		return timestamp.getValue();
 	}
 }

@@ -22,9 +22,11 @@ public class PrivacyHelper {
                 this.value = value;
                 this.name = name;
         }
+        
         int value(){
         	return value;
         }
+        
         String getName(){
         	return name;
         }

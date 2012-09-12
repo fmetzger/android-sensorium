@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.util.Log;
-import at.univie.seattlesensors.SensorRegistry;
 
 public class BatterySensor extends AbstractSensor {
 	
@@ -26,12 +25,12 @@ public class BatterySensor extends AbstractSensor {
 		super(context);
 		name = "Battery Sensor";
 		
-		timestamp = new SensorValue("ms");
-		level = new SensorValue("%");
-		temperature = new SensorValue("°C");
-		voltage = new SensorValue("V");
-		technology = new SensorValue("type");
-		plugged = new SensorValue("plugged");
+		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
+		level = new SensorValue(SensorValue.UNIT.RELATIVE, SensorValue.TYPE.CHARGE);
+		temperature = new SensorValue(SensorValue.UNIT.TEMPERATURE, SensorValue.TYPE.OTHER);
+		voltage = new SensorValue(SensorValue.UNIT.VOLTAGE, SensorValue.TYPE.OTHER);
+		technology = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.BATTERY_TECHNOLOGY);
+		plugged = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.PLUGGED);
 	}
 
 	@Override
@@ -80,8 +79,8 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public float batteryVoltage(){
-		return (Float) voltage.getValue();
+	public Object batteryVoltage(){
+		return voltage.getValue();
 	}
 	
 	@XMLRPCMethod
@@ -90,8 +89,8 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public float batteryTemperature(){
-		return (Float) temperature.getValue();
+	public Object batteryTemperature(){
+		return temperature.getValue();
 	}
 	
 	@XMLRPCMethod
@@ -100,7 +99,7 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public int batteryLevel(){
-		return (Integer) level.getValue();
+	public Object batteryLevel(){
+		return level.getValue();
 	}
 }
