@@ -29,6 +29,7 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import at.univie.seattlesensors.PrivacyHelper;
 
 public class RadioSensor extends AbstractSensor {
 
@@ -84,7 +85,7 @@ public class RadioSensor extends AbstractSensor {
 				cid.setValue(gsmCell.getCid());
 				lac.setValue(gsmCell.getLac());
 				networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
-				notifyListeners(timestamp, mcc, mnc, lac, cid, networktype, signalstrength);
+				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 
 			}
 
@@ -154,7 +155,7 @@ public class RadioSensor extends AbstractSensor {
 				}
 
 				
-				notifyListeners(timestamp, mcc, mnc, lac, cid, networktype, signalstrength);
+				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 			}
 		};
 

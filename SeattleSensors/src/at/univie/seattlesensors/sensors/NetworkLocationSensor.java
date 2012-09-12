@@ -64,7 +64,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 				accuracy.setValue(loc.getAccuracy());
 				timestamp.setValue(System.currentTimeMillis());
 				
-				notifyListeners(timestamp, PrivacyHelper.anonymizelocation(longitude, getPrivacylevel()), PrivacyHelper.anonymizelocation(latitude, getPrivacylevel()), altitude, accuracy);
+				notifyListeners(timestamp, PrivacyHelper.anonymize(longitude, getPrivacylevel()), PrivacyHelper.anonymize(latitude, getPrivacylevel()), altitude, accuracy);
 			}
 
 			public void onStatusChanged(String provider, int status, Bundle extras) {
