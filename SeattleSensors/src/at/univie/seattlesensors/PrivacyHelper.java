@@ -84,6 +84,7 @@ public class PrivacyHelper {
 
 	static SensorValue hash(SensorValue val) {
 		SensorValue ret = new SensorValue(val);
+		ret.setUnit(SensorValue.UNIT.HASH);
 		String sha1 = "";
 		String message = (val.getValue().toString()) + val.getUnit();
 		MessageDigest md;
