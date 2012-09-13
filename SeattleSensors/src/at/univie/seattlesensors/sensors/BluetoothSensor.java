@@ -10,24 +10,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
 public class BluetoothSensor extends AbstractSensor {
 	
-	BluetoothAdapter bluetoothAdapter;
-	BroadcastReceiver bluetoothReceiver;
+	private BluetoothAdapter bluetoothAdapter;
+	private BroadcastReceiver bluetoothReceiver;
+	private Intent bluetoothIntent;
 	String bluetooth = "";
 	String devices = "";
-	String localDeviceName;
-	String localMAC;
-	List<Device> bondedDevices;
-	List<Device> scannedDevices;
+
+	private SensorValue localDeviceName;
+	private SensorValue localMAC;
+	private List<Device> bondedDevices;
+	private List<Device> scannedDevices;
 
 	public BluetoothSensor(Context context) {
 		super(context);
 		name = "Bluetooth Sensor";
+		
+		localDeviceName = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
+		localMAC = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);
 		bondedDevices = new LinkedList<Device>();
 		scannedDevices = new LinkedList<Device>();
 	}
@@ -36,10 +40,12 @@ public class BluetoothSensor extends AbstractSensor {
 	protected void _enable() {
 		
 		bluetoothAdapter =  BluetoothAdapter.getDefaultAdapter();
-		bluetooth = "Local device\n\tName: " + bluetoothAdapter.getName() + "\n\tAddress: " 
-				+ bluetoothAdapter.getAddress();
-		localDeviceName = bluetoothAdapter.getName(); 
-		localMAC = bluetoothAdapter.getAddress();
+		bluetooth = "Local device\n\tName: " + bluetoothAdapter.getName() 
+				+ "\n\tAddress: " + bluetoothAdapter.getAddress();
+		
+		localDeviceName.setValue(bluetoothAdapter.getName()); 
+		localMAC.setValue(bluetoothAdapter.getAddress());		
+		notifyListeners(localDeviceName, localMAC);
 		
 		Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 		bluetooth += "\nBonded devices: ";
@@ -60,7 +66,7 @@ public class BluetoothSensor extends AbstractSensor {
 					if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 						BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 						String name = device.getName();
-						if (devices.contains(name) == false) {
+						if (name != null && devices.contains(name) == false) {
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 							devices += "\nDiscovered: " + name + "\tMAC address: " + device.getAddress() 
 									+ "\tRSSI: " + String.valueOf(rssi);
@@ -80,7 +86,7 @@ public class BluetoothSensor extends AbstractSensor {
 
 			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 			filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			context.registerReceiver(bluetoothReceiver, filter);
+			bluetoothIntent = context.registerReceiver(bluetoothReceiver, filter);
 		}
 		else // if not enabled, we only get info for local device
 			SensorRegistry.getInstance().log("Bluetooth", bluetooth);
@@ -88,17 +94,18 @@ public class BluetoothSensor extends AbstractSensor {
 	
 	@Override
 	protected void _disable() {
-		context.unregisterReceiver(bluetoothReceiver);
+		if(bluetoothIntent != null)
+			context.unregisterReceiver(bluetoothReceiver);
 	}
 	
 	@XMLRPCMethod
 	public String getLocalDeviceName() {
-		return localDeviceName;
+		return (String) localDeviceName.getValue();
 	}
 	
 	@XMLRPCMethod
 	public String getLocalMAC() {
-		return localMAC;
+		return (String) localMAC.getValue();
 	}
 	
 	@XMLRPCMethod
@@ -119,44 +126,41 @@ public class BluetoothSensor extends AbstractSensor {
 		return null;
 	}
 	
-	@XMLRPCMethod
-	public int batteryVoltage(){
-		return 0;
-	}
-	
 	public class Device{
-		String devName;
-		String MACAddr;
-		int RSSI;
+		private SensorValue devName = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
+		private SensorValue MACAddr = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);
+		private SensorValue RSSI = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.SIGNALSTRENGTH);
 		
 		public Device() {
-			this.devName = null;
-			this.MACAddr = null;
-			this.RSSI = 9999; // impossible value for RSSI
 		}
 		
 		public Device(String devName, String MAC){
-			this.devName = devName;
-			this.MACAddr = MAC;
-			this.RSSI = 9999; // impossible value for RSSI
+			if (devName != null)
+				this.devName.setValue(devName);
+			if (MAC != null)
+				this.MACAddr.setValue(MAC);
+			
+			this.RSSI.setValue(9999); // impossible value for RSSI
 		}
 		
 		public Device(String devName, String MAC, int rssi){
-			this.devName = devName;
-			this.MACAddr = MAC;
-			this.RSSI =rssi;
+			if (devName != null)
+				this.devName.setValue(devName);
+			if (MAC != null)
+				this.MACAddr.setValue(MAC);
+			this.RSSI.setValue(9999);
 		}
 		
 		public String getDevName(){
-			return devName;
+			return (String) devName.getValue();
 		}
 		
 		public String getMAC(){
-			return MACAddr;
+			return (String) MACAddr.getValue();
 		}
 		
-		public int getRSSI(){
-			return RSSI;
+		public Object getRSSI(){
+			return RSSI.getValue();
 		}
 	}
 }
