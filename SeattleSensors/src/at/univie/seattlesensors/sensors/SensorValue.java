@@ -29,7 +29,8 @@ public class SensorValue {
 		MCCMNC("country code + network code"), LAC("location area code"),
 		MCC("mobile country code"), MNC("mobile network code"),
 		CID("cell id"), SIGNALSTRENGTH("radio signal strength"),
-		NETWORKTYPE("network type");
+		NETWORKTYPE("network type"),
+		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address");
 
 		private String name;
 
