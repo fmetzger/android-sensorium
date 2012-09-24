@@ -16,8 +16,8 @@ import at.univie.seattlesensors.SensorRegistry;
 public class BluetoothSensor extends AbstractSensor {
 	
 	private BluetoothAdapter bluetoothAdapter;
-	private BroadcastReceiver bluetoothReceiver;
-	private Intent bluetoothIntent;
+	public static BroadcastReceiver bluetoothReceiver;
+	public static Intent bluetoothIntent;
 	String bluetooth = "";
 	String devices = "";
 
@@ -86,7 +86,7 @@ public class BluetoothSensor extends AbstractSensor {
 
 			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 			filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			bluetoothIntent = context.registerReceiver(bluetoothReceiver, filter);
+			bluetoothIntent = context.getApplicationContext().registerReceiver(bluetoothReceiver, filter);
 		}
 		else // if not enabled, we only get info for local device
 			SensorRegistry.getInstance().log("Bluetooth", bluetooth);
@@ -95,7 +95,7 @@ public class BluetoothSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 		if(bluetoothIntent != null)
-			context.unregisterReceiver(bluetoothReceiver);
+			context.getApplicationContext().unregisterReceiver(bluetoothReceiver);
 	}
 	
 	@XMLRPCMethod

@@ -27,11 +27,14 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
+import at.univie.seattlesensors.sensors.BatterySensor;
+import at.univie.seattlesensors.sensors.BluetoothSensor;
 
 public class SeattleSensorsActivity extends Activity {
 
@@ -51,6 +54,22 @@ public class SeattleSensorsActivity extends Activity {
 
 	public void onDestroy() {
 		super.onDestroy();
+		SensorServiceSingleton.getInstance().unbindService(this);
+		try {
+			if(BluetoothSensor.bluetoothIntent != null)
+				this.unregisterReceiver(BluetoothSensor.bluetoothReceiver);
+		}		
+		catch (IllegalArgumentException e) {
+			Log.d("Sensor Activity", "bluetoothReceiver may have been unregistered incorrectly...");
+		}
+		
+		try{
+			if(BatterySensor.batteryIntent != null)
+				this.unregisterReceiver(BatterySensor.batteryReceiver);
+		}
+		catch (IllegalArgumentException e) {
+			Log.d("Sensor Activity", "batteryReceiver may have been unregistered incorrectly...");
+		}
 	}
 
 	public void onPause() {
