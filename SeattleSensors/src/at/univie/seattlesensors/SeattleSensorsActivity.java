@@ -44,7 +44,7 @@ public class SeattleSensorsActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.seattle_sensors_main);
-		SensorServiceSingleton.getInstance().bindService(this);
+		//SensorServiceSingleton.getInstance().bindService(this);
 
 		ListView sensorViewList = (ListView) findViewById(R.id.sensorValues);
 		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
@@ -54,7 +54,7 @@ public class SeattleSensorsActivity extends Activity {
 
 	public void onDestroy() {
 		super.onDestroy();
-		SensorServiceSingleton.getInstance().unbindService(this);
+		/*SensorServiceSingleton.getInstance().unbindService(this);
 		try {
 			if(BluetoothSensor.bluetoothIntent != null)
 				this.unregisterReceiver(BluetoothSensor.bluetoothReceiver);
@@ -69,7 +69,7 @@ public class SeattleSensorsActivity extends Activity {
 		}
 		catch (IllegalArgumentException e) {
 			Log.d("Sensor Activity", "batteryReceiver may have been unregistered incorrectly...");
-		}
+		}*/
 	}
 
 	public void onPause() {
