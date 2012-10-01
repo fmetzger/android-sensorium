@@ -6,6 +6,7 @@ import android.util.Log;
 public class SeattleSensorsApplication extends Application {
 	public void onCreate() {
 		Log.d("SettleSensors", "application starting, binding service");
+		SensorServiceSingleton.getInstance().bindService(this);
 //		bindService();
 	}
 	

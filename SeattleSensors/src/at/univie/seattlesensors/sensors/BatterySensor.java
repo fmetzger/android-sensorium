@@ -9,8 +9,8 @@ import android.util.Log;
 
 public class BatterySensor extends AbstractSensor {
 	
-	private BroadcastReceiver batteryReceiver;
-	private Intent batteryIntent;
+	public static BroadcastReceiver batteryReceiver;
+	public static Intent batteryIntent;
 	
 	private SensorValue timestamp;
 	private SensorValue level;
@@ -68,14 +68,14 @@ public class BatterySensor extends AbstractSensor {
             }
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryIntent = context.registerReceiver(batteryReceiver, batteryLevelFilter);
+        batteryIntent = context.getApplicationContext().registerReceiver(batteryReceiver, batteryLevelFilter);
         Log.d("BATT", batteryIntent.toString());
 	}
 
 	@Override
 	protected void _disable() {
 		if(batteryIntent != null)
-			context.unregisterReceiver(batteryReceiver);
+			context.getApplicationContext().unregisterReceiver(batteryReceiver);
 	}
 	
 	@XMLRPCMethod
