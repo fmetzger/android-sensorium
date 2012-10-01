@@ -48,6 +48,25 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		
 		this.sensor = sensor;
 	}
+	
+	/**
+	 * if we are called without a specific sensor, we override all the others
+	 * TODO: needs a state in which the seekbar is undefined to display a
+	 * 		non-overriding state where all the sensors have individual settings
+	 * @param context
+	 */
+	public SensorPreference(Context context) {
+		super(context);
+
+		mMaxValue = PrivacyHelper.PrivacyLevel.NO.value();
+		mMinValue = PrivacyHelper.PrivacyLevel.FULL.value();
+
+		mInterval = 1;
+
+		mPrivacyLevel = new SeekBar(context);
+		mPrivacyLevel.setMax(mMaxValue - mMinValue);
+		mPrivacyLevel.setOnSeekBarChangeListener(this);
+	}
 
 	@Override
 	protected View onCreateView(ViewGroup parent) {

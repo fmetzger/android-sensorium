@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 
 import android.util.Base64;
 import android.util.Log;
@@ -24,11 +23,11 @@ public class PrivacyHelper {
 			this.name = name;
 		}
 
-		int value() {
+		public int value() {
 			return value;
 		}
 
-		String getName() {
+		public String getName() {
 			return name;
 		}
 
@@ -147,7 +146,7 @@ public class PrivacyHelper {
 		SensorValue ret = new SensorValue(val);
 		ret.setUnit(SensorValue.UNIT.HASH);
 		String sha1 = "";
-		String message = (val.getValue().toString()) + val.getUnit();
+		String message = (val.getValue().toString()) + val.getUnit() + val.getType();
 		MessageDigest md;
 		try {
 			md = MessageDigest.getInstance("SHA-1");

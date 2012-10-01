@@ -150,4 +150,9 @@ public abstract class AbstractSensor {
 	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
 		this.privacylevel = privacylevel;
 	}
+	
+	@XMLRPCMethod
+	public String privacyLevel(){
+		return privacylevel.getName();
+	}
 }
