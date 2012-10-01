@@ -58,7 +58,7 @@ public abstract class AbstractSensor {
 				_enable();
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-				prefs.edit().putBoolean(this.getClass().getName(), true).apply();
+				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
 
 				enabled = true;
 			} catch (Exception e) {
@@ -78,7 +78,7 @@ public abstract class AbstractSensor {
 //		if(enabled){
 			try {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-				prefs.edit().putBoolean(this.getClass().getName(), false).apply();
+				prefs.edit().putBoolean(this.getClass().getName(), false).commit();
 				enabled = false;
 
 				_disable();
