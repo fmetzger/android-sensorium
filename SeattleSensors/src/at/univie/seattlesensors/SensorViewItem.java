@@ -1,6 +1,5 @@
 package at.univie.seattlesensors;
 
-import android.text.Html;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.SensorChangeListener;
 import at.univie.seattlesensors.sensors.SensorValue;

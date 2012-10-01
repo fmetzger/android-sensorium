@@ -67,13 +67,14 @@ public class SensorRegistry {
 
 	public void startup(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		
+
 		for (AbstractSensor sensor : sensors) {
-			//TODO: exceptions will now be caught in the abstractsensor class, need to change this
+			// TODO: exceptions will now be caught in the abstractsensor class,
+			// need to change this
 			try {
 				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), false);
-				Log.d("SeattleSensors", sensor.getClass().getName()+ ": " + savedstate);
-				if(savedstate)
+				Log.d("SeattleSensors", sensor.getClass().getName() + ": " + savedstate);
+				if (savedstate)
 					sensor.enable();
 			} catch (Exception e) {
 				sensor.disable();
@@ -91,8 +92,7 @@ public class SensorRegistry {
 	public void registerSensor(AbstractSensor sensor) {
 		for (AbstractSensor s : sensors) {
 			if (s.getClass().equals(sensor.getClass())) {
-				Log.d("SeattleSensors",
-						"Sensor of this class already present, not registering.");
+				Log.d("SeattleSensors", "Sensor of this class already present, not registering.");
 				return;
 			}
 		}
@@ -107,13 +107,14 @@ public class SensorRegistry {
 				String name = sensor.getClass().getName();
 				Method[] methods = sensor.getClass().getMethods();
 				for (Method m : methods) {
-					if (m.isAnnotationPresent(XMLRPCMethod.class)){
+					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (name.lastIndexOf('.') > 0) {
-						    name = name.substring(name.lastIndexOf('.')+1);
-						    //get the last of at.univie.seattlesensors.sensors."RadioSensor"
-						} 
+							name = name.substring(name.lastIndexOf('.') + 1);
+							// get the last of
+							// at.univie.seattlesensors.sensors."RadioSensor"
+						}
 						out.add(name + "." + m.getName());
-						//Log.d("REFLECTIONTEST", name + "." + m.getName());
+						// Log.d("REFLECTIONTEST", name + "." + m.getName());
 					}
 				}
 			}
@@ -134,19 +135,18 @@ public class SensorRegistry {
 						if (m.getName().equals(methodname)) {
 							String name = sensor.getClass().getName();
 							if (name.lastIndexOf('.') > 0) {
-							    name = name.substring(name.lastIndexOf('.')+1);
-							    //get the last of at.univie.seattlesensors.sensors."RadioSensor"
+								name = name.substring(name.lastIndexOf('.') + 1);
+								// get the last of
+								// at.univie.seattlesensors.sensors."RadioSensor"
 							}
 							signature.add(name + "." + m.getName());
-							
-							Class<?>[] params = m.getParameterTypes();
-							Class<?> rettype = m.getReturnType();							
 
-							if (rettype.toString().equals(
-									"class [Ljava.lang.Object;")) {
+							Class<?>[] params = m.getParameterTypes();
+							Class<?> rettype = m.getReturnType();
+
+							if (rettype.toString().equals("class [Ljava.lang.Object;")) {
 								signature.add("array");
-							} else if (rettype.toString().equals(
-									"class java.lang.String")) {
+							} else if (rettype.toString().equals("class java.lang.String")) {
 								signature.add("string");
 							} else {
 								signature.add(rettype.toString());
@@ -160,31 +160,47 @@ public class SensorRegistry {
 								signature.add("nil");
 							}
 
-							//return signature.toArray();
+							// return signature.toArray();
 						}
 					}
 				}
 			}
 		}
-		if (!signature.isEmpty()) return signature.toArray();
-		else return null;
+		if (!signature.isEmpty())
+			return signature.toArray();
+		else
+			return null;
 	}
 
-	public Object[] callSensorMethod(String methodname) {
-		List<Object> result = new LinkedList<Object>();
-		result.clear();
+	public Object callSensorMethod(String methodname) {
+		Log.d("xmlrpc",methodname);
 		
+		if(methodname.lastIndexOf('.') == -1){
+			Log.d("SeattleSensor", "Invalid XMLRPC method call");
+			return null;
+		}
+			
+		String classname = methodname.substring(0,methodname.lastIndexOf('.'));
+		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
+
+
+
 		for (AbstractSensor sensor : sensors) {
-			if (sensor.isEnabled()) {
+			String sensorname = sensor.getClass().getName();
+			sensorname = sensorname.substring(sensorname.lastIndexOf('.') + 1);
+			if (sensorname.equals(classname) && sensor.isEnabled()) {
 				Method[] methods = sensor.getClass().getMethods();
 				for (Method m : methods) {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (m.getName().equals(methodname)) {
 							try {
-								Object obj = m.invoke(sensor);
-								if (obj != null) result.add(obj);
-								else continue;
-								Log.d("getScannedDev", result.toString());
+								return m.invoke(sensor);
+								// if (obj != null)
+								// result.add(obj);
+								// else
+								// continue;
+								// Log.d("SeattleSensors", result.toString());
+
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
 								e.printStackTrace();
@@ -200,15 +216,17 @@ public class SensorRegistry {
 				}
 			}
 		}
-		if (!result.isEmpty()) {
-			String time = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-			result.add(time);			
-			return result.toArray();
-		}
-		else {
-			Log.d("callSensorMethod!!", "sending back null");
-			return null;
-		}
+		return null;
+		// if (!result.isEmpty()) {
+		// String time =
+		// java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		// result.add(time);
+		// return result.toArray();
+		// }
+		// else {
+		// Log.d("callSensorMethod!!", "sending back null");
+		// return null;
+		// }
 	}
 
 	public void log(String tag, String out) {
@@ -218,8 +236,7 @@ public class SensorRegistry {
 		debugBuffer.append("<b>" + tag + ": </b>" + out + "<br>\n");
 		bufferedLines++;
 		if (textoutput != null)
-			textoutput.setText(Html.fromHtml(debugBuffer.toString()),
-					TextView.BufferType.SPANNABLE);
+			textoutput.setText(Html.fromHtml(debugBuffer.toString()), TextView.BufferType.SPANNABLE);
 	}
 
 	public void setDebugView(TextView t) {
@@ -229,10 +246,10 @@ public class SensorRegistry {
 	public List<AbstractSensor> getSensors() {
 		return this.sensors;
 	}
-	
-	public AbstractSensor getSensorForClassname(String classname){
-		for(AbstractSensor sensor: sensors){
-			if(sensor.getClass().getName().equals(classname))
+
+	public AbstractSensor getSensorForClassname(String classname) {
+		for (AbstractSensor sensor : sensors) {
+			if (sensor.getClass().getName().equals(classname))
 				return sensor;
 		}
 		return null;

@@ -89,8 +89,33 @@ public class NetworkLocationSensor extends AbstractSensor {
 			locationManager.removeUpdates(locationListener);
 	}
 
+//	@XMLRPCMethod
+//	public Object[] networklocationInformation() {
+//			return new Object[] { "timestamp", timestamp.getValue(), "long", longitude.getValue(), "lat", latitude.getValue(), "alt", altitude.getValue(), "accuracy", accuracy.getValue() };
+//	}
+	
 	@XMLRPCMethod
-	public Object[] networklocationInformation() {
-			return new Object[] { "timestamp", timestamp.getValue(), "long", longitude.getValue(), "lat", latitude.getValue(), "alt", altitude.getValue(), "accuracy", accuracy.getValue() };
+	public Long measurementtime() {
+			return (Long) timestamp.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Double longitude() {
+			return (Double) longitude.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Double lattitude() {
+			return (Double) latitude.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Double altitude() {
+			return (Double) altitude.getValue();
+	}
+	
+	@XMLRPCMethod
+	public Float accuracy() {
+			return (Float) accuracy.getValue();
 	}
 }

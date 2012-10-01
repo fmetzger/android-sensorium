@@ -87,7 +87,7 @@ public class XMLRPCSensorServerThread  implements Runnable{
 					if (methodresult != null){
 						server.respond(client, methodresult);
 					} else {
-						server.respond(client,"Input not recognized");
+						server.respond(client,"Input not recognized or no information returned");
 					}
 					
 				}

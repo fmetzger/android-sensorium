@@ -45,6 +45,7 @@ public class RadioSensor extends AbstractSensor {
 	private SensorValue signalstrength;
 
 
+	
 	public RadioSensor(Context context) {
 		super(context);
 		name = "Radio Cell Info Sensor";
