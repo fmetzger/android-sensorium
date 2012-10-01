@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import at.univie.seattlesensors.sensors.BatterySensor;
 import at.univie.seattlesensors.sensors.BluetoothSensor;
+import at.univie.seattlesensors.sensors.DeviceInfoSensor;
 import at.univie.seattlesensors.sensors.DummySensor;
 import at.univie.seattlesensors.sensors.GPSLocationSensor;
 import at.univie.seattlesensors.sensors.NetworkLocationSensor;
@@ -43,6 +44,7 @@ public class SensorService extends Service {
 	
 	private void startSensors(){
 		registry = SensorRegistry.getInstance();
+		registry.registerSensor(new DeviceInfoSensor(this));
 		registry.registerSensor(new RadioSensor(this));
 		registry.registerSensor(new NetworkLocationSensor(this));
 		registry.registerSensor(new GPSLocationSensor(this));

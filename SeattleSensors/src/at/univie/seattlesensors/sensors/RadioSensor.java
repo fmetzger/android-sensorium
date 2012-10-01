@@ -44,6 +44,7 @@ public class RadioSensor extends AbstractSensor {
 	private SensorValue networktype;
 	private SensorValue signalstrength;
 
+
 	public RadioSensor(Context context) {
 		super(context);
 		name = "Radio Cell Info Sensor";
@@ -55,6 +56,7 @@ public class RadioSensor extends AbstractSensor {
 		cid = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.CID);
 		networktype = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.NETWORKTYPE);
 		signalstrength = new SensorValue(SensorValue.UNIT.DBM, SensorValue.TYPE.SIGNALSTRENGTH);
+		
 	}
 
 	@Override
