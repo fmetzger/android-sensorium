@@ -7,8 +7,8 @@ public class SensorValue {
 	private TYPE type;
 
 	public static enum UNIT {
-		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(""), STRING(""), 
-		OTHER(""), NUMBER(""), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),METERSPERSECOND("m/s"),
+		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(" "), STRING(" "), 
+		OTHER(" "), NUMBER(" "), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),METERSPERSECOND("m/s"),
 		STATE("state"), NAME("name"), LIST("list"), DBM("dBm"), MBPS("Mbps"), ASU("asu");
 
 		private String name;

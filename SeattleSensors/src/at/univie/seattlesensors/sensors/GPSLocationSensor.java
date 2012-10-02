@@ -171,4 +171,9 @@ public class GPSLocationSensor extends AbstractSensor {
 	public Object speed() {
 			return speed.getValue();
 	}
+	
+	@XMLRPCMethod
+	public Object satellites() {
+			return satellites.getValue();
+	}
 }
