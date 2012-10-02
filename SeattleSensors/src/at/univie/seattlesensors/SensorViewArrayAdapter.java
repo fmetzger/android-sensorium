@@ -40,24 +40,11 @@ public class SensorViewArrayAdapter  extends ArrayAdapter<AbstractSensor> {
 					.findViewById(R.id.sensorUnits);
 			sType = (TextView) convertView
 					.findViewById(R.id.sensorTypes);
-			
-			sName.setText(sensor.getName());
-
-			SensorViewItem svi = new SensorViewItem(sName, sValue, sUnit, sType);
-			sensor.addListener(svi);
+		
+			SensorViewItem svi = new SensorViewItem(sensor, sName, sValue, sUnit, sType);
 			convertView.setTag(svi);
 
 		}
-//		} else {
-//			SensorViewItem viewItem = (SensorViewItem) convertView
-//					.getTag();
-//			sValue = viewItem.getTextViewSensorValues();
-//			sName = viewItem.getTextViewSensorName();
-//		}
-
-		// fill sensors values here
-		//textView.setText(sensor.getName());
-
 		return convertView;
 	}
 

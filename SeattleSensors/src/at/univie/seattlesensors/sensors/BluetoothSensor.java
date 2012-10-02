@@ -90,7 +90,7 @@ public class BluetoothSensor extends AbstractSensor {
 						Log.d("Bluetooth FINISHED", "done");
 						sScannedDevices.setValue(devices);
 						//notifyListeners(sScannedDevices);
-						notifyListeners(localDeviceName, localMAC, sBondedDevices, sScannedDevices);
+						notifyListeners();
 						devices = "";
 						scannedDevices.clear();
 						

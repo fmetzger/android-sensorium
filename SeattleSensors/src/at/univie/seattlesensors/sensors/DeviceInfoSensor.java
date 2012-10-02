@@ -38,7 +38,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 		Log.d("SeattleSensors", (String) vendorname.getValue());
 		Log.d("SeattleSensors", (String) modelname.getValue());
 		
-		notifyListeners(vendorname,modelname,tac);
+		notifyListeners();
 	}
 
 	@Override

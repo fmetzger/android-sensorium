@@ -64,7 +64,7 @@ public class BatterySensor extends AbstractSensor {
                 } else {
                 	level.setValue(rawlevel);
                 }
-                notifyListeners(timestamp, level, voltage, plugged, temperature, technology);
+                notifyListeners();
             }
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);

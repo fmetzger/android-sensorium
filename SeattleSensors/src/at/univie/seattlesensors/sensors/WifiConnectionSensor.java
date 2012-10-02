@@ -56,7 +56,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 //		}
 //		SensorRegistry.getInstance().log("WiFi", AP);
 //		sConnectedAP.setValue(AP);
-		notifyListeners(ssid, ssid_hidden, bssid, ip, mac, supplicant_state, rssi, speed);
+		notifyListeners();
 	}
 
 	@Override

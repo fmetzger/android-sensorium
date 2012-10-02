@@ -49,7 +49,7 @@ public class SensorService extends Service {
 		registry.registerSensor(new NetworkLocationSensor(this));
 		registry.registerSensor(new GPSLocationSensor(this));
 		registry.registerSensor(new BatterySensor(this));
-		registry.registerSensor(new DummySensor(this));
+//		registry.registerSensor(new DummySensor(this));
 		registry.registerSensor(new WifiSensor(this));
 		registry.registerSensor(new BluetoothSensor(this));
 		registry.startup(this);

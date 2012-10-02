@@ -24,6 +24,7 @@ package at.univie.seattlesensors.sensors;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ import at.univie.seattlesensors.PrivacyHelper;
 import at.univie.seattlesensors.SensorRegistry;
 
 public abstract class AbstractSensor {
-	
+
 	private boolean enabled = false;
 	private List<SensorChangeListener> listeners;
 	private String description = "";
@@ -43,9 +44,7 @@ public abstract class AbstractSensor {
 
 	protected Context context;
 	protected String name = "";
-	
-	
-	
+
 	public AbstractSensor(Context context) {
 		this.context = context;
 		this.listeners = new LinkedList<SensorChangeListener>();
@@ -75,21 +74,21 @@ public abstract class AbstractSensor {
 	protected abstract void _enable();
 
 	public void disable() {
-//		if(enabled){
-			try {
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-				prefs.edit().putBoolean(this.getClass().getName(), false).commit();
-				enabled = false;
+		// if(enabled){
+		try {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			prefs.edit().putBoolean(this.getClass().getName(), false).commit();
+			enabled = false;
 
-				_disable();
-			} catch (Exception e) {
-				Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
-			}
-//		}
+			_disable();
+		} catch (Exception e) {
+			Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
+		}
+		// }
 	}
 
 	protected abstract void _disable();
@@ -119,30 +118,53 @@ public abstract class AbstractSensor {
 	public String getName() {
 		return name;
 	}
-	
-	public void addListener(SensorChangeListener s){
+
+	public List<SensorValue> getSensorValues() {
+		List<SensorValue> values = new LinkedList<SensorValue>();
+
+		Field[] fields = this.getClass().getDeclaredFields();
+
+		try {
+			for (Field f : fields) {
+				f.setAccessible(true);
+				Object o = f.get(this);
+				if (o instanceof SensorValue) {
+					values.add((SensorValue) o);
+				}
+
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return values;
+	}
+
+	public void addListener(SensorChangeListener s) {
 		this.listeners.add(s);
 	}
 
-	public void removeListener(SensorChangeListener s){
+	public void removeListener(SensorChangeListener s) {
 		this.listeners.remove(s);
 	}
-	
-	protected void notifyListeners(SensorValue... values){
-		for(SensorChangeListener l: listeners){
-			l.sensorUpdated(values);
+
+	protected void notifyListeners() {
+		for (SensorChangeListener l : listeners) {
+			l.sensorUpdated();
 		}
-		
+
 		StringBuilder sb = new StringBuilder();
-		for(SensorValue val: values){
-			sb.append(val.getValue() +" "+ val.getUnit().getName() +"; ");
+		for (SensorValue val : getSensorValues()) {
+			sb.append(val.getValue() + " " + val.getUnit().getName() + "; ");
 		}
 		SensorRegistry.getInstance().log(this.getClass().getCanonicalName(), sb.toString());
-		
-		
+
 		Log.d("SeattleSensors", sb.toString());
 	}
-	
+
 	public PrivacyHelper.PrivacyLevel getPrivacylevel() {
 		return privacylevel;
 	}
@@ -150,9 +172,9 @@ public abstract class AbstractSensor {
 	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
 		this.privacylevel = privacylevel;
 	}
-	
+
 	@XMLRPCMethod
-	public String privacyLevel(){
+	public String privacyLevel() {
 		return privacylevel.getName();
 	}
 }

@@ -74,7 +74,8 @@ public class RadioSensor extends AbstractSensor {
 			cid.setValue(gsmCell.getCid());
 			lac.setValue(gsmCell.getLac());
 		}
-		notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
+//		notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
+		notifyListeners();
 
 		phoneStateListener = new PhoneStateListener() {
 			@Override
@@ -88,7 +89,8 @@ public class RadioSensor extends AbstractSensor {
 				cid.setValue(gsmCell.getCid());
 				lac.setValue(gsmCell.getLac());
 				networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
-				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
+//				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
+				notifyListeners();
 
 			}
 
@@ -158,7 +160,8 @@ public class RadioSensor extends AbstractSensor {
 				}
 
 				
-				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
+//				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
+				notifyListeners();
 			}
 		};
 
