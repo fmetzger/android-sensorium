@@ -134,11 +134,15 @@ public abstract class AbstractSensor {
 
 			}
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
 		}
 		return values;
 	}
@@ -153,7 +157,7 @@ public abstract class AbstractSensor {
 
 	protected void notifyListeners() {
 		for (SensorChangeListener l : listeners) {
-			l.sensorUpdated();
+			l.sensorUpdated(this);
 		}
 
 		StringBuilder sb = new StringBuilder();

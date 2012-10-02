@@ -203,13 +203,22 @@ public class SensorRegistry {
 
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
-								e.printStackTrace();
+								StringWriter sw = new StringWriter();
+								PrintWriter pw = new PrintWriter(sw);
+								e.printStackTrace(pw);
+								Log.d("SeattleSensors", sw.toString());
 							} catch (IllegalAccessException e) {
 								Log.d("SeattleSensors", e.toString());
-								e.printStackTrace();
+								StringWriter sw = new StringWriter();
+								PrintWriter pw = new PrintWriter(sw);
+								e.printStackTrace(pw);
+								Log.d("SeattleSensors", sw.toString());
 							} catch (InvocationTargetException e) {
 								Log.d("SeattleSensors", e.toString());
-								e.printStackTrace();
+								StringWriter sw = new StringWriter();
+								PrintWriter pw = new PrintWriter(sw);
+								e.printStackTrace(pw);
+								Log.d("SeattleSensors", sw.toString());
 							}
 						}
 					}

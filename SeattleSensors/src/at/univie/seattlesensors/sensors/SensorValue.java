@@ -8,7 +8,7 @@ public class SensorValue {
 
 	public static enum UNIT {
 		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(""), STRING(""), 
-		OTHER(""), NUMBER(""), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),
+		OTHER(""), NUMBER(""), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),METERSPERSECOND("m/s"),
 		STATE("state"), NAME("name"), LIST("list"), DBM("dBm"), MBPS("Mbps"), ASU("asu");
 
 		private String name;
@@ -28,9 +28,9 @@ public class SensorValue {
 		CHARGE("charged"), OTHER(""), BATTERY_TECHNOLOGY(""), PLUGGED("power source"),
 		MCCMNC("country code + network code"), LAC("location area code"),
 		MCC("mobile country code"), MNC("mobile network code"),
-		CID("cell id"), SIGNALSTRENGTH("received signal strength"),
+		CID("cell id"), SIGNALSTRENGTH("received signal strength"),SATELLITES("satellites"),
 		NETWORKTYPE("network type"),TAC("TAC"),MODEL_NAME("model"),VENDOR_NAME("vendor"),
-		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),
+		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),BEARING("bearing"),VELOCITY("speed"),
 		//AP_LIST(""), 
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),

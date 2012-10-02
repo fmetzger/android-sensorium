@@ -22,6 +22,8 @@
 
 package at.univie.seattlesensors;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -96,7 +98,10 @@ public class XMLRPCSensorServerThread  implements Runnable{
 
 		} catch (Exception e) {
 			Log.d("SeattleSensors:", e.toString());
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
 		}
 	}
 }

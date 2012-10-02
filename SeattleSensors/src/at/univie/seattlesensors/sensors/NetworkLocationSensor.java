@@ -50,7 +50,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);
 		altitude = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ALTITUDE);
-		accuracy = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.ACCURACY);
+		accuracy = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ACCURACY);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 				latitude.setValue(loc.getLatitude());
 				altitude.setValue(loc.getAltitude());
 				accuracy.setValue(loc.getAccuracy());
-				timestamp.setValue(System.currentTimeMillis());
+				timestamp.setValue(loc.getTime());
 				
 //				notifyListeners(timestamp, PrivacyHelper.anonymize(longitude, getPrivacylevel()), PrivacyHelper.anonymize(latitude, getPrivacylevel()), altitude, accuracy);
 				notifyListeners();
@@ -90,33 +90,28 @@ public class NetworkLocationSensor extends AbstractSensor {
 			locationManager.removeUpdates(locationListener);
 	}
 
-//	@XMLRPCMethod
-//	public Object[] networklocationInformation() {
-//			return new Object[] { "timestamp", timestamp.getValue(), "long", longitude.getValue(), "lat", latitude.getValue(), "alt", altitude.getValue(), "accuracy", accuracy.getValue() };
-//	}
-	
 	@XMLRPCMethod
-	public Long measurementtime() {
-			return (Long) timestamp.getValue();
+	public Object lastfix() {
+			return timestamp.getValue();
 	}
 	
 	@XMLRPCMethod
-	public Double longitude() {
-			return (Double) longitude.getValue();
+	public Object longitude() {
+			return longitude.getValue();
 	}
 	
 	@XMLRPCMethod
-	public Double latitude() {
-			return (Double) latitude.getValue();
+	public Object latitude() {
+			return latitude.getValue();
 	}
 	
 	@XMLRPCMethod
-	public Double altitude() {
-			return (Double) altitude.getValue();
+	public Object altitude() {
+			return altitude.getValue();
 	}
 	
 	@XMLRPCMethod
-	public Float accuracy() {
-			return (Float) accuracy.getValue();
+	public Object accuracy() {
+			return accuracy.getValue();
 	}
 }

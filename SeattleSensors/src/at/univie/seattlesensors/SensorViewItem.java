@@ -8,26 +8,28 @@ import at.univie.seattlesensors.sensors.SensorChangeListener;
 import at.univie.seattlesensors.sensors.SensorValue;
 
 public class SensorViewItem implements SensorChangeListener{
-	
-	private AbstractSensor sensor;
-	
+
 	private TextView textViewSensorValues;
 	private TextView textViewSensorUnits;
 	private TextView textViewSensorTypes;
 	private TextView textViewSensorName;
 
-	public SensorViewItem(AbstractSensor sensor, TextView sName, TextView sValues, TextView sUnits, TextView sTypes) {
-		this.sensor = sensor;
-		sensor.addListener(this);
-		
+	public SensorViewItem(TextView sName, TextView sValues, TextView sUnits, TextView sTypes) {
+
 		this.textViewSensorValues = sValues;
 		this.textViewSensorUnits = sUnits;
 		this.textViewSensorTypes = sTypes;
 		this.textViewSensorName = sName;
 		
-		this.textViewSensorName.setText(this.sensor.getName());
 		
-		updateDisplay();
+	
+//		updateDisplay();
+	}
+	
+	public void attachto(AbstractSensor sensor,List<AbstractSensor>sensors){
+		for(AbstractSensor s: sensors)
+			s.removeListener(this);
+		sensor.addListener(this);
 	}
 	
 	public TextView getTextViewSensorValues() {
@@ -46,7 +48,7 @@ public class SensorViewItem implements SensorChangeListener{
 		return textViewSensorName;
 	}
 	
-	private void updateDisplay(){
+	public void updateDisplay(AbstractSensor sensor){
 		StringBuffer sValues = new StringBuffer();
 		StringBuffer sUnits = new StringBuffer();
 		StringBuffer sTypes = new StringBuffer();
@@ -65,14 +67,15 @@ public class SensorViewItem implements SensorChangeListener{
 		}
 		
 //		textViewSensorValuesc.setText(Html.fromHtml(sb.toString()), TextView.BufferType.SPANNABLE);
+		this.textViewSensorName.setText(sensor.getName());
 		textViewSensorValues.setText(sValues.toString());
 		textViewSensorUnits.setText(sUnits.toString());
 		textViewSensorTypes.setText(sTypes.toString());
 	}
 
 	@Override
-	public void sensorUpdated() {
-		updateDisplay();
+	public void sensorUpdated(AbstractSensor sensor) {
+		updateDisplay(sensor);
 	}
 
 	

@@ -46,6 +46,7 @@ public class SensorService extends Service {
 		registry = SensorRegistry.getInstance();
 		registry.registerSensor(new DeviceInfoSensor(this));
 		registry.registerSensor(new RadioSensor(this));
+
 		registry.registerSensor(new NetworkLocationSensor(this));
 		registry.registerSensor(new GPSLocationSensor(this));
 		registry.registerSensor(new BatterySensor(this));
