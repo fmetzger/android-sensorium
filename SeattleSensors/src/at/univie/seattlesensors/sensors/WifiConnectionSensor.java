@@ -19,7 +19,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 	private SensorValue supplicant_state;
 	private SensorValue rssi;
 	private SensorValue speed;
-	private SensorValue sConnectedAP;
+	//private SensorValue sConnectedAP;
 	String AP = "";  // the AP that is connected to
 
 	public WifiConnectionSensor(Context context){
@@ -34,7 +34,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 		supplicant_state = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.STATE);
 		rssi = new SensorValue(SensorValue.UNIT.DBM, SensorValue.TYPE.SIGNALSTRENGTH);
 		speed = new SensorValue(SensorValue.UNIT.MBPS,SensorValue.TYPE.SPEED);
-		sConnectedAP = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.WIFI_CONNECTION);
+		//sConnectedAP = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.WIFI_CONNECTION);
 	}
 
 	@Override

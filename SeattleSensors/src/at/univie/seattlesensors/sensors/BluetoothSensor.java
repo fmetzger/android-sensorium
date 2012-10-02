@@ -67,7 +67,6 @@ public class BluetoothSensor extends AbstractSensor {
 			bonded += "None";
 		}
 		sBondedDevices.setValue(bonded);
-		//notifyListeners(localDeviceName, localMAC, sBondedDevices);
 		
 		if (bluetoothAdapter.isEnabled()){ // only when bluetooth is enabled can we discover devices
 			bluetoothAdapter.startDiscovery();			
@@ -89,7 +88,6 @@ public class BluetoothSensor extends AbstractSensor {
 						SensorRegistry.getInstance().log("Bluetooth", bluetooth + devices);
 						Log.d("Bluetooth FINISHED", "done");
 						sScannedDevices.setValue(devices);
-						//notifyListeners(sScannedDevices);
 						notifyListeners();
 						devices = "";
 						scannedDevices.clear();

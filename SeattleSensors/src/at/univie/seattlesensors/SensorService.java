@@ -15,6 +15,7 @@ import at.univie.seattlesensors.sensors.DummySensor;
 import at.univie.seattlesensors.sensors.GPSLocationSensor;
 import at.univie.seattlesensors.sensors.NetworkLocationSensor;
 import at.univie.seattlesensors.sensors.RadioSensor;
+import at.univie.seattlesensors.sensors.WifiConnectionSensor;
 import at.univie.seattlesensors.sensors.WifiSensor;
 
 public class SensorService extends Service {
@@ -52,6 +53,7 @@ public class SensorService extends Service {
 		registry.registerSensor(new BatterySensor(this));
 //		registry.registerSensor(new DummySensor(this));
 		registry.registerSensor(new WifiSensor(this));
+		registry.registerSensor(new WifiConnectionSensor(this));
 		registry.registerSensor(new BluetoothSensor(this));
 		registry.startup(this);
 
