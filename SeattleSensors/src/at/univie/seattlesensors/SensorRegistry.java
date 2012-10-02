@@ -39,7 +39,7 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 import at.univie.seattlesensors.sensors.XMLRPCMethod;
-import at.univie.seattlesensors.sensors.BluetoothSensor.Device;
+import at.univie.seattlesensors.sensors.BluetoothSensor.BtDevice;
 
 public class SensorRegistry {
 

@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import at.univie.seattlesensors.sensors.BluetoothSensor.Device;
+import at.univie.seattlesensors.sensors.BluetoothSensor.BtDevice;
 
 public class SensorDebugActivity extends Activity {
 
