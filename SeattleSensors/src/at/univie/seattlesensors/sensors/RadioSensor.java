@@ -195,7 +195,7 @@ public class RadioSensor extends AbstractSensor {
 
 	@XMLRPCMethod
 	public Object signalstrength() {
-		return mnc.getValue();
+		return signalstrength.getValue();
 	}
 
 	@XMLRPCMethod
