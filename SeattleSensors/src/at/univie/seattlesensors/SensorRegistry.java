@@ -45,8 +45,6 @@ public class SensorRegistry {
 	private List<AbstractSensor> sensors;
 
 	private StringBuffer debugBuffer;
-	private String debugString = "";
-	
 	private int bufferedLines = 0;
 	private static final int MAXDEBUGLINES = 100;
 	private TextView textoutput;
