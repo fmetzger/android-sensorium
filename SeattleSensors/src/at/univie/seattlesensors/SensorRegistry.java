@@ -26,12 +26,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -39,7 +37,6 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 import at.univie.seattlesensors.sensors.XMLRPCMethod;
-import at.univie.seattlesensors.sensors.BluetoothSensor.BtDevice;
 
 public class SensorRegistry {
 
@@ -48,6 +45,8 @@ public class SensorRegistry {
 	private List<AbstractSensor> sensors;
 
 	private StringBuffer debugBuffer;
+	private String debugString = "";
+	
 	private int bufferedLines = 0;
 	private static final int MAXDEBUGLINES = 100;
 	private TextView textoutput;
@@ -226,23 +225,15 @@ public class SensorRegistry {
 			}
 		}
 		return null;
-		// if (!result.isEmpty()) {
-		// String time =
-		// java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-		// result.add(time);
-		// return result.toArray();
-		// }
-		// else {
-		// Log.d("callSensorMethod!!", "sending back null");
-		// return null;
-		// }
 	}
 
 	public void log(String tag, String out) {
+		out = out.replace("\n", "").replace("\r", "");
 		if (bufferedLines >= MAXDEBUGLINES) {
-			debugBuffer.delete(0, debugBuffer.indexOf("\n") + 1);
+			debugBuffer.delete(debugBuffer.lastIndexOf("\n"),debugBuffer.length()-1);
+			bufferedLines--;
 		}
-		debugBuffer.append("<b>" + tag + ": </b>" + out + "<br>\n");
+		debugBuffer.insert(0, "<b>" + tag + ": </b>" + out + "<br>\n");
 		bufferedLines++;
 		if (textoutput != null)
 			textoutput.setText(Html.fromHtml(debugBuffer.toString()), TextView.BufferType.SPANNABLE);

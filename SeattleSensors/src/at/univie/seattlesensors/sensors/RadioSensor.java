@@ -159,7 +159,7 @@ public class RadioSensor extends AbstractSensor {
 					signalstrength.setValue(asu);
 				}
 
-				
+				timestamp.setValue(System.currentTimeMillis());
 //				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 				notifyListeners();
 			}
