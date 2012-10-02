@@ -105,7 +105,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public Double lattitude() {
+	public Double latitude() {
 			return (Double) latitude.getValue();
 	}
 	
