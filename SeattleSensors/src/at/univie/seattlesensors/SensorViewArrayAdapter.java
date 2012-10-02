@@ -24,8 +24,6 @@ public class SensorViewArrayAdapter extends ArrayAdapter<AbstractSensor> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		AbstractSensor sensor = (AbstractSensor) this.getItem(position);
-
 		TextView sValue;
 		TextView sName;
 		TextView sUnit;
