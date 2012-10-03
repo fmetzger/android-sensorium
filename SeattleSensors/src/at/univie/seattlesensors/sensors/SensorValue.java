@@ -34,6 +34,7 @@ public class SensorValue {
 		//AP_LIST(""), 
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
+		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),
 		BONDED_DEV("bounded device(s)"), SCANNED_DEV("scanned device(s)");
 
 		private String name;

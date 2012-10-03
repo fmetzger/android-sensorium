@@ -25,6 +25,7 @@ package at.univie.seattlesensors.sensors;
 import android.content.Context;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
@@ -43,6 +44,10 @@ public class RadioSensor extends AbstractSensor {
 	private SensorValue lac;
 	private SensorValue networktype;
 	private SensorValue signalstrength;
+	
+	private SensorValue roaming;
+	private SensorValue servicestate;
+	private SensorValue operator;
 
 
 	
@@ -57,6 +62,10 @@ public class RadioSensor extends AbstractSensor {
 		cid = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.CID);
 		networktype = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.NETWORKTYPE);
 		signalstrength = new SensorValue(SensorValue.UNIT.DBM, SensorValue.TYPE.SIGNALSTRENGTH);
+		
+		roaming = new SensorValue(SensorValue.UNIT.OTHER, SensorValue.TYPE.ROAMING);
+		servicestate = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SERVICESTATE);
+		operator = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OPERATOR);
 		
 	}
 
@@ -78,17 +87,56 @@ public class RadioSensor extends AbstractSensor {
 		notifyListeners();
 
 		phoneStateListener = new PhoneStateListener() {
+			
+			@Override
+			public void onServiceStateChanged(ServiceState serviceState) {
+				// TODO Auto-generated method stub
+				super.onServiceStateChanged(serviceState);
+				
+				String state = "";
+				switch(serviceState.getState()){
+				case ServiceState.STATE_EMERGENCY_ONLY: 
+					state = "emergency calls only";
+					break;
+				case ServiceState.STATE_IN_SERVICE:
+					state = "in service";
+					break;
+				case ServiceState.STATE_OUT_OF_SERVICE:
+					state = "no service";
+					break;
+				case ServiceState.STATE_POWER_OFF:
+					state = "disabled";
+					break;
+				}
+				servicestate.setValue(state);
+				operator.setValue(serviceState.getOperatorAlphaLong());
+				roaming.setValue(serviceState.getRoaming());
+				notifyListeners();
+			}
+			
+			
 			@Override
 			public void onCellLocationChanged(CellLocation location) {
 				GsmCellLocation gsmCell = (GsmCellLocation) location;
 				timestamp.setValue(System.currentTimeMillis());
 
 				String mccmnc = telephonyManager.getNetworkOperator();
-				mcc.setValue(mccmnc.substring(0, 3));
-				mnc.setValue(mccmnc.substring(3));
-				cid.setValue(gsmCell.getCid());
-				lac.setValue(gsmCell.getLac());
-				networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
+				Log.d("STRING", "mccmnc is \"" + mccmnc+"\"");
+				if (mccmnc != null && !mccmnc.equals("")){
+					Log.d("STRING", mccmnc);
+					mcc.setValue(mccmnc.substring(0, 3));
+					mnc.setValue(mccmnc.substring(3));
+					cid.setValue(gsmCell.getCid());
+					lac.setValue(gsmCell.getLac());
+					networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
+				} else {
+					mcc.setValue("n/a");
+					mnc.setValue("n/a");
+					cid.setValue("n/a");
+					lac.setValue("n/a");
+					networktype.setValue("n/a");
+				}
+
 //				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 				notifyListeners();
 
@@ -165,7 +213,7 @@ public class RadioSensor extends AbstractSensor {
 			}
 		};
 
-		telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+		telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CELL_LOCATION | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | PhoneStateListener.LISTEN_SERVICE_STATE);
 	}
 
 	@Override
