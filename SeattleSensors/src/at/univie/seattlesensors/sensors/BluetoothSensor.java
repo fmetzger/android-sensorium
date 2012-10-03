@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
 import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
@@ -22,6 +23,8 @@ public class BluetoothSensor extends AbstractSensor {
 	public static Intent bluetoothIntent;
 	String bluetooth = "";
 	String devices = "";
+	private int scan_interval = 10; // sec
+	private Handler handler = new Handler();
 
 	private SensorValue localDeviceName;
 	private SensorValue localMAC;
@@ -41,6 +44,19 @@ public class BluetoothSensor extends AbstractSensor {
 		sBondedDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.BONDED_DEV);
 		sScannedDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SCANNED_DEV);
 	}
+	
+	private Runnable scanTask = new Runnable() {
+		@Override
+		public void run() {			
+			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+			filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+			bluetoothIntent = context.getApplicationContext().registerReceiver(bluetoothReceiver, filter);
+			bluetoothAdapter.startDiscovery();	        		
+			Log.d("scanTask", "restart bluetooth scanning");
+			
+			handler.postDelayed(this, scan_interval*1000);
+		}		
+	};
 	
 	@Override
 	protected void _enable() {
@@ -68,8 +84,7 @@ public class BluetoothSensor extends AbstractSensor {
 		}
 		sBondedDevices.setValue(bonded);
 		
-		if (bluetoothAdapter.isEnabled()){ // only when bluetooth is enabled can we discover devices
-			bluetoothAdapter.startDiscovery();			
+		if (bluetoothAdapter.isEnabled()){ // only when bluetooth is enabled can we discover devices			
 			bluetoothReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {					
@@ -85,21 +100,18 @@ public class BluetoothSensor extends AbstractSensor {
 						}
 					}
 					else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+						context.unregisterReceiver(this);
 						SensorRegistry.getInstance().log("Bluetooth", bluetooth + devices);
 						Log.d("Bluetooth FINISHED", "done");
 						sScannedDevices.setValue(devices);
 						notifyListeners();
 						devices = "";
-						scannedDevices.clear();
-						
-						bluetoothAdapter.startDiscovery();
+						scannedDevices.clear();						
+//						bluetoothAdapter.startDiscovery();
 					}
 				}
 			};	
-
-			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-			filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			bluetoothIntent = context.getApplicationContext().registerReceiver(bluetoothReceiver, filter);
+			handler.postDelayed(scanTask, 0);
 		}
 		else // if not enabled, we only get info for local device
 			SensorRegistry.getInstance().log("Bluetooth", bluetooth);
