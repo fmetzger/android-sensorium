@@ -69,7 +69,6 @@ public class BatterySensor extends AbstractSensor {
         };
         IntentFilter batteryLevelFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         batteryIntent = context.getApplicationContext().registerReceiver(batteryReceiver, batteryLevelFilter);
-        Log.d("BATT", batteryIntent.toString());
 	}
 
 	@Override

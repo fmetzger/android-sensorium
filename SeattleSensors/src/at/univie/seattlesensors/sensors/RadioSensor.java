@@ -111,6 +111,7 @@ public class RadioSensor extends AbstractSensor {
 				servicestate.setValue(state);
 				operator.setValue(serviceState.getOperatorAlphaLong());
 				roaming.setValue(serviceState.getRoaming());
+				timestamp.setValue(System.currentTimeMillis());
 				notifyListeners();
 			}
 			
@@ -121,20 +122,20 @@ public class RadioSensor extends AbstractSensor {
 				timestamp.setValue(System.currentTimeMillis());
 
 				String mccmnc = telephonyManager.getNetworkOperator();
-				Log.d("STRING", "mccmnc is \"" + mccmnc+"\"");
-				if (mccmnc != null && !mccmnc.equals("")){
-					Log.d("STRING", mccmnc);
+				if ((mccmnc == null || mccmnc.equals("")) || !servicestate.getValue().equals("in service")){
+					mcc.setValue("n/a");
+					mnc.setValue("n/a");
+					cid.setValue("n/a");
+					lac.setValue("n/a");
+					signalstrength.setValue("n/a");
+					networktype.setValue("n/a");
+					
+				} else {
 					mcc.setValue(mccmnc.substring(0, 3));
 					mnc.setValue(mccmnc.substring(3));
 					cid.setValue(gsmCell.getCid());
 					lac.setValue(gsmCell.getLac());
 					networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
-				} else {
-					mcc.setValue("n/a");
-					mnc.setValue("n/a");
-					cid.setValue("n/a");
-					lac.setValue("n/a");
-					networktype.setValue("n/a");
 				}
 
 //				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
