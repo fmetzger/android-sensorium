@@ -18,20 +18,22 @@ import at.univie.seattlesensors.SensorRegistry;
 
 public class BluetoothSensor extends AbstractSensor {
 	
-	private BluetoothAdapter bluetoothAdapter;
 	public static BroadcastReceiver bluetoothReceiver;
 	public static Intent bluetoothIntent;
-	String bluetooth = "";
-	String devices = "";
-	private int scan_interval = 10; // sec
+	
 	private Handler handler = new Handler();
+	private BluetoothAdapter bluetoothAdapter;
 
 	private SensorValue localDeviceName;
 	private SensorValue localMAC;
-	private List<BtDevice> bondedDevices;
-	private List<BtDevice> scannedDevices;
 	private SensorValue sBondedDevices;
 	private SensorValue sScannedDevices;
+	
+	private List<BtDevice> bondedDevices;
+	private List<BtDevice> scannedDevices;
+	private String bluetooth = "";
+	private String devices = "";
+	private int scan_interval = 10; // sec
 
 	public BluetoothSensor(Context context) {
 		super(context);

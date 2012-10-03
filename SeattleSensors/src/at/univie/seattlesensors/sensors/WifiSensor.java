@@ -14,20 +14,22 @@ import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
 public class WifiSensor extends AbstractSensor {
-	WifiManager mainWifi;
-	BroadcastReceiver wifiReceiver;
-	List<ScanResult> wifiList = null;
-	private List<WifiDevice> scannedDevices;
 	
-	String APList = "";   
+	public static BroadcastReceiver wifiReceiver;
+	private WifiManager mainWifi;
+	private List<ScanResult> wifiList = null;
+	private List<WifiDevice> scannedDevices;
+	private Handler handler = new Handler();
+	
+	private String APList = "";   
 	private SensorValue sAPList;
 	private int defaultSize = 5;
-	private int scan_interval = 10; // sec
-	private Handler handler = new Handler();
+	private int scan_interval = 10; // sec	
 
 	public WifiSensor(Context context) {
 		super(context);
 		name = "Wifi Scan Sensor";
+		
 		sAPList = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OTHER);		
 		scannedDevices = new LinkedList<WifiDevice>();
 	}
@@ -38,7 +40,7 @@ public class WifiSensor extends AbstractSensor {
 			IntentFilter wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 			context.registerReceiver(wifiReceiver, wifiFilter);
 			mainWifi.startScan();		        		
-			Log.d("scanTask", "restart scanning");
+			//Log.d("scanTask", "restart scanning");
 			
 			handler.postDelayed(this, scan_interval*1000);
 		}		
@@ -54,14 +56,17 @@ public class WifiSensor extends AbstractSensor {
 				APList = "";
 				wifiList = mainWifi.getScanResults();
 				int length = Math.min(wifiList.size(), defaultSize);
+				
 		        for(int i = 0; i < length; i++){
 		        	ScanResult result = wifiList.get(i);
 		        	String message = String.format("%s. %s \t BSSID: %s \t Signal level: %d dBm \t " +
-		        			"capabilities: %s \t frequency: %.3f GHz", new Integer(i+1).toString(), result.SSID, 
-		        			result.BSSID, result.level, result.capabilities, (float)result.frequency/1000);
+		        			"capabilities: %s \t frequency: %.3f GHz", new Integer(i+1).toString(), 
+		        			result.SSID, result.BSSID, result.level, result.capabilities, 
+		        			(float)result.frequency/1000);
 		        	SensorRegistry.getInstance().log("WiFi", message);
 		        	APList += message + (i == (length-1) ? "" : "\n\n");
 		        }
+		        
 		        for(int i = 0; i < wifiList.size(); i++){
 		        	ScanResult result = wifiList.get(i);
 		        	scannedDevices.add(new WifiDevice(result.SSID, result.BSSID, result.capabilities, 

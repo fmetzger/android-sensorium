@@ -1,19 +1,13 @@
 package at.univie.seattlesensors.sensors;
 
-import java.util.List;
-
 import android.content.Context;
-import android.content.IntentFilter;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.text.format.Formatter;
-import android.util.Log;
-import at.univie.seattlesensors.SensorRegistry;
 
 public class WifiConnectionSensor extends AbstractSensor {
-	WifiManager mainWifi;
+	private WifiManager mainWifi;
 	private SensorValue ssid;
 	private SensorValue ssid_hidden;
 	private SensorValue bssid;
@@ -22,10 +16,10 @@ public class WifiConnectionSensor extends AbstractSensor {
 	private SensorValue supplicant_state;
 	private SensorValue rssi;
 	private SensorValue speed;
+	private Handler handler = new Handler();
 	//private SensorValue sConnectedAP;
 	String AP = "";  // the AP that is connected to
 	private int scan_interval = 10; // sec
-	private Handler handler = new Handler();
 
 	public WifiConnectionSensor(Context context){
 		super(context);
