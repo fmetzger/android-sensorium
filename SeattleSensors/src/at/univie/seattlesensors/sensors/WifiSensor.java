@@ -9,8 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
-import at.univie.seattlesensors.sensors.BluetoothSensor.BtDevice;
 
 public class WifiSensor extends AbstractSensor {
 	WifiManager mainWifi;
@@ -20,7 +21,9 @@ public class WifiSensor extends AbstractSensor {
 	
 	String APList = "";   
 	private SensorValue sAPList;
-	int defaultSize = 5;
+	private int defaultSize = 5;
+	private int scan_interval = 10; // sec
+	private Handler handler = new Handler();
 
 	public WifiSensor(Context context) {
 		super(context);
@@ -28,6 +31,18 @@ public class WifiSensor extends AbstractSensor {
 		sAPList = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OTHER);		
 		scannedDevices = new LinkedList<WifiDevice>();
 	}
+	
+	private Runnable scanTask = new Runnable() {
+		@Override
+		public void run() {			
+			IntentFilter wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+			context.registerReceiver(wifiReceiver, wifiFilter);
+			mainWifi.startScan();		        		
+			Log.d("scanTask", "restart scanning");
+			
+			handler.postDelayed(this, scan_interval*1000);
+		}		
+	};
 	
 	@Override
 	protected void _enable() {
@@ -56,9 +71,7 @@ public class WifiSensor extends AbstractSensor {
 		        notifyListeners();
 			}
 		};			
-		IntentFilter wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-		context.registerReceiver(wifiReceiver, wifiFilter);
-		mainWifi.startScan();		        
+		handler.postDelayed(scanTask, 0);
 	}
 	
 	@Override

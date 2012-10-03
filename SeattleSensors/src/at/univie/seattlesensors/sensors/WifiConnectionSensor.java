@@ -3,10 +3,13 @@ package at.univie.seattlesensors.sensors;
 import java.util.List;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
 import android.text.format.Formatter;
+import android.util.Log;
 import at.univie.seattlesensors.SensorRegistry;
 
 public class WifiConnectionSensor extends AbstractSensor {
@@ -21,6 +24,8 @@ public class WifiConnectionSensor extends AbstractSensor {
 	private SensorValue speed;
 	//private SensorValue sConnectedAP;
 	String AP = "";  // the AP that is connected to
+	private int scan_interval = 10; // sec
+	private Handler handler = new Handler();
 
 	public WifiConnectionSensor(Context context){
 		super(context);
@@ -36,27 +41,35 @@ public class WifiConnectionSensor extends AbstractSensor {
 		speed = new SensorValue(SensorValue.UNIT.MBPS,SensorValue.TYPE.SPEED);
 		//sConnectedAP = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.WIFI_CONNECTION);
 	}
+	
+	private Runnable scanTask = new Runnable() {
+		@Override
+		public void run() {			
+			mainWifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			WifiInfo info = mainWifi.getConnectionInfo();  // the network that Android is connected to
+			ssid.setValue(info.getSSID());
+			ssid_hidden.setValue(info.getHiddenSSID());
+			bssid.setValue(info.getBSSID());
+			ip.setValue(Formatter.formatIpAddress(info.getIpAddress()));
+			mac.setValue(info.getMacAddress());
+			supplicant_state.setValue(info.getSupplicantState());
+			rssi.setValue(info.getRssi());
+			speed.setValue(info.getLinkSpeed());
+			
+//			List<WifiConfiguration> configs = mainWifi.getConfiguredNetworks();
+//			for (WifiConfiguration config : configs) {
+//				AP += "\n" + config.toString();
+//			}
+//			SensorRegistry.getInstance().log("WiFi", AP);
+//			sConnectedAP.setValue(AP);
+			notifyListeners();
+			handler.postDelayed(this, scan_interval*1000);
+		}		
+	};
 
 	@Override
 	protected void _enable() {
-		mainWifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		WifiInfo info = mainWifi.getConnectionInfo();  // the network that Android is connected to
-		ssid.setValue(info.getSSID());
-		ssid_hidden.setValue(info.getHiddenSSID());
-		bssid.setValue(info.getBSSID());
-		ip.setValue(Formatter.formatIpAddress(info.getIpAddress()));
-		mac.setValue(info.getMacAddress());
-		supplicant_state.setValue(info.getSupplicantState());
-		rssi.setValue(info.getRssi());
-		speed.setValue(info.getLinkSpeed());
-		
-//		List<WifiConfiguration> configs = mainWifi.getConfiguredNetworks();
-//		for (WifiConfiguration config : configs) {
-//			AP += "\n" + config.toString();
-//		}
-//		SensorRegistry.getInstance().log("WiFi", AP);
-//		sConnectedAP.setValue(AP);
-		notifyListeners();
+		handler.postDelayed(scanTask, 0);
 	}
 
 	@Override
