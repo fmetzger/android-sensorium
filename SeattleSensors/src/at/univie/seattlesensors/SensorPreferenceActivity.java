@@ -37,6 +37,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 			public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+				Log.d("SeattleSensors", "about to change " + key);
 				if (!key.contains("-level")) {
 					boolean state = prefs.getBoolean(key, false);
 					Log.d("SeattleSensors", key + " changed to " + state);
@@ -116,7 +117,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					Log.d("SeattleSensors", "Preference" + preference.getTitle() + "changed to " + newValue);
+					Log.d("SeattleSensors", "Preference " + preference.getTitle() + " changed to " + newValue);
 					return true;
 				}
 			});
@@ -131,7 +132,8 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					Log.d("SeattleSensors", "Preference" + preference.getTitle() + "changed to " + newValue);
+					Log.d("SeattleSensors", "Preference " + preference.getTitle() + " changed to " + newValue);
+					//TODO: notify the sensor listeners on this preference change!
 					return true;
 				}
 			});

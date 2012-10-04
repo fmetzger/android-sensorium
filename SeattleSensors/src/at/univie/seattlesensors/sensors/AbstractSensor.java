@@ -33,6 +33,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import at.univie.seattlesensors.PrivacyHelper;
+import at.univie.seattlesensors.PrivacyHelper.PrivacyLevel;
 import at.univie.seattlesensors.SensorRegistry;
 
 public abstract class AbstractSensor {
@@ -58,7 +59,9 @@ public abstract class AbstractSensor {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
-				//TODO: also read and apply the privacylevel preference for this sensor!
+				
+				int state = prefs.getInt(this.getClass().getName()+"-level", PrivacyHelper.PrivacyLevel.FULL.value());
+				setPrivacylevel(PrivacyLevel.fromInt(state));
 
 				enabled = true;
 			} catch (Exception e) {
