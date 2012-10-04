@@ -13,13 +13,15 @@ public class SensorViewItem implements SensorChangeListener {
 	private TextView textViewSensorUnits;
 	private TextView textViewSensorTypes;
 	private TextView textViewSensorName;
+	private TextView textViewSensorPrivacyLevel;
 
-	public SensorViewItem(TextView sName, TextView sValues, TextView sUnits, TextView sTypes) {
+	public SensorViewItem(TextView sName, TextView sPrivacyLevel, TextView sValues, TextView sUnits, TextView sTypes) {
 
 		this.textViewSensorValues = sValues;
 		this.textViewSensorUnits = sUnits;
 		this.textViewSensorTypes = sTypes;
 		this.textViewSensorName = sName;
+		this.textViewSensorPrivacyLevel = sPrivacyLevel;
 	}
 
 	public void attachto(AbstractSensor sensor, List<AbstractSensor> sensors) {
@@ -27,23 +29,6 @@ public class SensorViewItem implements SensorChangeListener {
 			s.removeListener(this);
 		sensor.addListener(this);
 	}
-
-	public TextView getTextViewSensorValues() {
-		return textViewSensorValues;
-	}
-
-	public TextView getTextViewSensorUnits() {
-		return textViewSensorUnits;
-	}
-
-	public TextView getTextViewSensorTypes() {
-		return textViewSensorTypes;
-	}
-
-	public TextView getTextViewSensorName() {
-		return textViewSensorName;
-	}
-
 	public void updateDisplay(AbstractSensor sensor) {
 		StringBuffer sValues = new StringBuffer();
 		StringBuffer sUnits = new StringBuffer();
@@ -56,7 +41,8 @@ public class SensorViewItem implements SensorChangeListener {
 			sUnits.append(v.getUnit().getName() + "\n");
 			sTypes.append(v.getType().getName() + "\n");
 		}
-		this.textViewSensorName.setText(sensor.getName());
+		textViewSensorName.setText(sensor.getName());
+		textViewSensorPrivacyLevel.setText(sensor.privacyLevel());
 		textViewSensorValues.setText(sValues.toString());
 		textViewSensorUnits.setText(sUnits.toString());
 		textViewSensorTypes.setText(sTypes.toString());
