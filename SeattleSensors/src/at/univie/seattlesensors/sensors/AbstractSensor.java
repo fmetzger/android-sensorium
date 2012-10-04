@@ -58,6 +58,7 @@ public abstract class AbstractSensor {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
+				//TODO: also read and apply the privacylevel preference for this sensor!
 
 				enabled = true;
 			} catch (Exception e) {

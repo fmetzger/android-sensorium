@@ -28,7 +28,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import at.univie.seattlesensors.PrivacyHelper;
 
 public class NetworkLocationSensor extends AbstractSensor {
 
@@ -64,7 +63,6 @@ public class NetworkLocationSensor extends AbstractSensor {
 				accuracy.setValue(loc.getAccuracy());
 				timestamp.setValue(loc.getTime());
 				
-//				notifyListeners(timestamp, PrivacyHelper.anonymize(longitude, getPrivacylevel()), PrivacyHelper.anonymize(latitude, getPrivacylevel()), altitude, accuracy);
 				notifyListeners();
 			}
 
@@ -91,27 +89,27 @@ public class NetworkLocationSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object lastfix() {
-			return timestamp.getValue();
+	public SensorValue lastfix() {
+			return timestamp;
 	}
 	
 	@XMLRPCMethod
-	public Object longitude() {
-			return longitude.getValue();
+	public SensorValue longitude() {
+			return longitude;
 	}
 	
 	@XMLRPCMethod
-	public Object latitude() {
-			return latitude.getValue();
+	public SensorValue latitude() {
+			return latitude;
 	}
 	
 	@XMLRPCMethod
-	public Object altitude() {
-			return altitude.getValue();
+	public SensorValue altitude() {
+			return altitude;
 	}
 	
 	@XMLRPCMethod
-	public Object accuracy() {
-			return accuracy.getValue();
+	public SensorValue accuracy() {
+			return accuracy;
 	}
 }

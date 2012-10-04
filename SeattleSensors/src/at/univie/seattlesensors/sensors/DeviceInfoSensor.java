@@ -47,17 +47,17 @@ public class DeviceInfoSensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public String tac() {
-		return (String) tac.getValue();
+	public SensorValue tac() {
+		return tac;
 	}
 	
 	@XMLRPCMethod
-	public String vendorname() {
-		return (String) vendorname.getValue();
+	public SensorValue vendorname() {
+		return vendorname;
 	}
 	
 	@XMLRPCMethod
-	public String modelname() {
-		return (String) modelname.getValue();
+	public SensorValue modelname() {
+		return modelname;
 	}
 }

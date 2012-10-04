@@ -31,7 +31,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import at.univie.seattlesensors.SensorRegistry;
 
 public class GPSLocationSensor extends AbstractSensor {
 
@@ -138,42 +137,42 @@ public class GPSLocationSensor extends AbstractSensor {
 
 	
 	@XMLRPCMethod
-	public Object lastfix() {
-			return timestamp.getValue();
+	public SensorValue lastfix() {
+			return timestamp;
 	}
 	
 	@XMLRPCMethod
-	public Object longitude() {
-			return longitude.getValue();
+	public SensorValue longitude() {
+			return longitude;
 	}
 	
 	@XMLRPCMethod
-	public Object latitude() {
-			return latitude.getValue();
+	public SensorValue latitude() {
+			return latitude;
 	}
 	
 	@XMLRPCMethod
-	public Object altitude() {
-			return altitude.getValue();
+	public SensorValue altitude() {
+			return altitude;
 	}
 	
 	@XMLRPCMethod
-	public Object accuracy() {
-			return accuracy.getValue();
+	public SensorValue accuracy() {
+			return accuracy;
 	}
 	
 	@XMLRPCMethod
-	public Object bearing() {
-			return bearing.getValue();
+	public SensorValue bearing() {
+			return bearing;
 	}
 	
 	@XMLRPCMethod
-	public Object speed() {
-			return speed.getValue();
+	public SensorValue speed() {
+			return speed;
 	}
 	
 	@XMLRPCMethod
-	public Object satellites() {
-			return satellites.getValue();
+	public SensorValue satellites() {
+			return satellites;
 	}
 }

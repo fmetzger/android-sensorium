@@ -78,27 +78,27 @@ public class BatterySensor extends AbstractSensor {
 	}
 	
 	@XMLRPCMethod
-	public Object batteryVoltage(){
-		return voltage.getValue();
+	public SensorValue batteryVoltage(){
+		return voltage;
 	}
 	
 	@XMLRPCMethod
-	public String batteryTechnology(){
-		return (String) technology.getValue();
+	public SensorValue batteryTechnology(){
+		return technology;
 	}
 	
 	@XMLRPCMethod
-	public Object batteryTemperature(){
-		return temperature.getValue();
+	public SensorValue batteryTemperature(){
+		return temperature;
 	}
 	
 	@XMLRPCMethod
-	public String batteryPlugged(){
-		return (String) plugged.getValue();
+	public SensorValue batteryPlugged(){
+		return plugged;
 	}
 	
 	@XMLRPCMethod
-	public Object batteryLevel(){
-		return level.getValue();
+	public SensorValue batteryLevel(){
+		return level;
 	}
 }

@@ -30,7 +30,6 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
-import at.univie.seattlesensors.PrivacyHelper;
 
 public class RadioSensor extends AbstractSensor {
 
@@ -83,14 +82,12 @@ public class RadioSensor extends AbstractSensor {
 			cid.setValue(gsmCell.getCid());
 			lac.setValue(gsmCell.getLac());
 		}
-//		notifyListeners(timestamp, mcc, mnc, lac, cid, signalstrength);
 		notifyListeners();
 
 		phoneStateListener = new PhoneStateListener() {
 			
 			@Override
 			public void onServiceStateChanged(ServiceState serviceState) {
-				// TODO Auto-generated method stub
 				super.onServiceStateChanged(serviceState);
 				
 				String state = "";
@@ -138,7 +135,6 @@ public class RadioSensor extends AbstractSensor {
 					networktype.setValue(decodenetworktype(telephonyManager.getNetworkType()));
 				}
 
-//				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 				notifyListeners();
 
 			}
@@ -209,7 +205,6 @@ public class RadioSensor extends AbstractSensor {
 				}
 
 				timestamp.setValue(System.currentTimeMillis());
-//				notifyListeners(timestamp, PrivacyHelper.anonymize(mcc, getPrivacylevel()), PrivacyHelper.anonymize(mnc, getPrivacylevel()), PrivacyHelper.anonymize(lac, getPrivacylevel()), PrivacyHelper.anonymize(cid, getPrivacylevel()), PrivacyHelper.anonymize(networktype, getPrivacylevel()), PrivacyHelper.anonymize(signalstrength, getPrivacylevel()));
 				notifyListeners();
 			}
 		};
@@ -226,37 +221,37 @@ public class RadioSensor extends AbstractSensor {
 	}
 
 	@XMLRPCMethod
-	public Object mcc() {
-		return mcc.getValue();
+	public SensorValue mcc() {
+		return mcc;
 	}
 
 	@XMLRPCMethod
-	public Object mnc() {
-		return mnc.getValue();
+	public SensorValue mnc() {
+		return mnc;
 	}
 
 	@XMLRPCMethod
-	public Object lac() {
-		return lac.getValue();
+	public SensorValue lac() {
+		return lac;
 	}
 
 	@XMLRPCMethod
-	public Object cid() {
-		return cid.getValue();
+	public SensorValue cid() {
+		return cid;
 	}
 
 	@XMLRPCMethod
-	public Object signalstrength() {
-		return signalstrength.getValue();
+	public SensorValue signalstrength() {
+		return signalstrength;
 	}
 
 	@XMLRPCMethod
-	public Object timestamp() {
-		return timestamp.getValue();
+	public SensorValue timestamp() {
+		return timestamp;
 	}
 	
 	@XMLRPCMethod
-	public Object networktype() {
-		return networktype.getValue();
+	public SensorValue networktype() {
+		return networktype;
 	}
 }

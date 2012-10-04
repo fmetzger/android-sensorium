@@ -36,6 +36,7 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
+import at.univie.seattlesensors.sensors.SensorValue;
 import at.univie.seattlesensors.sensors.XMLRPCMethod;
 
 public class SensorRegistry {
@@ -107,11 +108,8 @@ public class SensorRegistry {
 					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
 						if (name.lastIndexOf('.') > 0) {
 							name = name.substring(name.lastIndexOf('.') + 1);
-							// get the last of
-							// at.univie.seattlesensors.sensors."RadioSensor"
 						}
 						out.add(name + "." + m.getName());
-						// Log.d("REFLECTIONTEST", name + "." + m.getName());
 					}
 				}
 			}
@@ -133,8 +131,6 @@ public class SensorRegistry {
 							String name = sensor.getClass().getName();
 							if (name.lastIndexOf('.') > 0) {
 								name = name.substring(name.lastIndexOf('.') + 1);
-								// get the last of
-								// at.univie.seattlesensors.sensors."RadioSensor"
 							}
 							signature.add(name + "." + m.getName());
 
@@ -156,8 +152,6 @@ public class SensorRegistry {
 							} else {
 								signature.add("nil");
 							}
-
-							// return signature.toArray();
 						}
 					}
 				}
@@ -170,18 +164,44 @@ public class SensorRegistry {
 	}
 
 	public Object callSensorMethod(String methodname) {
-		Log.d("xmlrpc",methodname);
-		
-		if(methodname.lastIndexOf('.') == -1){
+		Log.d("xmlrpc", methodname);
+
+		if (methodname.lastIndexOf('.') == -1) {
 			Log.d("SeattleSensor", "Invalid XMLRPC method call");
 			return null;
 		}
-			
-		String classname = methodname.substring(0,methodname.lastIndexOf('.'));
+
+		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
 		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
 
+		Object o = invokeMethod(classname, methodname);
+		if (o instanceof SensorValue) {
+			SensorValue val = (SensorValue) o;
+			AbstractSensor sensor = getSensorWithName(classname);
+			if (sensor != null){
+				return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
+			} else {
+				// panic!
+			}
+			return val.getValue();
+		} else { // legacy path until all have been converted
+			return o;
+		}
 
+	}
 
+	private AbstractSensor getSensorWithName(String classname) {
+		for (AbstractSensor sensor : sensors) {
+			String sensorname = sensor.getClass().getName();
+			sensorname = sensorname.substring(sensorname.lastIndexOf('.') + 1);
+			if (sensorname.equals(classname) && sensor.isEnabled()) {
+				return sensor;
+			}
+		}
+		return null;
+	}
+
+	private Object invokeMethod(String classname, String methodname) {
 		for (AbstractSensor sensor : sensors) {
 			String sensorname = sensor.getClass().getName();
 			sensorname = sensorname.substring(sensorname.lastIndexOf('.') + 1);
@@ -192,11 +212,6 @@ public class SensorRegistry {
 						if (m.getName().equals(methodname)) {
 							try {
 								return m.invoke(sensor);
-								// if (obj != null)
-								// result.add(obj);
-								// else
-								// continue;
-								// Log.d("SeattleSensors", result.toString());
 
 							} catch (IllegalArgumentException e) {
 								Log.d("SeattleSensors", e.toString());
@@ -228,7 +243,7 @@ public class SensorRegistry {
 	public void log(String tag, String out) {
 		out = out.replace("\n", "").replace("\r", "");
 		if (bufferedLines >= MAXDEBUGLINES) {
-			debugBuffer.delete(debugBuffer.lastIndexOf("\n"),debugBuffer.length()-1);
+			debugBuffer.delete(debugBuffer.lastIndexOf("\n"), debugBuffer.length() - 1);
 			bufferedLines--;
 		}
 		debugBuffer.insert(0, "<b>" + tag + ": </b>" + out + "<br>\n");
