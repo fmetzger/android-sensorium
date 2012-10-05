@@ -1,0 +1,5 @@
+- FIX: sensor view does not immediately update after a preference change
+- FEATURE: sensor data logging
+- FEATURE: built-in data upload
+- CHANGE: improve preference layout
+- CHANGE: PrivacyHelper anonymization method improvements
