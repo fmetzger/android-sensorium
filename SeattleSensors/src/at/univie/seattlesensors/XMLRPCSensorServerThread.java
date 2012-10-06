@@ -54,6 +54,7 @@ public class XMLRPCSensorServerThread  implements Runnable{
 		int i;
 		for (i = 0; i < portArray.length; i++) {
 			SOCKET_PORT = portArray[i];
+			Log.d("SeattleSensors", "XMLRPC Server bonding on port... " + SOCKET_PORT);
 			
 			try {
 				InetAddress localhost = InetAddress.getLocalHost();
@@ -111,7 +112,7 @@ public class XMLRPCSensorServerThread  implements Runnable{
 				e.printStackTrace(pw);
 				Log.d("SeattleSensors", sw.toString());
 			}
-			break;
+			
 		}
 		
 		if (i == portArray.length) {
