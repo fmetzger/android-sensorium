@@ -31,11 +31,10 @@ public class SensorValue {
 		CID("cell id"), SIGNALSTRENGTH("received signal strength"),SATELLITES("satellites"),
 		NETWORKTYPE("network type"),TAC("TAC"),MODEL_NAME("model"),VENDOR_NAME("vendor"),
 		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),BEARING("bearing"),VELOCITY("speed"),
-		//AP_LIST(""), 
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
 		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),
-		BONDED_DEV("bounded device(s)"), SCANNED_DEV("scanned device(s)");
+		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)");
 
 		private String name;
 

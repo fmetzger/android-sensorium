@@ -32,13 +32,17 @@ import java.util.ArrayList;
 import org.xmlrpc.android.MethodCall;
 import org.xmlrpc.android.XMLRPCServer;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class XMLRPCSensorServerThread  implements Runnable{
 
 	public static final String SOCKET_ADDRESS = "127.0.0.1";
-	public static final int SOCKET_PORT = 63090;
-	
+//	public static final int SOCKET_PORT = 63090;
+	private int[] portArray = new int[] {63090, 63091, 63092, 
+			63093, 63094, 63095, 63096, 63097, 63098, 63099};
+	public static int SOCKET_PORT;
 	public static boolean running = false;
 
 
@@ -47,62 +51,73 @@ public class XMLRPCSensorServerThread  implements Runnable{
 
 	public void run() {
 		running = true;
-		try {
-			InetAddress localhost = InetAddress.getLocalHost();
-			ServerSocket socket = new ServerSocket(SOCKET_PORT, 10, localhost);
-			XMLRPCServer server = new XMLRPCServer();
+		int i;
+		for (i = 0; i < portArray.length; i++) {
+			SOCKET_PORT = portArray[i];
 			
-			SensorRegistry sensorregistry = SensorRegistry.getInstance();
-			
-			while (true) {
-				Socket client = socket.accept();
-				MethodCall call = server.readMethodCall(client);
-				String name = call.getMethodName();
-				
-				
-				if (name.equals("isSeattleSensor")){
-					server.respond(client, true);
-				}
-				
-				else if (name.equals("system.methodSignature")){
-					ArrayList<Object> params = call.getParams();
-					if (params.size() > 0 )
-					{
-						String methodname = (String) params.get(0);
-					
-						Object [] methodsignature = sensorregistry.getSensorMethodSignature(methodname);
+			try {
+				InetAddress localhost = InetAddress.getLocalHost();
+				ServerSocket socket = new ServerSocket(SOCKET_PORT, 10, localhost);
+				XMLRPCServer server = new XMLRPCServer();
+				Log.d("SeattleSensors", "XMLRPC Server listening on port " + SOCKET_PORT);
 
-						if (methodsignature != null)
-							server.respond(client, methodsignature);
-						else{
-							server.respond(client, "Unknown method");
-						}
-					} else
-						server.respond(client, "Too few arguments");
-				}
+				SensorRegistry sensorregistry = SensorRegistry.getInstance();
 
-				else if (name.equals("system.listMethods")){
-					server.respond(client, sensorregistry.getSensorMethods().toArray());
-				}
-				else {
-					Object methodresult = sensorregistry.callSensorMethod(name);
-					if (methodresult != null){
-						server.respond(client, methodresult);
-					} else {
-						server.respond(client,"Input not recognized or no information returned or sensor disabled");
+				while (true) {
+					Socket client = socket.accept();
+					MethodCall call = server.readMethodCall(client);
+					String name = call.getMethodName();
+
+
+					if (name.equals("isSeattleSensor")){
+						server.respond(client, true);
 					}
-					
+
+					else if (name.equals("system.methodSignature")){
+						ArrayList<Object> params = call.getParams();
+						if (params.size() > 0 )
+						{
+							String methodname = (String) params.get(0);
+
+							Object [] methodsignature = sensorregistry.getSensorMethodSignature(methodname);
+
+							if (methodsignature != null)
+								server.respond(client, methodsignature);
+							else{
+								server.respond(client, "Unknown method");
+							}
+						} else
+							server.respond(client, "Too few arguments");
+					}
+
+					else if (name.equals("system.listMethods")){
+						server.respond(client, sensorregistry.getSensorMethods().toArray());
+					}
+					else {
+						Object methodresult = sensorregistry.callSensorMethod(name);
+						if (methodresult != null){
+							server.respond(client, methodresult);
+						} else {
+							server.respond(client,"Input not recognized or no information returned or sensor disabled");
+						}
+
+					}
 				}
+				
+			} catch (Exception e) {
+				Log.d("SeattleSensors:", e.toString());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
 			}
-
-
-		} catch (Exception e) {
-			Log.d("SeattleSensors:", e.toString());
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			break;
 		}
+		
+		if (i == portArray.length) {
+			Log.e("SeattleSensors", "Could not locate a port in XMLRPC Server Thread!");
+		}
+		
 	}
 }
 
