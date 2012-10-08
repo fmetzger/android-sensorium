@@ -44,7 +44,7 @@ public class SensorViewItem implements SensorChangeListener {
 		textViewSensorName.setText(sensor.getName());
 		textViewSensorPrivacyLevel.setText(sensor.privacyLevel());
 		textViewSensorValues.setText(sValues.toString());
-		textViewSensorUnits.setText(sUnits.toString());
+		textViewSensorUnits.setText(" " + sUnits.toString());
 		textViewSensorTypes.setText(sTypes.toString());
 	}
 

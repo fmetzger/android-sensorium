@@ -4,3 +4,4 @@
 - CHANGE: improve preference layout
 - CHANGE: PrivacyHelper anonymization method improvements
 - CHANGE: improve the way xmlrpc finds its methods in the sensors (e.g. remove @xmlrpcmethod and generate calls directly from SensorValue attributes)
+- CHANGE: change name to Sensorium(?)

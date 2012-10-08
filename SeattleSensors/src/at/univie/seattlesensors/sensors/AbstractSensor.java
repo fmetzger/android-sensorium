@@ -59,11 +59,12 @@ public abstract class AbstractSensor {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
-				
-				int state = prefs.getInt(this.getClass().getName()+"-level", PrivacyHelper.PrivacyLevel.FULL.value());
+
+				int state = prefs.getInt(this.getClass().getName() + "-level", PrivacyHelper.PrivacyLevel.FULL.value());
 				setPrivacylevel(PrivacyLevel.fromInt(state));
 
 				enabled = true;
+				notifyListeners();
 			} catch (Exception e) {
 				disable();
 				Log.d("SeattleSensors", "Caught exception while enabling " + name + ": " + e.toString());
@@ -85,6 +86,8 @@ public abstract class AbstractSensor {
 			enabled = false;
 
 			_disable();
+			unsetallValues();
+			notifyListeners();
 		} catch (Exception e) {
 			Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
 			StringWriter sw = new StringWriter();
@@ -184,5 +187,11 @@ public abstract class AbstractSensor {
 	@XMLRPCMethod
 	public String privacyLevel() {
 		return privacylevel.getName();
+	}
+
+	private void unsetallValues() {
+		for (SensorValue s : getSensorValues()) {
+			s.unsetValue();
+		}
 	}
 }

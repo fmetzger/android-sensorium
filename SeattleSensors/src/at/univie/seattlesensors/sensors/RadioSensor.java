@@ -82,7 +82,6 @@ public class RadioSensor extends AbstractSensor {
 			cid.setValue(gsmCell.getCid());
 			lac.setValue(gsmCell.getLac());
 		}
-		notifyListeners();
 
 		phoneStateListener = new PhoneStateListener() {
 			

@@ -69,9 +69,6 @@ public class GPSLocationSensor extends AbstractSensor {
 	protected void _enable() {
 		
 		Log.d("GPS", "ENABLING GPS");
-		
-		timestamp.setValue(System.currentTimeMillis());
-		notifyListeners();
 
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location loc) {

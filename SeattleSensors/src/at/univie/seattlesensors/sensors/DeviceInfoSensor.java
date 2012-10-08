@@ -3,7 +3,6 @@ package at.univie.seattlesensors.sensors;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 /**
  * Provides information tied to the device/model, i.e. vendor and model name, TAC, ...
@@ -34,16 +33,10 @@ public class DeviceInfoSensor extends AbstractSensor {
 		
 		vendorname.setValue(Build.MANUFACTURER);
 		modelname.setValue(Build.MODEL);
-		
-		Log.d("SeattleSensors", (String) vendorname.getValue());
-		Log.d("SeattleSensors", (String) modelname.getValue());
-		
-		notifyListeners();
 	}
 
 	@Override
 	protected void _disable() {
-		// we should not need to do anything
 	}
 	
 	@XMLRPCMethod

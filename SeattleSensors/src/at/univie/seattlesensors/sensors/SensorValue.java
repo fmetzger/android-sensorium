@@ -87,4 +87,8 @@ public class SensorValue {
 	public void setType(TYPE type) {
 		this.type = type;
 	}
+	
+	public void unsetValue(){
+		this.value = "n/a";
+	}
 }
