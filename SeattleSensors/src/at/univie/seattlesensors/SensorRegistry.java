@@ -24,6 +24,7 @@ package at.univie.seattlesensors;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
@@ -178,7 +179,7 @@ public class SensorRegistry {
 		if (o instanceof SensorValue) {
 			SensorValue val = (SensorValue) o;
 			AbstractSensor sensor = getSensorWithName(classname);
-			if (sensor != null){
+			if (sensor != null) {
 				return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
 			} else {
 				// panic!
@@ -266,5 +267,129 @@ public class SensorRegistry {
 				return sensor;
 		}
 		return null;
+	}
+
+	private SensorValue invokeImplicitMethod(String classname, String methodname) {
+		AbstractSensor sensor = getSensorForClassname(classname);
+		if (sensor.isEnabled()) {
+			Field[] fields = sensor.getClass().getDeclaredFields();
+			try {
+				for (Field f : fields) {
+					f.setAccessible(true);
+					Object o = f.get(this);
+					if (f.getName().equals(methodname) && o instanceof SensorValue) {
+						return (SensorValue) o;
+					}
+				}
+			} catch (IllegalArgumentException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			} catch (IllegalAccessException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			}
+		}
+		return null;
+	}
+
+	public Object callImplicitSensorMethod(String methodname) {
+		if (methodname.lastIndexOf('.') == -1) {
+			Log.d("SeattleSensor", "Invalid XMLRPC method call");
+			return null;
+		}
+		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
+		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
+		SensorValue val = invokeImplicitMethod(classname, methodname);
+		AbstractSensor sensor = getSensorWithName(classname);
+		return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
+	}
+
+	public Object[] getImplicitSensorMethodSignature(String methodname) {
+		List<String> signature = new LinkedList<String>();
+		
+		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
+		AbstractSensor sensor = getSensorForClassname(classname);
+
+			if (sensor.isEnabled()) {
+				Field[] fields = sensor.getClass().getDeclaredFields();
+				try {
+					for (Field f : fields) {
+						f.setAccessible(true);
+						String fieldname = f.getName();
+						if(fieldname.equals(methodname.substring(methodname.lastIndexOf('.') + 1))){
+							signature.add(methodname);
+							
+							String rettype = f.get(sensor).getClass().toString();
+							
+							//TODO: this will frequently be only String and changing, 
+							// due to be set to "n/a" when no value is present
+							if (rettype.equals("class [Ljava.lang.Object;")) {
+								signature.add("array");
+							} else if (rettype.equals("class java.lang.String")) {
+								signature.add("string");
+							} else {
+								signature.add(rettype.toString());
+							}
+							
+							// add method parameters: always nil
+							signature.add("nil");
+						}
+					}
+				} catch (IllegalArgumentException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				} catch (IllegalAccessException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				} 
+			}
+		if (!signature.isEmpty())
+			return signature.toArray();
+		else
+			return null;
+	}
+
+	public List<String> getImplicitSensorMethods() {
+		List<String> out = new LinkedList<String>();
+
+		for (AbstractSensor sensor : sensors) {
+			if (sensor.isEnabled()) {
+				String name = sensor.getClass().getName();
+				Field[] fields = sensor.getClass().getDeclaredFields();
+
+				try {
+					for (Field f : fields) {
+						f.setAccessible(true);
+						Object o = f.get(this);
+						if (o instanceof SensorValue) {
+							if (name.lastIndexOf('.') > 0) {
+								name = name.substring(name.lastIndexOf('.') + 1);
+							}
+							out.add(name + "." + f.getName());
+						}
+
+					}
+				} catch (IllegalArgumentException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				} catch (IllegalAccessException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				}
+			}
+		}
+		return out;
 	}
 }
