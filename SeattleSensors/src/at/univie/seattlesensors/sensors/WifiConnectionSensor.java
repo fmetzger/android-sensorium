@@ -69,44 +69,4 @@ public class WifiConnectionSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 	}
-	
-	@XMLRPCMethod
-	public String ssid(){
-		return (String) ssid.getValue();
-	}
-	
-	@XMLRPCMethod
-	public Object ssid_hidden(){
-		return ssid_hidden.getValue();
-	}
-	
-	@XMLRPCMethod
-	public String bssid(){
-		return (String) bssid.getValue();
-	}
-	
-	@XMLRPCMethod
-	public Object device_ip(){
-		return ip.getValue();
-	}
-	
-	@XMLRPCMethod
-	public String mac(){
-		return (String) mac.getValue();
-	}
-	
-	@XMLRPCMethod
-	public Object supplicant_state(){
-		return supplicant_state.getValue();
-	}
-	
-	@XMLRPCMethod
-	public Object rssi(){
-		return rssi.getValue();
-	}
-	
-	@XMLRPCMethod
-	public Object speed(){
-		return speed.getValue();
-	}
 }

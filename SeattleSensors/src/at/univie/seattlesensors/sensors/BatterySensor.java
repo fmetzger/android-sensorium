@@ -75,29 +75,4 @@ public class BatterySensor extends AbstractSensor {
 		if(batteryIntent != null)
 			context.getApplicationContext().unregisterReceiver(batteryReceiver);
 	}
-	
-	@XMLRPCMethod
-	public SensorValue batteryVoltage(){
-		return voltage;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue batteryTechnology(){
-		return technology;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue batteryTemperature(){
-		return temperature;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue batteryPlugged(){
-		return plugged;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue batteryLevel(){
-		return level;
-	}
 }

@@ -131,45 +131,4 @@ public class GPSLocationSensor extends AbstractSensor {
 		if (gpsStatusListener != null)
 			locationManager.removeGpsStatusListener(gpsStatusListener);
 	}
-
-	
-	@XMLRPCMethod
-	public SensorValue lastfix() {
-			return timestamp;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue longitude() {
-			return longitude;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue latitude() {
-			return latitude;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue altitude() {
-			return altitude;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue accuracy() {
-			return accuracy;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue bearing() {
-			return bearing;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue speed() {
-			return speed;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue satellites() {
-			return satellites;
-	}
 }

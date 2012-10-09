@@ -218,39 +218,4 @@ public class RadioSensor extends AbstractSensor {
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
 		}
 	}
-
-	@XMLRPCMethod
-	public SensorValue mcc() {
-		return mcc;
-	}
-
-	@XMLRPCMethod
-	public SensorValue mnc() {
-		return mnc;
-	}
-
-	@XMLRPCMethod
-	public SensorValue lac() {
-		return lac;
-	}
-
-	@XMLRPCMethod
-	public SensorValue cid() {
-		return cid;
-	}
-
-	@XMLRPCMethod
-	public SensorValue signalstrength() {
-		return signalstrength;
-	}
-
-	@XMLRPCMethod
-	public SensorValue timestamp() {
-		return timestamp;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue networktype() {
-		return networktype;
-	}
 }

@@ -38,19 +38,4 @@ public class DeviceInfoSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 	}
-	
-	@XMLRPCMethod
-	public SensorValue tac() {
-		return tac;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue vendorname() {
-		return vendorname;
-	}
-	
-	@XMLRPCMethod
-	public SensorValue modelname() {
-		return modelname;
-	}
 }

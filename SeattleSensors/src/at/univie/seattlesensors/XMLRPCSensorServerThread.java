@@ -32,9 +32,7 @@ import java.util.ArrayList;
 import org.xmlrpc.android.MethodCall;
 import org.xmlrpc.android.XMLRPCServer;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 public class XMLRPCSensorServerThread  implements Runnable{
 

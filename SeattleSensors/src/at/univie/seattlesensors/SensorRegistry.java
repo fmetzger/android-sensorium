@@ -25,8 +25,6 @@ package at.univie.seattlesensors;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +36,6 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.seattlesensors.sensors.AbstractSensor;
 import at.univie.seattlesensors.sensors.SensorValue;
-import at.univie.seattlesensors.sensors.XMLRPCMethod;
 
 public class SensorRegistry {
 
@@ -98,144 +95,12 @@ public class SensorRegistry {
 		sensors.add(sensor);
 	}
 
-	public List<String> getSensorMethods() {
-		List<String> out = new LinkedList<String>();
-
-		for (AbstractSensor sensor : sensors) {
-			if (sensor.isEnabled()) {
-				String name = sensor.getClass().getName();
-				Method[] methods = sensor.getClass().getMethods();
-				for (Method m : methods) {
-					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
-						if (name.lastIndexOf('.') > 0) {
-							name = name.substring(name.lastIndexOf('.') + 1);
-						}
-						out.add(name + "." + m.getName());
-					}
-				}
-			}
-		}
-
-		return out;
-	}
-
-	public Object[] getSensorMethodSignature(String methodname) {
-
-		List<String> signature = new LinkedList<String>();
-
-		for (AbstractSensor sensor : sensors) {
-			if (sensor.isEnabled()) {
-				Method[] methods = sensor.getClass().getMethods();
-				for (Method m : methods) {
-					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
-						if (m.getName().equals(methodname)) {
-							String name = sensor.getClass().getName();
-							if (name.lastIndexOf('.') > 0) {
-								name = name.substring(name.lastIndexOf('.') + 1);
-							}
-							signature.add(name + "." + m.getName());
-
-							Class<?>[] params = m.getParameterTypes();
-							Class<?> rettype = m.getReturnType();
-
-							if (rettype.toString().equals("class [Ljava.lang.Object;")) {
-								signature.add("array");
-							} else if (rettype.toString().equals("class java.lang.String")) {
-								signature.add("string");
-							} else {
-								signature.add(rettype.toString());
-							}
-
-							if (params != null && params.length != 0) {
-								for (Class<?> c : params) {
-									signature.add(c.toString());
-								}
-							} else {
-								signature.add("nil");
-							}
-						}
-					}
-				}
-			}
-		}
-		if (!signature.isEmpty())
-			return signature.toArray();
-		else
-			return null;
-	}
-
-	public Object callSensorMethod(String methodname) {
-		Log.d("xmlrpc", methodname);
-
-		if (methodname.lastIndexOf('.') == -1) {
-			Log.d("SeattleSensor", "Invalid XMLRPC method call");
-			return null;
-		}
-
-		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
-		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
-
-		Object o = invokeMethod(classname, methodname);
-		if (o instanceof SensorValue) {
-			SensorValue val = (SensorValue) o;
-			AbstractSensor sensor = getSensorWithName(classname);
-			if (sensor != null) {
-				return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
-			} else {
-				// panic!
-			}
-			return val.getValue();
-		} else { // legacy path until all have been converted
-			return o;
-		}
-
-	}
-
 	private AbstractSensor getSensorWithName(String classname) {
 		for (AbstractSensor sensor : sensors) {
 			String sensorname = sensor.getClass().getName();
 			sensorname = sensorname.substring(sensorname.lastIndexOf('.') + 1);
 			if (sensorname.equals(classname) && sensor.isEnabled()) {
 				return sensor;
-			}
-		}
-		return null;
-	}
-
-	private Object invokeMethod(String classname, String methodname) {
-		for (AbstractSensor sensor : sensors) {
-			String sensorname = sensor.getClass().getName();
-			sensorname = sensorname.substring(sensorname.lastIndexOf('.') + 1);
-			if (sensorname.equals(classname) && sensor.isEnabled()) {
-				Method[] methods = sensor.getClass().getMethods();
-				for (Method m : methods) {
-					if (m.isAnnotationPresent(XMLRPCMethod.class)) {
-						if (m.getName().equals(methodname)) {
-							try {
-								return m.invoke(sensor);
-
-							} catch (IllegalArgumentException e) {
-								Log.d("SeattleSensors", e.toString());
-								StringWriter sw = new StringWriter();
-								PrintWriter pw = new PrintWriter(sw);
-								e.printStackTrace(pw);
-								Log.d("SeattleSensors", sw.toString());
-							} catch (IllegalAccessException e) {
-								Log.d("SeattleSensors", e.toString());
-								StringWriter sw = new StringWriter();
-								PrintWriter pw = new PrintWriter(sw);
-								e.printStackTrace(pw);
-								Log.d("SeattleSensors", sw.toString());
-							} catch (InvocationTargetException e) {
-								Log.d("SeattleSensors", e.toString());
-								StringWriter sw = new StringWriter();
-								PrintWriter pw = new PrintWriter(sw);
-								e.printStackTrace(pw);
-								Log.d("SeattleSensors", sw.toString());
-							}
-						}
-					}
-				}
 			}
 		}
 		return null;
@@ -263,80 +128,32 @@ public class SensorRegistry {
 
 	public AbstractSensor getSensorForClassname(String classname) {
 		for (AbstractSensor sensor : sensors) {
-			if (sensor.getClass().getName().equals(classname))
-				return sensor;
-		}
-		return null;
-	}
-
-	private SensorValue invokeImplicitMethod(String classname, String methodname) {
-		AbstractSensor sensor = getSensorForClassname(classname);
-		if (sensor.isEnabled()) {
-			Field[] fields = sensor.getClass().getDeclaredFields();
-			try {
-				for (Field f : fields) {
-					f.setAccessible(true);
-					Object o = f.get(this);
-					if (f.getName().equals(methodname) && o instanceof SensorValue) {
-						return (SensorValue) o;
-					}
+			String name = sensor.getClass().getName();
+			if (classname.lastIndexOf('.') > 0) { // we have a qualified name
+				if (name.equals(classname))
+					return sensor;
+			} else {
+				name = name.substring(name.lastIndexOf('.') + 1);
+				if (name.equals(classname)) {
+					return sensor;
 				}
-			} catch (IllegalArgumentException e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
-			} catch (IllegalAccessException e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
 			}
+
 		}
 		return null;
 	}
 
-	public Object callImplicitSensorMethod(String methodname) {
-		if (methodname.lastIndexOf('.') == -1) {
-			Log.d("SeattleSensor", "Invalid XMLRPC method call");
-			return null;
-		}
-		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
-		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
-		SensorValue val = invokeImplicitMethod(classname, methodname);
-		AbstractSensor sensor = getSensorWithName(classname);
-		return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
-	}
-
-	public Object[] getImplicitSensorMethodSignature(String methodname) {
-		List<String> signature = new LinkedList<String>();
-		
-		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
+	private SensorValue invokeMethod(String classname, String methodname) {
 		AbstractSensor sensor = getSensorForClassname(classname);
-
+		if (sensor != null) {
 			if (sensor.isEnabled()) {
 				Field[] fields = sensor.getClass().getDeclaredFields();
 				try {
 					for (Field f : fields) {
 						f.setAccessible(true);
-						String fieldname = f.getName();
-						if(fieldname.equals(methodname.substring(methodname.lastIndexOf('.') + 1))){
-							signature.add(methodname);
-							
-							String rettype = f.get(sensor).getClass().toString();
-							
-							//TODO: this will frequently be only String and changing, 
-							// due to be set to "n/a" when no value is present
-							if (rettype.equals("class [Ljava.lang.Object;")) {
-								signature.add("array");
-							} else if (rettype.equals("class java.lang.String")) {
-								signature.add("string");
-							} else {
-								signature.add(rettype.toString());
-							}
-							
-							// add method parameters: always nil
-							signature.add("nil");
+						Object o = f.get(sensor);
+						if (f.getName().equals(methodname) && o instanceof SensorValue) {
+							return (SensorValue) o;
 						}
 					}
 				} catch (IllegalArgumentException e) {
@@ -349,30 +166,105 @@ public class SensorRegistry {
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
 					Log.d("SeattleSensors", sw.toString());
-				} 
+				}
 			}
-		if (!signature.isEmpty())
-			return signature.toArray();
-		else
-			return null;
+		}
+		return null;
 	}
 
-	public List<String> getImplicitSensorMethods() {
+	public Object callSensorMethod(String methodname) {
+		if (methodname.lastIndexOf('.') == -1) {
+			Log.d("SeattleSensor", "Invalid XMLRPC method call");
+			return null;
+		}
+		String classname = methodname.substring(0, methodname.lastIndexOf('.'));
+		methodname = methodname.substring(methodname.lastIndexOf('.') + 1);
+		SensorValue val = invokeMethod(classname, methodname);
+		if (val != null) {
+			AbstractSensor sensor = getSensorWithName(classname);
+			return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
+		}
+		return null;
+	}
+
+	public Object[] getSensorMethodSignature(String methodname) {
+		List<String> signature = new LinkedList<String>();
+
+		if (methodname.lastIndexOf('.') > 0) {
+			String classname = methodname.substring(0, methodname.lastIndexOf('.'));
+			AbstractSensor sensor = getSensorForClassname(classname);
+			
+			if (sensor != null && sensor.isEnabled()) {
+				Field[] fields = sensor.getClass().getDeclaredFields();
+				try {
+					for (Field f : fields) {
+						f.setAccessible(true);
+						Object o = f.get(sensor);
+						if (o instanceof SensorValue) {
+							String fieldname = f.getName();
+							if (fieldname.equals(methodname.substring(methodname.lastIndexOf('.') + 1))) {
+								signature.add(methodname);
+
+								SensorValue sv = (SensorValue) o;
+								String rettype = sv.getValue().getClass().toString();
+
+								// TODO: this will frequently be only String and
+								// changing,
+								// due to be set to "n/a" when no value is
+								// present
+								if (rettype.equals("class [Ljava.lang.Object;")) {
+									signature.add("array");
+								} else if (rettype.equals("class java.lang.String")) {
+									signature.add("string");
+								} else if (rettype.equals("class java.lang.Integer")) {
+									signature.add("int");
+								} else if (rettype.equals("class java.lang.Boolean")) {
+									signature.add("boolean");
+								} else if (rettype.equals("class java.lang.Double")) {
+									signature.add("double");
+								} else if (rettype.equals("class java.lang.Long")) {
+									signature.add("ex:i8");
+								} else {
+									signature.add(rettype.toString());
+								}
+								// add method parameters: always nil
+								signature.add("nil");
+							}
+						}
+					}
+				} catch (IllegalArgumentException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				} catch (IllegalAccessException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d("SeattleSensors", sw.toString());
+				}
+			}
+
+			if (!signature.isEmpty())
+				return signature.toArray();
+		}
+		return null;
+	}
+
+	public List<String> getSensorMethods() {
 		List<String> out = new LinkedList<String>();
 
 		for (AbstractSensor sensor : sensors) {
 			if (sensor.isEnabled()) {
 				String name = sensor.getClass().getName();
+				name = name.substring(name.lastIndexOf('.') + 1);
 				Field[] fields = sensor.getClass().getDeclaredFields();
 
 				try {
 					for (Field f : fields) {
 						f.setAccessible(true);
-						Object o = f.get(this);
+						Object o = f.get(sensor);
 						if (o instanceof SensorValue) {
-							if (name.lastIndexOf('.') > 0) {
-								name = name.substring(name.lastIndexOf('.') + 1);
-							}
 							out.add(name + "." + f.getName());
 						}
 
