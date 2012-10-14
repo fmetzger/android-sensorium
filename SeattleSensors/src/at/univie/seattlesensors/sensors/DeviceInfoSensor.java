@@ -47,10 +47,8 @@ public class DeviceInfoSensor extends AbstractSensor {
 	
 	private Runnable memCPUTask = new Runnable() {
 		@Override
-		public void run() {			
-			totalMem.setValue(getTotalMemory());
+		public void run() {						
 			availMem.setValue(memoryInfo.availMem/1048576L);
-			memThreshold.setValue(memoryInfo.threshold/1048576L);
 			cpu.setValue(cpuUpdate()*100);
 			
 			notifyListeners();
@@ -72,6 +70,8 @@ public class DeviceInfoSensor extends AbstractSensor {
 		memoryInfo = new ActivityManager.MemoryInfo();
 		activityManager.getMemoryInfo(memoryInfo);
 		
+		totalMem.setValue(getTotalMemory());
+		memThreshold.setValue(memoryInfo.threshold/1048576L);
 		handler.postDelayed(memCPUTask, 0);
 	}
 
