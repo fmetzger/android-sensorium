@@ -7,7 +7,7 @@ public class SensorValue {
 	private TYPE type;
 
 	public static enum UNIT {
-		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(" "), STRING(" "), 
+		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(" "), STRING(" "), MEM("MB"),
 		OTHER(" "), NUMBER(" "), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),METERSPERSECOND("m/s"),
 		STATE("state"), NAME("name"), LIST("list"), DBM("dBm"), MBPS("Mbps"), ASU("asu");
 
@@ -30,6 +30,7 @@ public class SensorValue {
 		MCC("mobile country code"), MNC("mobile network code"),
 		CID("cell id"), SIGNALSTRENGTH("received signal strength"),SATELLITES("satellites"),
 		NETWORKTYPE("network type"),TAC("TAC"),MODEL_NAME("model"),VENDOR_NAME("vendor"),
+		TOTAL_MEM("total memory"), AVAL_MEM("available memory"), THD_MEM("low memory threshold"), CPU("CPU usage"),
 		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),BEARING("bearing"),VELOCITY("speed"),
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
