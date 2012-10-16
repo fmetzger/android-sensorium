@@ -1,0 +1,81 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="at.univie.sensorium"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:name="SeattleSensorsApplication"
+        android:debuggable="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".SeattleSensorsActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SensorConfigActivity"
+            android:label="@string/title_activity_sensor_config" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.univie.sensorium.SeattleSensorsActivity" />
+        </activity>
+        <activity
+            android:name=".SensorDebugActivity"
+            android:label="@string/title_activity_sensor_debug" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.univie.sensorium.SeattleSensorsActivity" />
+        </activity>
+        <activity
+            android:name=".SensorsViewActivity"
+            android:label="@string/title_activity_sensors_view" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="at.univie.sensorium.SeattleSensorsActivity" />
+        </activity>
+        <activity
+            android:name=".SensorPreferenceActivity"
+            android:label="@string/title_activity_sensor_config" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".SensorBootCompletedReceiver"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="SensorService" >
+        </service>
+    </application>
+
+</manifest>

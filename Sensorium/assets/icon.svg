@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="icon.svg"
+   inkscape:export-filename="/home/fm/git/android-seattle-sensors/SeattleSensors/assets/icon.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="141.37014 : 1946.4295 : 1"
+       inkscape:vp_y="0 : 4944.6987 : 0"
+       inkscape:vp_z="1060.6 : 1025.2735 : 1"
+       inkscape:persp3d-origin="386.82747 : 158.00451 : 1"
+       id="perspective3773" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.48"
+     inkscape:cx="277.19521"
+     inkscape:cy="492.74783"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1325"
+     inkscape:window-height="808"
+     inkscape:window-x="260"
+     inkscape:window-y="174"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3837"
+       transform="matrix(4.2069314,0,0,4.2069314,-986.77255,-1962.5009)"
+       inkscape:export-filename="/home/fm/git/android-seattle-sensors/SeattleSensors/assets/icon.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/fm/git/android-seattle-sensors/SeattleSensors/assets/icon.png"
+         inkscape:corner7="-0.13332393 : 0.069387362 : 0.034335016 : 1"
+         inkscape:corner0="-0.10460367 : 0.139471 : 0 : 1"
+         inkscape:perspectiveID="#perspective3773"
+         id="g3775"
+         style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         sodipodi:type="inkscape:box3d">
+        <path
+           d="m 333.32497,637.6637 2.15937,12.715 5.76113,-6.76202 -2.25759,-12.03655 z"
+           inkscape:box3dsidetype="13"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3785"
+           sodipodi:type="inkscape:box3dside" />
+        <path
+           d="m 333.32497,545.66626 0,91.99744 5.66291,-6.08357 0,-88.59997 z"
+           inkscape:box3dsidetype="6"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3777"
+           sodipodi:type="inkscape:box3dside" />
+        <path
+           d="m 338.98788,542.98016 2.25759,9.21237 0,91.42415 -2.25759,-12.03655 z"
+           inkscape:box3dsidetype="11"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3787"
+           sodipodi:type="inkscape:box3dside" />
+        <path
+           d="m 333.32497,545.66626 2.15937,9.66636 5.76113,-3.14009 -2.25759,-9.21237 z"
+           inkscape:box3dsidetype="5"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3779"
+           sodipodi:type="inkscape:box3dside" />
+        <path
+           d="m 335.48434,555.33262 0,95.04608 5.76113,-6.76202 0,-91.42415 z"
+           inkscape:box3dsidetype="14"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3783"
+           sodipodi:type="inkscape:box3dside" />
+        <path
+           d="m 333.32497,545.66626 2.15937,9.66636 0,95.04608 -2.15937,-12.715 z"
+           inkscape:box3dsidetype="3"
+           style="fill:#6c5154;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.46329856;stroke-opacity:1"
+           id="path3781"
+           sodipodi:type="inkscape:box3dside" />
+      </g>
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/fm/git/android-seattle-sensors/SeattleSensors/assets/icon.png"
+         transform="translate(0,3.2398537)"
+         id="g3765">
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2985"
+           sodipodi:cx="337.34976"
+           sodipodi:cy="519.00128"
+           sodipodi:rx="72.49173"
+           sodipodi:ry="72.49173"
+           d="m 409.84149,519.00128 c 0,40.03608 -32.45565,72.49173 -72.49173,72.49173 -40.03607,0 -72.49173,-32.45565 -72.49173,-72.49173 0,-40.03608 32.45566,-72.49173 72.49173,-72.49173 40.03608,0 72.49173,32.45565 72.49173,72.49173 z"
+           transform="matrix(1,-0.46630561,0,1,-0.40496826,182.82194)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2987"
+           sodipodi:cx="341.80457"
+           sodipodi:cy="529.12579"
+           sodipodi:rx="45.357952"
+           sodipodi:ry="45.357952"
+           d="m 387.16252,529.12579 c 0,25.05051 -20.30745,45.35796 -45.35795,45.35796 -25.05051,0 -45.35796,-20.30745 -45.35796,-45.35796 0,-25.0505 20.30745,-45.35795 45.35796,-45.35795 25.0505,0 45.35795,20.30745 45.35795,45.35795 z"
+           transform="matrix(1,-0.46630561,0,1,-4.8597717,174.77473)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2989"
+           sodipodi:cx="343.4245"
+           sodipodi:cy="538.0354"
+           sodipodi:rx="29.968647"
+           sodipodi:ry="29.968647"
+           d="m 373.39315,538.0354 c 0,16.55123 -13.41742,29.96865 -29.96865,29.96865 -16.55123,0 -29.96865,-13.41742 -29.96865,-29.96865 0,-16.55123 13.41742,-29.96865 29.96865,-29.96865 16.55123,0 29.96865,13.41742 29.96865,29.96865 z"
+           transform="matrix(1,-0.46630561,0,1,-6.4797058,166.62051)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2991"
+           sodipodi:cx="336.94479"
+           sodipodi:cy="539.65533"
+           sodipodi:rx="19.439123"
+           sodipodi:ry="19.439123"
+           d="m 356.38392,539.65533 c 0,10.73594 -8.7032,19.43913 -19.43913,19.43913 -10.73593,0 -19.43912,-8.70319 -19.43912,-19.43913 0,-10.73593 8.70319,-19.43912 19.43912,-19.43912 10.73593,0 19.43913,8.70319 19.43913,19.43912 z"
+           transform="matrix(1,-0.46630561,0,1,0,161.97905)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2993"
+           sodipodi:cx="336.94479"
+           sodipodi:cy="542.08521"
+           sodipodi:rx="57.507404"
+           sodipodi:ry="57.507404"
+           d="m 394.4522,542.08521 c 0,31.76046 -25.74694,57.5074 -57.50741,57.5074 -31.76046,0 -57.5074,-25.74694 -57.5074,-57.5074 0,-31.76047 25.74694,-57.50741 57.5074,-57.50741 31.76047,0 57.50741,25.74694 57.50741,57.50741 z"
+           transform="matrix(1,-0.46630561,0,1,0,159.54918)" />
+        <path
+           sodipodi:type="arc"
+           style="fill:#ff0000;fill-opacity:1;stroke:#ff0000;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path2995"
+           sodipodi:cx="336.94479"
+           sodipodi:cy="544.51514"
+           sodipodi:rx="5.669744"
+           sodipodi:ry="5.669744"
+           d="m 342.61454,544.51514 c 0,3.13131 -2.53843,5.66974 -5.66975,5.66974 -3.13131,0 -5.66974,-2.53843 -5.66974,-5.66974 0,-3.13132 2.53843,-5.66975 5.66974,-5.66975 3.13132,0 5.66975,2.53843 5.66975,5.66975 z"
+           transform="matrix(1,-0.46630561,0,1,0,157.11925)" />
+      </g>
+      <g
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/fm/git/android-seattle-sensors/SeattleSensors/assets/icon.png"
+         transform="translate(6,-2)"
+         id="g3795">
+        <path
+           sodipodi:type="arc"
+           style="fill:none;stroke:#000000;stroke-width:4.84278727;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+           id="path3789"
+           sodipodi:cx="123.51942"
+           sodipodi:cy="416.13589"
+           sodipodi:rx="35.23341"
+           sodipodi:ry="35.23341"
+           d="m 158.75283,416.13589 c 0,19.45888 -15.77454,35.23341 -35.23341,35.23341 -19.45888,0 -35.233413,-15.77453 -35.233413,-35.23341 0,-19.45887 15.774533,-35.23341 35.233413,-35.23341 19.45887,0 35.23341,15.77454 35.23341,35.23341 z"
+           transform="matrix(0.82597061,0,0,0.82597061,191.58833,220.64318)" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+           d="m 272.95768,585.01328 -42.92807,42.1181"
+           id="path3793"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+  </g>
+</svg>
