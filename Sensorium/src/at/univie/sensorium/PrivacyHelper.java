@@ -30,6 +30,11 @@ public class PrivacyHelper {
 		public String getName() {
 			return name;
 		}
+		
+		@Override
+		public String toString() {
+			return name;
+		}
 
 		public static PrivacyLevel fromInt(int x) {
 			switch (x) {

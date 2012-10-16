@@ -42,7 +42,7 @@ public class SensorViewItem implements SensorChangeListener {
 			sTypes.append(v.getType().getName() + "\n");
 		}
 		textViewSensorName.setText(sensor.getName());
-		textViewSensorPrivacyLevel.setText(sensor.privacyLevel());
+		textViewSensorPrivacyLevel.setText(sensor.getPrivacylevel().toString());
 		textViewSensorValues.setText(sValues.toString());
 		textViewSensorUnits.setText(" " + sUnits.toString());
 		textViewSensorTypes.setText(sTypes.toString());

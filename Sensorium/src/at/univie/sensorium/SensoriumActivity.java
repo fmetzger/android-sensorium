@@ -33,7 +33,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import at.univie.sensorium.sensors.AbstractSensor;
 
-public class SeattleSensorsActivity extends Activity {
+public class SensoriumActivity extends Activity {
 
 	private ArrayAdapter<AbstractSensor> listAdapter;
 

@@ -18,12 +18,13 @@ public class WifiSensor extends AbstractSensor {
 	public static BroadcastReceiver wifiReceiver;
 	private WifiManager mainWifi;
 	private List<ScanResult> wifiList = null;
-	private List<WifiDevice> scannedDevices;
+	
 	private Handler handler = new Handler();
 	
 	private String APList = "";
-	
 	private SensorValue sAPList;
+	
+	private List<WifiDevice> scannedDevices;
 	private SensorValue scannedDevicesSV;
 	
 	private int defaultSize = 5;
@@ -78,8 +79,8 @@ public class WifiSensor extends AbstractSensor {
 		        	ScanResult result = wifiList.get(i);
 		        	scannedDevices.add(new WifiDevice(result.SSID, result.BSSID, result.capabilities, 
 		        			result.level, (float)result.frequency/1000));
-		        	scannedDevicesSV.setValue(scannedDevices);
 		        }
+		        scannedDevicesSV.setValue(scannedDevices);
 		        sAPList.setValue(APList);
 		        notifyListeners();
 			}
@@ -90,19 +91,6 @@ public class WifiSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 		context.unregisterReceiver(wifiReceiver);
-	}
-	
-	@XMLRPCMethod
-	public Object[] wifiInformation() {
-		if (wifiList != null)
-			return new Object[] {"APList", APList};
-		return null;
-	}
-	
-	@XMLRPCMethod
-	public List<WifiDevice> getScannedDev(){
-		if (scannedDevices.isEmpty()) return null;
-		else return scannedDevices;
 	}
 	
 	public class WifiDevice{

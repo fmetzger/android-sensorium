@@ -41,7 +41,7 @@ public abstract class AbstractSensor {
 	private boolean enabled = false;
 	private List<SensorChangeListener> listeners;
 	private String description = "";
-	private PrivacyHelper.PrivacyLevel privacylevel;
+	private PrivacyHelper.PrivacyLevel plevel;
 
 	protected Context context;
 	protected String name = "";
@@ -49,7 +49,7 @@ public abstract class AbstractSensor {
 	public AbstractSensor(Context context) {
 		this.context = context;
 		this.listeners = new LinkedList<SensorChangeListener>();
-		this.privacylevel = PrivacyHelper.PrivacyLevel.FULL;
+		this.plevel = PrivacyHelper.PrivacyLevel.FULL;
 	}
 
 	public void enable() {
@@ -177,17 +177,13 @@ public abstract class AbstractSensor {
 	}
 
 	public PrivacyHelper.PrivacyLevel getPrivacylevel() {
-		return privacylevel;
+		return plevel;
 	}
 
 	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
-		this.privacylevel = privacylevel;
+		this.plevel = privacylevel;
 	}
 
-	@XMLRPCMethod
-	public String privacyLevel() {
-		return privacylevel.getName();
-	}
 
 	private void unsetallValues() {
 		for (SensorValue s : getSensorValues()) {

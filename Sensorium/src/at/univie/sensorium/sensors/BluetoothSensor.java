@@ -1,10 +1,8 @@
 package at.univie.sensorium.sensors;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,13 +24,21 @@ public class BluetoothSensor extends AbstractSensor {
 
 	private SensorValue localDeviceName;
 	private SensorValue localMAC;
-	private SensorValue sBondedDevices;
-	private SensorValue sScannedDevices;
 	
 	private List<BtDevice> bondedDevices;
+	private SensorValue sBondedDevices;
+	
 	private List<BtDevice> scannedDevices;
+	private SensorValue sScannedDevices;
+	
 	private String bluetooth = "";
+	private SensorValue sBluetooth;
+	
 	private String devices = "";
+	private SensorValue sDevices;
+	
+	
+	
 	private int scan_interval = 10; // sec
 
 	public BluetoothSensor(Context context) {
@@ -43,8 +49,10 @@ public class BluetoothSensor extends AbstractSensor {
 		localMAC = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);
 		bondedDevices = new LinkedList<BtDevice>();
 		scannedDevices = new LinkedList<BtDevice>();
-		sBondedDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.BONDED_DEV);
-		sScannedDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SCANNED_DEV);
+		sBondedDevices = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.BONDED_DEV);
+		sScannedDevices = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.SCANNED_DEV);
+		sDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
+		sBluetooth = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OTHER);
 	}
 	
 	private Runnable scanTask = new Runnable() {
@@ -84,6 +92,7 @@ public class BluetoothSensor extends AbstractSensor {
 			bluetooth += "None\n";
 			bonded += "None";
 		}
+		sBluetooth.setValue(bluetooth);
 		sBondedDevices.setValue(bonded);
 		
 		if (bluetoothAdapter.isEnabled()){ // only when bluetooth is enabled can we discover devices			
@@ -105,12 +114,15 @@ public class BluetoothSensor extends AbstractSensor {
 						context.unregisterReceiver(this);
 						SensorRegistry.getInstance().log("Bluetooth", bluetooth + devices);
 						Log.d("Bluetooth FINISHED", "done");
-						sScannedDevices.setValue(devices);
+						
 						notifyListeners();
 						devices = "";
 						scannedDevices.clear();						
 //						bluetoothAdapter.startDiscovery();
 					}
+					
+					sDevices.setValue(devices);
+					sScannedDevices.setValue(scannedDevices);
 				}
 			};	
 			handler.postDelayed(scanTask, 0);
@@ -123,35 +135,6 @@ public class BluetoothSensor extends AbstractSensor {
 	protected void _disable() {
 		if(bluetoothIntent != null)
 			context.getApplicationContext().unregisterReceiver(bluetoothReceiver);
-	}
-	
-	@XMLRPCMethod
-	public String getLocalDeviceName() {
-		return (String) localDeviceName.getValue();
-	}
-	
-	@XMLRPCMethod
-	public String getLocalMAC() {
-		return (String) localMAC.getValue();
-	}
-	
-	@XMLRPCMethod
-	public List<BtDevice> getBondedDev(){
-		if (bondedDevices.isEmpty()) return null;
-		else return bondedDevices;
-	}
-	
-	@XMLRPCMethod
-	public List<BtDevice> getScannedDev(){
-		if (scannedDevices.isEmpty()) return null;
-		else return scannedDevices;
-	}
-	
-	@XMLRPCMethod
-	public Object[] bluetoothInformation() {
-		if (devices != "")
-			return new Object[] {"Bluetooth", bluetooth, "Discovered", devices};
-		return null;
 	}
 	
 	public class BtDevice{

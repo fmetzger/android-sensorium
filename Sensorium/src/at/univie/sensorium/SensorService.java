@@ -72,7 +72,7 @@ public class SensorService extends Service {
 		Notification sensorsNot = new Notification();
 		sensorsNot.icon = R.drawable.ic_launcher;
 		sensorsNot.when = System.currentTimeMillis();
-		Intent notificationIntent = new Intent(this, SeattleSensorsActivity.class);
+		Intent notificationIntent = new Intent(this, SensoriumActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		sensorsNot.setLatestEventInfo(this, "SeattleSensors", "running", contentIntent);
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIFICATION, sensorsNot);
