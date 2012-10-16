@@ -173,5 +173,10 @@ public class BluetoothSensor extends AbstractSensor {
 		public Object getRSSI(){
 			return RSSI.getValue();
 		}
+		
+		@Override
+		public String toString() {
+			return devName.getValueRepresentation() + "; " + MACAddr.getValueRepresentation() + "; " + RSSI.getValueRepresentation();
+		}
 	}
 }

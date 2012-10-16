@@ -37,7 +37,7 @@ public class SensorViewItem implements SensorChangeListener {
 		List<SensorValue> values = sensor.getSensorValues();
 
 		for (SensorValue v : values) {
-			sValues.append(v.getValue() + "\n");
+			sValues.append(v.getValueRepresentation() + "\n");
 			sUnits.append(v.getUnit().getName() + "\n");
 			sTypes.append(v.getType().getName() + "\n");
 		}

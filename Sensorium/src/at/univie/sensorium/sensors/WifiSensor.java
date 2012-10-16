@@ -133,5 +133,10 @@ public class WifiSensor extends AbstractSensor {
 		public Object getRSSI(){
 			return RSSI.getValue();
 		}
+		
+		@Override
+		public String toString() {
+			return SSID.getValueRepresentation() +"; " + BSSID.getValueRepresentation() + "; " + frequency.getValueRepresentation() + "; " + RSSI.getValueRepresentation() + "; " + capabilities.getValueRepresentation();
+		}
 	}
 }

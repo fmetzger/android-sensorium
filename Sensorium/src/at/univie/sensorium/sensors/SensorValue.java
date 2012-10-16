@@ -1,5 +1,7 @@
 package at.univie.sensorium.sensors;
 
+import java.util.List;
+
 public class SensorValue {
 
 	private Object value;
@@ -67,6 +69,20 @@ public class SensorValue {
 
 	public Object getValue() {
 		return value;
+	}
+	
+	public String getValueRepresentation(){
+		if(value instanceof List){
+			StringBuffer sb = new StringBuffer();
+			for (Object o: (List) value){
+				sb.append(o.toString());
+				sb.append("\n");
+			}
+			if (sb.length() > 0)
+				sb.deleteCharAt(sb.length()-1);
+			return sb.toString();
+		}
+		return value.toString();
 	}
 
 	public void setValue(Object value) {
