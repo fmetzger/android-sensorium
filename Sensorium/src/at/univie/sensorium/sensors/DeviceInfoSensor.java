@@ -129,5 +129,6 @@ public class DeviceInfoSensor extends AbstractSensor {
 
 	@Override
 	protected void _disable() {
+		handler.removeCallbacks(memCPUTask);
 	}
 }
