@@ -32,9 +32,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import at.univie.sensorium.PrivacyHelper;
 import at.univie.sensorium.SensorRegistry;
-import at.univie.sensorium.PrivacyHelper.PrivacyLevel;
+import at.univie.sensorium.privacy.PrivacyHelper;
+import at.univie.sensorium.privacy.PrivacyHelper.PrivacyLevel;
 
 public abstract class AbstractSensor {
 

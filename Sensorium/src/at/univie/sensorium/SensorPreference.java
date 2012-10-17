@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import at.univie.sensorium.R;
+import at.univie.sensorium.privacy.PrivacyHelper;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 /**

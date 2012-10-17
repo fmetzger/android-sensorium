@@ -34,6 +34,7 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
+import at.univie.sensorium.privacy.PrivacyHelper;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorValue;
 

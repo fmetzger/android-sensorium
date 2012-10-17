@@ -1,4 +1,4 @@
-package at.univie.sensorium;
+package at.univie.sensorium.privacy;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
