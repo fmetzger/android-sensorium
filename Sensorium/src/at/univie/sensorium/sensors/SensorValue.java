@@ -27,16 +27,16 @@ public class SensorValue {
 	public static enum TYPE {
 		LATITUDE("latitude"), LONGITUDE("longitude"), TIMESTAMP("timestamp"),
 		ALTITUDE("altitude"), RELATIVE_DISTANCE("distance"), ACCURACY("accuracy"),
-		CHARGE("charged"), OTHER(""), BATTERY_TECHNOLOGY(""), PLUGGED("power source"),
+		CHARGE("charged"), OTHER(""), BATTERY_TECHNOLOGY("battery type"), PLUGGED("power source"),
 		MCCMNC("country code + network code"), LAC("location area code"),
-		MCC("mobile country code"), MNC("mobile network code"),
+		MCC("mobile country code"), MNC("mobile network code"),TEMPERATURE("temperature"),
 		CID("cell id"), SIGNALSTRENGTH("received signal strength"),SATELLITES("satellites"),
 		NETWORKTYPE("network type"),TAC("TAC"),MODEL_NAME("model"),VENDOR_NAME("vendor"),
 		TOTAL_MEM("total memory"), AVAL_MEM("available memory"), THD_MEM("low memory threshold"), CPU("CPU usage"),
 		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),BEARING("bearing"),VELOCITY("speed"),
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
-		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),
+		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),VOLTAGE("voltage"),
 		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)");
 
 		private String name;
@@ -51,6 +51,8 @@ public class SensorValue {
 	}
 
 	public SensorValue(Object value, UNIT unit, TYPE type) {
+		if (value == null)
+			value = "n/a";
 		this.value = value;
 		this.unit = unit;
 	}
@@ -86,6 +88,8 @@ public class SensorValue {
 	}
 
 	public void setValue(Object value) {
+		if (value == null)
+			value = "n/a";
 		this.value = value;
 	}
 

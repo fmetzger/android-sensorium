@@ -26,8 +26,8 @@ public class BatterySensor extends AbstractSensor {
 		
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		level = new SensorValue(SensorValue.UNIT.RELATIVE, SensorValue.TYPE.CHARGE);
-		temperature = new SensorValue(SensorValue.UNIT.TEMPERATURE, SensorValue.TYPE.OTHER);
-		voltage = new SensorValue(SensorValue.UNIT.VOLTAGE, SensorValue.TYPE.OTHER);
+		temperature = new SensorValue(SensorValue.UNIT.TEMPERATURE, SensorValue.TYPE.TEMPERATURE);
+		voltage = new SensorValue(SensorValue.UNIT.VOLTAGE, SensorValue.TYPE.VOLTAGE);
 		technology = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.BATTERY_TECHNOLOGY);
 		plugged = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.PLUGGED);
 	}
