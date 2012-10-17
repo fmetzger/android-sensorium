@@ -23,8 +23,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 	SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 	CheckBoxPreference autostartPref;
-	CheckBoxPreference allsensorsPref;
-	Map<String, CheckBoxPreference> sensorPrefs;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,39 +31,6 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		setPreferenceScreen(createPreferenceHierarchy());
 
 		SensorServiceSingleton.getInstance().bindService(this);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-		listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-			public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-				Log.d("SeattleSensors", "about to change " + key);
-				if (!key.contains("-level")) {
-					boolean state = prefs.getBoolean(key, false);
-					Log.d("SeattleSensors", key + " changed to " + state);
-
-					AbstractSensor sensor = SensorRegistry.getInstance().getSensorForClassname(key);
-					if (sensor != null) {
-						if (state && !sensor.isEnabled()) {
-							Log.d("SeattleSensors", "trying to enable " + sensor.getName());
-							sensor.enable();
-						} else if (!state && sensor.isEnabled()) {
-							sensor.disable();
-							Log.d("SeattleSensors", "trying to disable " + sensor.getName());
-						}
-
-						CheckBoxPreference tmp = sensorPrefs.get(key);
-						if (sensor.isEnabled() != tmp.isChecked())
-							sensorPrefs.get(key).setChecked(sensor.isEnabled());
-					}
-				} else {
-					int state = prefs.getInt(key, PrivacyHelper.PrivacyLevel.FULL.value());
-					
-				}
-			}
-
-		};
-
-		prefs.registerOnSharedPreferenceChangeListener(listener);
 	}
 
 	private PreferenceScreen createPreferenceHierarchy() {
@@ -81,62 +47,23 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		autostartPref.setSummary("Keeps the sensor service running at all times.");
 		generalCat.addPreference(autostartPref);
 
-		allsensorsPref = new CheckBoxPreference(this);
-		allsensorsPref.setKey("all_sensors_override");
-		allsensorsPref.setTitle("Sensors Privacy");
-		allsensorsPref.setSummary("Enable/disable all sensors at once");
-		allsensorsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				Log.d("SeattleSensors", "Preference" + preference.getTitle() + "changed to " + newValue);
-				if (preference.getKey().equals("all_sensors_override")) {
-					Log.d("SeattleSensors", "overriding individual sensor settings");
-					for (CheckBoxPreference pref : sensorPrefs.values()) {
-						pref.setChecked((Boolean) newValue);
-					}
-				}
-				return true;
-			}
-
-		});
-
-		generalCat.addPreference(allsensorsPref);
-
 		PreferenceCategory sensorsCat = new PreferenceCategory(this);
 		sensorsCat.setTitle("Individual Sensors");
 		root.addPreference(sensorsCat);
 
 		List<AbstractSensor> sensors = SensorRegistry.getInstance().getSensors();
-		sensorPrefs = new HashMap<String, CheckBoxPreference>();
 
 		for (AbstractSensor sensor : sensors) {
-			CheckBoxPreference tmpPref = new CheckBoxPreference(this);
-			tmpPref.setKey(sensor.getClass().getName());
-			tmpPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					Log.d("SeattleSensors", "Preference " + preference.getTitle() + " changed to " + newValue);
-					return true;
-				}
-			});
-			tmpPref.setTitle(sensor.getName());
-			tmpPref.setSummary(sensor.getName());
-			sensorsCat.addPreference(tmpPref);
-			sensorPrefs.put(sensor.getClass().getName(), tmpPref);
-
 			SensorPreference sPref = new SensorPreference(this, sensor);
 			sPref.setKey(sensor.getClass().getName() + "-level");
-			sPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					Log.d("SeattleSensors", "Preference " + preference.getTitle() + " changed to " + newValue);
-					//TODO: notify the sensor listeners on this preference change!
-					return true;
-				}
-			});
+//			sPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//				@Override
+//				public boolean onPreferenceChange(Preference preference, Object newValue) {
+//					Log.d("SeattleSensors", "Preference " + preference.getTitle() + " changed to " + newValue);
+//					//TODO: notify the sensor listeners on this preference change!
+//					return true;
+//				}
+//			});
 			sensorsCat.addPreference(sPref);
 		}
 		return root;

@@ -182,6 +182,7 @@ public abstract class AbstractSensor {
 
 	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
 		this.plevel = privacylevel;
+		notifyListeners();
 	}
 
 

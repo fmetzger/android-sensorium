@@ -131,9 +131,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 			mStatusText = (TextView) layout.findViewById(R.id.seekBarPrefValue);
 			mStatusText.setText(PrivacyHelper.PrivacyLevel.fromInt(mCurrentValue).getName());
 			mStatusText.setMinimumWidth(30);
-			
-			sensor.setPrivacylevel(PrivacyHelper.PrivacyLevel.fromInt(mCurrentValue));
-
 			mPrivacyLevel.setProgress(mCurrentValue - mMinValue);
 
 		} catch (Exception e) {
@@ -163,7 +160,18 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		}
 
 		// change accepted, store it
+		sensor.setPrivacylevel(PrivacyHelper.PrivacyLevel.fromInt(newValue));
+		if(newValue == PrivacyHelper.PrivacyLevel.FULL.value() && sensor.isEnabled()){
+			sensor.disable();
+			Log.d("SeattleSensors", "trying to disable " + sensor.getName());
+		} else if(mCurrentValue == PrivacyHelper.PrivacyLevel.FULL.value() && mCurrentValue != newValue && !sensor.isEnabled()){
+			Log.d("SeattleSensors", "trying to enable " + sensor.getName());
+			sensor.enable();
+		}
 		mCurrentValue = newValue;
+		
+		
+		
 		mStatusText.setText(PrivacyHelper.PrivacyLevel.fromInt(mCurrentValue).getName());
 		persistInt(newValue);
 

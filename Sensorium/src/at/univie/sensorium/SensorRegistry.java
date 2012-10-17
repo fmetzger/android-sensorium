@@ -107,7 +107,7 @@ public class SensorRegistry {
 	}
 
 	public void log(String tag, String out) {
-		out = out.replaceAll("\r\n|\r|\n", "");
+		out = out.replaceAll("\r\n|\r|\n", " ");
 		if (bufferedLines >= MAXDEBUGLINES) {
 			debugBuffer.deleteCharAt(debugBuffer.length() - 1);
 			debugBuffer.delete(debugBuffer.lastIndexOf("\n"), debugBuffer.length() - 1);

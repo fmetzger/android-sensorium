@@ -32,7 +32,8 @@
         android:id="@+id/seekBarPrefValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@android:id/title"
+        android:textSize="10sp"
+        android:layout_below="@+id/seekBarTitle"
         android:layout_alignParentRight="true"
         android:gravity="right" >
     </TextView>
@@ -45,5 +46,4 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/seekBarSummary" >
     </LinearLayout>
-
 </RelativeLayout>
