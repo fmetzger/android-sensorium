@@ -45,7 +45,7 @@ public class SensorRegistry {
 
 	private StringBuffer debugBuffer;
 	private int bufferedLines = 0;
-	private static final int MAXDEBUGLINES = 100;
+	private static final int MAXDEBUGLINES = 20;
 	private TextView textoutput;
 
 	protected SensorRegistry() {
@@ -107,8 +107,9 @@ public class SensorRegistry {
 	}
 
 	public void log(String tag, String out) {
-		out = out.replace("\n", "").replace("\r", "");
+		out = out.replaceAll("\r\n|\r|\n", "");
 		if (bufferedLines >= MAXDEBUGLINES) {
+			debugBuffer.deleteCharAt(debugBuffer.length() - 1);
 			debugBuffer.delete(debugBuffer.lastIndexOf("\n"), debugBuffer.length() - 1);
 			bufferedLines--;
 		}
