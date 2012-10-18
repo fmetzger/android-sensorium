@@ -10,7 +10,7 @@ import android.util.Base64;
 import android.util.Log;
 import at.univie.sensorium.sensors.SensorValue;
 
-public class PrivacyHelper {
+public class Privacy {
 
 	public static enum PrivacyLevel {
 		NO(4, "Full Sensor Access"), LOW(3, "Low Privacy"), MED(2, "Medium Privacy"), HIGH(1, "High Privacy"), FULL(0, "Sensor Disabled");
@@ -25,10 +25,6 @@ public class PrivacyHelper {
 
 		public int value() {
 			return value;
-		}
-
-		public String getName() {
-			return name;
 		}
 		
 		@Override
@@ -53,24 +49,9 @@ public class PrivacyHelper {
 		}
 	}
 
-	private static SensorValue anonymizelocation(SensorValue val, PrivacyLevel l) {
-		switch (l) {
-		case NO:
-			return val;
-		case LOW:
-			return round(val);
-		case MED:
-			return hash(round(val));
-		case HIGH:
-			return hash(salt(round(val)));
-		case FULL:
-		default:
-			val.setValue("n/a");
-			return val;
-		}
-	}
 
-	private static SensorValue anonymizearbitrary(SensorValue val, PrivacyLevel l) {
+
+	protected static SensorValue anonymizeValue(SensorValue val, PrivacyLevel l) {
 		switch (l) {
 		case NO:
 			return val;
@@ -86,7 +67,7 @@ public class PrivacyHelper {
 		}
 	}
 
-	private static SensorValue anonymizesignalstrength(SensorValue val, PrivacyLevel l) {
+	protected static SensorValue anonymizesignalstrength(SensorValue val, PrivacyLevel l) {
 		switch (l) {
 		case NO:
 			return val;
@@ -113,14 +94,14 @@ public class PrivacyHelper {
 		switch (val.getType()) {
 		case LATITUDE:
 		case LONGITUDE:
-			return anonymizelocation(val, l);
+			return LocationPrivacy.anonymizeValue(val, l);
 
 		case CID:
 		case LAC:
 		case MCC:
 		case MNC:
 		case NETWORKTYPE:
-			return anonymizearbitrary(val, l);
+			return anonymizeValue(val, l);
 		case SIGNALSTRENGTH:
 			return anonymizesignalstrength(val, l);
 
@@ -130,24 +111,9 @@ public class PrivacyHelper {
 		}
 	}
 
-	/*
-	 * 
-	 * 1° longitude between 0km (pole 90°) and 111.3km (equator 0°) europe/us ~
-	 * 45° \approx 79km 1° latitude \approx 111km across the globe
-	 * 
-	 * -> round both to the first decimal place i.e. 11km long, 8km lat bins
-	 */
-	private static SensorValue round(SensorValue val) {
-		SensorValue ret = new SensorValue(val);
-		if (val.getValue() instanceof Double) {
-			double value = (Double) val.getValue();
-			ret.setValue(((double) Math.round(value * 10)) / 10.0);
-		}
-		return ret;
 
-	}
 
-	private static SensorValue hash(SensorValue val) {
+	protected static SensorValue hash(SensorValue val) {
 		SensorValue ret = new SensorValue(val);
 		ret.setUnit(SensorValue.UNIT.HASH);
 		String sha1 = "";
@@ -177,7 +143,7 @@ public class PrivacyHelper {
 		return ret;
 	}
 
-	private static SensorValue salt(SensorValue val) {
+	protected static SensorValue salt(SensorValue val) {
 		SensorValue ret = new SensorValue(val);
 		String salt = Long.toString(System.currentTimeMillis() / 1000000); // 1000s
 																			// salt

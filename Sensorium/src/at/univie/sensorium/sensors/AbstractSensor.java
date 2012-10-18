@@ -33,15 +33,15 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
-import at.univie.sensorium.privacy.PrivacyHelper;
-import at.univie.sensorium.privacy.PrivacyHelper.PrivacyLevel;
+import at.univie.sensorium.privacy.Privacy;
+import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 
 public abstract class AbstractSensor {
 
 	private boolean enabled = false;
 	private List<SensorChangeListener> listeners;
 	private String description = "";
-	private PrivacyHelper.PrivacyLevel plevel;
+	private Privacy.PrivacyLevel plevel;
 
 	protected Context context;
 	protected String name = "";
@@ -49,7 +49,7 @@ public abstract class AbstractSensor {
 	public AbstractSensor(Context context) {
 		this.context = context;
 		this.listeners = new LinkedList<SensorChangeListener>();
-		this.plevel = PrivacyHelper.PrivacyLevel.FULL;
+		this.plevel = Privacy.PrivacyLevel.FULL;
 	}
 
 	public void enable() {
@@ -60,7 +60,7 @@ public abstract class AbstractSensor {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
 
-				int state = prefs.getInt(this.getClass().getName() + "-level", PrivacyHelper.PrivacyLevel.FULL.value());
+				int state = prefs.getInt(this.getClass().getName() + "-level", Privacy.PrivacyLevel.FULL.value());
 				setPrivacylevel(PrivacyLevel.fromInt(state));
 
 				enabled = true;
@@ -176,11 +176,11 @@ public abstract class AbstractSensor {
 		Log.d("SeattleSensors", sb.toString());
 	}
 
-	public PrivacyHelper.PrivacyLevel getPrivacylevel() {
+	public Privacy.PrivacyLevel getPrivacylevel() {
 		return plevel;
 	}
 
-	public void setPrivacylevel(PrivacyHelper.PrivacyLevel privacylevel) {
+	public void setPrivacylevel(Privacy.PrivacyLevel privacylevel) {
 		this.plevel = privacylevel;
 		notifyListeners();
 	}

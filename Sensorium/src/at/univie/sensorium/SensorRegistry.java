@@ -34,7 +34,7 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
-import at.univie.sensorium.privacy.PrivacyHelper;
+import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorValue;
 
@@ -184,7 +184,7 @@ public class SensorRegistry {
 		SensorValue val = invokeMethod(classname, methodname);
 		if (val != null) {
 			AbstractSensor sensor = getSensorWithName(classname);
-			return PrivacyHelper.anonymize(val, sensor.getPrivacylevel()).getValue();
+			return Privacy.anonymize(val, sensor.getPrivacylevel()).getValue();
 		}
 		return null;
 	}

@@ -16,7 +16,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import at.univie.sensorium.R;
-import at.univie.sensorium.privacy.PrivacyHelper;
+import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 /**
@@ -39,8 +39,8 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	public SensorPreference(Context context, AbstractSensor sensor) {
 		super(context);
 
-		mMaxValue = PrivacyHelper.PrivacyLevel.NO.value();
-		mMinValue = PrivacyHelper.PrivacyLevel.FULL.value();
+		mMaxValue = Privacy.PrivacyLevel.NO.value();
+		mMinValue = Privacy.PrivacyLevel.FULL.value();
 
 		mInterval = 1;
 
@@ -60,8 +60,8 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	public SensorPreference(Context context) {
 		super(context);
 
-		mMaxValue = PrivacyHelper.PrivacyLevel.NO.value();
-		mMinValue = PrivacyHelper.PrivacyLevel.FULL.value();
+		mMaxValue = Privacy.PrivacyLevel.NO.value();
+		mMinValue = Privacy.PrivacyLevel.FULL.value();
 
 		mInterval = 1;
 
@@ -130,7 +130,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 			RelativeLayout layout = (RelativeLayout) view;
 
 			mStatusText = (TextView) layout.findViewById(R.id.seekBarPrefValue);
-			mStatusText.setText(PrivacyHelper.PrivacyLevel.fromInt(mCurrentValue).getName());
+			mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
 			mStatusText.setMinimumWidth(30);
 			mPrivacyLevel.setProgress(mCurrentValue - mMinValue);
 
@@ -161,11 +161,11 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		}
 
 		// change accepted, store it
-		sensor.setPrivacylevel(PrivacyHelper.PrivacyLevel.fromInt(newValue));
-		if(newValue == PrivacyHelper.PrivacyLevel.FULL.value() && sensor.isEnabled()){
+		sensor.setPrivacylevel(Privacy.PrivacyLevel.fromInt(newValue));
+		if(newValue == Privacy.PrivacyLevel.FULL.value() && sensor.isEnabled()){
 			sensor.disable();
 			Log.d("SeattleSensors", "trying to disable " + sensor.getName());
-		} else if(mCurrentValue == PrivacyHelper.PrivacyLevel.FULL.value() && mCurrentValue != newValue && !sensor.isEnabled()){
+		} else if(mCurrentValue == Privacy.PrivacyLevel.FULL.value() && mCurrentValue != newValue && !sensor.isEnabled()){
 			Log.d("SeattleSensors", "trying to enable " + sensor.getName());
 			sensor.enable();
 		}
@@ -173,7 +173,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		
 		
 		
-		mStatusText.setText(PrivacyHelper.PrivacyLevel.fromInt(mCurrentValue).getName());
+		mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
 		persistInt(newValue);
 
 	}
@@ -190,7 +190,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	@Override
 	protected Object onGetDefaultValue(TypedArray ta, int index) {
 
-		int defaultValue = ta.getInt(index, PrivacyHelper.PrivacyLevel.FULL.value());
+		int defaultValue = ta.getInt(index, Privacy.PrivacyLevel.FULL.value());
 		return defaultValue;
 
 	}
