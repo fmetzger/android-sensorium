@@ -68,5 +68,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 
 	@Override
 	protected void _disable() {
+		handler.removeCallbacks(scanTask);
+        //notifyListeners();
 	}
 }

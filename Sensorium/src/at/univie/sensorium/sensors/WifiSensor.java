@@ -84,6 +84,10 @@ public class WifiSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 		context.unregisterReceiver(wifiReceiver);
+		handler.removeCallbacks(scanTask);
+		scannedDevices.clear();
+		scannedDevicesSV.setValue(scannedDevices);
+        notifyListeners();
 	}
 	
 	public class WifiDevice{
