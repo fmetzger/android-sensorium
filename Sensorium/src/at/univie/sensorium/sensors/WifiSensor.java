@@ -10,11 +10,15 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 
 public class WifiSensor extends AbstractSensor {
 	
 	public static BroadcastReceiver wifiReceiver;
+	public static IntentFilter wifiFilter;
+	public static Intent wifiIntent;
+	
 	private WifiManager mainWifi;
 	private List<ScanResult> wifiList = null;	
 	private Handler handler = new Handler();
@@ -30,18 +34,18 @@ public class WifiSensor extends AbstractSensor {
 		super(context);
 		name = "Wifi Scan Sensor";
 		
-		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.OTHER);
-		scannedDevicesSV.setValue(new LinkedList<WifiDevice>());		
+		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.OTHER);	
 		scannedDevices = new LinkedList<WifiDevice>();
 	}
 	
 	private Runnable scanTask = new Runnable() {
 		@Override
-		public void run() {			
-			IntentFilter wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-			context.registerReceiver(wifiReceiver, wifiFilter);
+		public void run() {
+			wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+			wifiIntent = context.getApplicationContext().registerReceiver(wifiReceiver, wifiFilter);
+			scannedDevices.clear();
 			mainWifi.startScan();		        		
-			//Log.d("scanTask", "restart scanning");
+			Log.d("scanTask", "restart scanning");
 			
 			handler.postDelayed(this, scan_interval*1000);
 		}		
@@ -54,7 +58,7 @@ public class WifiSensor extends AbstractSensor {
 		wifiReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
 				context.unregisterReceiver(this);
-				scannedDevices.clear();
+//				scannedDevices.clear();
 
 				wifiList = mainWifi.getScanResults();
 				totalSize = wifiList.size();
@@ -69,7 +73,7 @@ public class WifiSensor extends AbstractSensor {
 		        	SensorRegistry.getInstance().log("WiFi", message);
 		        }
 		        
-		        for(int i = 0; i < wifiList.size(); i++){
+		        for(int i = 0; i < length; i++){
 		        	ScanResult result = wifiList.get(i);
 		        	scannedDevices.add(new WifiDevice(i+1, result.SSID, result.BSSID, result.capabilities, 
 		        			result.level, (float)result.frequency/1000));
@@ -83,11 +87,11 @@ public class WifiSensor extends AbstractSensor {
 	
 	@Override
 	protected void _disable() {
-		context.unregisterReceiver(wifiReceiver);
+		if(wifiIntent != null)
+			context.getApplicationContext().unregisterReceiver(wifiReceiver);
 		handler.removeCallbacks(scanTask);
 		scannedDevices.clear();
 		scannedDevicesSV.setValue(scannedDevices);
-        notifyListeners();
 	}
 	
 	public class WifiDevice{

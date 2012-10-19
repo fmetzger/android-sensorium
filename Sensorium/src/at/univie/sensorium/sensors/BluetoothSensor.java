@@ -124,6 +124,10 @@ public class BluetoothSensor extends AbstractSensor {
 	protected void _disable() {
 		if(bluetoothIntent != null)
 			context.getApplicationContext().unregisterReceiver(bluetoothReceiver);
+		handler.removeCallbacks(scanTask);
+		scannedDevices.clear();
+		sScannedDevices.setValue(scannedDevices);
+//        notifyListeners();
 	}
 	
 	public class BtDevice{
