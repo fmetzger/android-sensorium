@@ -3,15 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/seattle_donate_thanks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:enabled="false"
-        android:text="@string/seattle_donate_thanks"
-        android:textStyle="bold" />
-
     <ListView
         android:id="@+id/sensorValues"
         android:layout_width="match_parent"
@@ -26,10 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/seattle_donate_thanks"
-        android:layout_marginTop="17dp"
-        android:padding="10dp"
+        android:layout_alignParentTop="true"
         android:text="@string/current_values"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>
