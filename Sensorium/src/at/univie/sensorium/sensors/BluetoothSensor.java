@@ -32,12 +32,10 @@ public class BluetoothSensor extends AbstractSensor {
 	private SensorValue sScannedDevices;
 	
 	private String bluetooth = "";
-	private SensorValue sBluetooth;
-	
+//	private SensorValue sBluetooth;
+//	
 	private String devices = "";
-	private SensorValue sDevices;
-	
-	
+//	private SensorValue sDevices;	
 	
 	private int scan_interval = 10; // sec
 
@@ -51,8 +49,6 @@ public class BluetoothSensor extends AbstractSensor {
 		scannedDevices = new LinkedList<BtDevice>();
 		sBondedDevices = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.BONDED_DEV);
 		sScannedDevices = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.SCANNED_DEV);
-		sDevices = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
-		sBluetooth = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OTHER);
 	}
 	
 	private Runnable scanTask = new Runnable() {
@@ -72,27 +68,22 @@ public class BluetoothSensor extends AbstractSensor {
 	protected void _enable() {
 		
 		bluetoothAdapter =  BluetoothAdapter.getDefaultAdapter();
-		bluetooth = "Local device\n\tName: " + bluetoothAdapter.getName() 
-				+ "\n\tAddress: " + bluetoothAdapter.getAddress();
 		
 		localDeviceName.setValue(bluetoothAdapter.getName()); 
 		localMAC.setValue(bluetoothAdapter.getAddress());		
 		
 		Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-		bluetooth += "\nBonded devices: ";
 		String bonded = "";
 		if (pairedDevices.size() > 0) {
 		    for (BluetoothDevice device : pairedDevices) {
-		    	bluetooth += device.getName() + "\t" + device.getAddress();
 		    	bondedDevices.add(new BtDevice(device.getName(), device.getAddress()));
-		    	bonded += device.getName() + "\t/" + device.getAddress() + "\n";
+		    	bonded += device.getName() + "; " + device.getAddress() + "\n";
 		    }
 		}
 		else {
-			bluetooth += "None\n";
+			bondedDevices.add(new BtDevice("n/a", "n/a"));
 			bonded += "None";
 		}
-		sBluetooth.setValue(bluetooth);
 		sBondedDevices.setValue(bonded);
 		
 		if (bluetoothAdapter.isEnabled()){ // only when bluetooth is enabled can we discover devices			
@@ -118,10 +109,8 @@ public class BluetoothSensor extends AbstractSensor {
 						notifyListeners();
 						devices = "";
 						scannedDevices.clear();						
-//						bluetoothAdapter.startDiscovery();
 					}
 					
-					sDevices.setValue(devices);
 					sScannedDevices.setValue(scannedDevices);
 				}
 			};	
@@ -135,6 +124,10 @@ public class BluetoothSensor extends AbstractSensor {
 	protected void _disable() {
 		if(bluetoothIntent != null)
 			context.getApplicationContext().unregisterReceiver(bluetoothReceiver);
+		handler.removeCallbacks(scanTask);
+		scannedDevices.clear();
+		sScannedDevices.setValue(scannedDevices);
+//        notifyListeners();
 	}
 	
 	public class BtDevice{
@@ -149,9 +142,8 @@ public class BluetoothSensor extends AbstractSensor {
 			if (devName != null)
 				this.devName.setValue(devName);
 			if (MAC != null)
-				this.MACAddr.setValue(MAC);
-			
-			this.RSSI.setValue(9999); // impossible value for RSSI
+				this.MACAddr.setValue(MAC);			
+			this.RSSI.setValue(""); // impossible value for RSSI
 		}
 		
 		public BtDevice(String devName, String MAC, int rssi){
@@ -159,7 +151,7 @@ public class BluetoothSensor extends AbstractSensor {
 				this.devName.setValue(devName);
 			if (MAC != null)
 				this.MACAddr.setValue(MAC);
-			this.RSSI.setValue(9999);
+			this.RSSI.setValue(rssi);
 		}
 		
 		public String getDevName(){
@@ -176,7 +168,8 @@ public class BluetoothSensor extends AbstractSensor {
 		
 		@Override
 		public String toString() {
-			return devName.getValueRepresentation() + "; " + MACAddr.getValueRepresentation() + "; " + RSSI.getValueRepresentation();
+			return devName.getValueRepresentation() + "; " + MACAddr.getValueRepresentation() 
+					+ "; " + RSSI.getValueRepresentation() + " dBm";
 		}
 	}
 }
