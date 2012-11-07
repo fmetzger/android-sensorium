@@ -36,22 +36,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SensorConfigActivity"
-            android:label="@string/title_activity_sensor_config" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.univie.sensorium.SeattleSensorsActivity" />
-        </activity>
-        <activity
             android:name=".SensorDebugActivity"
             android:label="@string/title_activity_sensor_debug" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="at.univie.sensorium.SeattleSensorsActivity" />
-        </activity>
-        <activity
-            android:name=".SensorsViewActivity"
-            android:label="@string/title_activity_sensors_view" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="at.univie.sensorium.SeattleSensorsActivity" />
