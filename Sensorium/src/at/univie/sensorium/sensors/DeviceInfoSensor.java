@@ -1,3 +1,23 @@
+/*
+ *  This file is part of Sensorium.
+ *
+ *   Sensorium is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Sensorium is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Sensorium. If not, see
+ *   <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ */
+
 package at.univie.sensorium.sensors;
 
 import java.io.IOException;
@@ -6,16 +26,12 @@ import java.io.RandomAccessFile;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
 
 /**
  * Provides information tied to the device/model, i.e. vendor and model name, TAC, ...
- * @author fm
  *
  */
 public class DeviceInfoSensor extends AbstractSensor {

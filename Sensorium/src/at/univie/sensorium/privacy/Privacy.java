@@ -1,13 +1,38 @@
+/*
+ *  This file is part of Sensorium.
+ *
+ *   Sensorium is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Sensorium is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Sensorium. If not, see
+ *   <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ */
+
 package at.univie.sensorium.privacy;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
+import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.sensors.SensorValue;
 
 public class Privacy {
@@ -144,11 +169,18 @@ public class Privacy {
 	}
 
 	protected static SensorValue salt(SensorValue val) {
+		// load stored seed or generate a new one
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SensorRegistry.getInstance().getContext());
+		String salt = prefs.getString("Sensorium-Salt", "");
+		if (salt.equals("")){
+			SecureRandom random = new SecureRandom();
+			salt = (new BigInteger(130, random)).toString(32);
+			prefs.edit().putString("Sensorium-Salt", salt);
+		}
+		Log.d("Sensorium", "Salt is "+salt);
+		
 		SensorValue ret = new SensorValue(val);
-		String salt = Long.toString(System.currentTimeMillis() / 1000000); // 1000s
-																			// salt
-																			// bins
-		ret.setValue(val.getValue().toString() + salt);
+		ret.setValue(salt + val.getValue().toString());
 		return ret;
 	}
 }

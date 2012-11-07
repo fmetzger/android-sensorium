@@ -1,20 +1,18 @@
 /*
- *  * Copyright (C) 2012 Florian Metzger
- * 
- *  This file is part of android-seattle-sensors.
+ *  This file is part of Sensorium.
  *
- *   android-seattle-sensors is free software: you can redistribute it and/or modify
+ *   Sensorium is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU Lesser General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
  *
- *   android-seattle-sensors is distributed in the hope that it will be useful,
+ *   Sensorium is distributed in the hope that it will be useful,
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *   GNU Lesser General Public License for more details.
  *
  *   You should have received a copy of the GNU Lesser General Public License
- *   along with android-seattle-sensors. If not, see
+ *   along with Sensorium. If not, see
  *   <http://www.gnu.org/licenses/>.
  * 
  * 
@@ -48,6 +46,8 @@ public class SensorRegistry {
 	private int bufferedLines = 0;
 	private static final int MAXDEBUGLINES = 20;
 	private TextView textoutput;
+	
+	private Context context;
 
 	protected SensorRegistry() {
 		sensors = new LinkedList<AbstractSensor>();
@@ -63,11 +63,9 @@ public class SensorRegistry {
 	}
 
 	public void startup(Context context) {
+		this.context = context;
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
 		for (AbstractSensor sensor : sensors) {
-			// TODO: exceptions will now be caught in the abstractsensor class,
-			// need to change this
 			try {
 				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), false);
 				Log.d("SeattleSensors", sensor.getClass().getName() + ": " + savedstate);
@@ -224,13 +222,19 @@ public class SensorRegistry {
 									signature.add("boolean");
 								} else if (rettype.equals("class java.lang.Double")) {
 									signature.add("double");
+								} else if (rettype.equals("class java.lang.Float")) {
+									signature.add("ex:float");
 								} else if (rettype.equals("class java.lang.Long")) {
 									signature.add("ex:i8");
+								} else if (rettype.equals("class java.lang.Byte")) {
+									signature.add("ex:i1");
+								} else if (rettype.equals("class java.lang.Short")) {
+									signature.add("ex:i2");
 								} else {
 									signature.add(rettype.toString());
 								}
 								// add method parameters: always nil
-								signature.add("nil");
+								signature.add("ex:nil");
 							}
 						}
 					}
@@ -285,5 +289,9 @@ public class SensorRegistry {
 			}
 		}
 		return out;
+	}
+	
+	public Context getContext(){
+		return context;
 	}
 }

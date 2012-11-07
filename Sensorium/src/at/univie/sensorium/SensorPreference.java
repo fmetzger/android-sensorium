@@ -1,3 +1,23 @@
+/*
+ *  This file is part of Sensorium.
+ *
+ *   Sensorium is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Sensorium is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU Lesser General Public License for more details.
+ *
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with Sensorium. If not, see
+ *   <http://www.gnu.org/licenses/>.
+ * 
+ * 
+ */
+
 package at.univie.sensorium;
 
 import java.io.PrintWriter;
@@ -21,8 +41,6 @@ import at.univie.sensorium.sensors.AbstractSensor;
 
 /**
  * adapted from: http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
- * 
- * 
  */
 public class SensorPreference extends Preference implements OnSeekBarChangeListener {
 	
@@ -51,12 +69,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		this.sensor = sensor;
 	}
 	
-	/**
-	 * if we are called without a specific sensor, we override all the others
-	 * TODO: needs a state in which the seekbar is undefined to display a
-	 * 		non-overriding state where all the sensors have individual settings
-	 * @param context
-	 */
 	public SensorPreference(Context context) {
 		super(context);
 
@@ -119,11 +131,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		updateView(view);
 	}
 
-	/**
-	 * Update a SeekBarPreference view with our current state
-	 * 
-	 * @param view
-	 */
 	protected void updateView(View view) {
 
 		try {
@@ -154,13 +161,10 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		else if (mInterval != 1 && newValue % mInterval != 0)
 			newValue = Math.round(((float) newValue) / mInterval) * mInterval;
 
-		// change rejected, revert to the previous value
 		if (!callChangeListener(newValue)) {
 			seekBar.setProgress(mCurrentValue - mMinValue);
 			return;
 		}
-
-		// change accepted, store it
 		sensor.setPrivacylevel(Privacy.PrivacyLevel.fromInt(newValue));
 		if(newValue == Privacy.PrivacyLevel.FULL.value() && sensor.isEnabled()){
 			sensor.disable();
@@ -170,8 +174,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 			sensor.enable();
 		}
 		mCurrentValue = newValue;
-		
-		
 		
 		mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
 		persistInt(newValue);
@@ -219,7 +221,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	
 	@Override
 	public void setEnabled(boolean enabled) {
-		// TODO Auto-generated method stub
 		super.setEnabled(enabled);
 	}
 
