@@ -23,6 +23,7 @@ package at.univie.sensorium;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -73,6 +74,13 @@ public class SensoriumActivity extends Activity {
 			return true;
 		case R.id.menu_debug:
 			startActivityForResult(new Intent(this, SensorDebugActivity.class), 0);
+			return true;
+		case R.id.menu_about:
+			AlertDialog alertDialog;
+			alertDialog = new AlertDialog.Builder(this).create();
+			alertDialog.setTitle("About Sensorium");
+			alertDialog.setMessage("To use Sensorium you first have to configure the privacy level of each individual sensor. Then you can connect to localhost TCP port 63090 (-63099) and use XMLRPC calls to interact with Sensorium. Have fun!");
+			alertDialog.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

@@ -11,5 +11,11 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_debug">
     </item>
+        <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_about">
+    </item>
 
 </menu>
