@@ -41,7 +41,7 @@ public abstract class AbstractSensor {
 	private String description = "";
 	private Privacy.PrivacyLevel plevel;
 
-	protected Context context;
+	protected static Context context;
 	protected String name = "";
 
 	public AbstractSensor(Context context) {

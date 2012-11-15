@@ -34,7 +34,7 @@ public class WifiSensor extends AbstractSensor {
 		super(context);
 		name = "Wifi Scan Sensor";
 		
-		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.OTHER);	
+		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.DEVICE_IP);	
 		scannedDevices = new LinkedList<WifiDevice>();
 	}
 	

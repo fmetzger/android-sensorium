@@ -32,6 +32,7 @@ import at.univie.sensorium.sensors.BatterySensor;
 import at.univie.sensorium.sensors.BluetoothSensor;
 import at.univie.sensorium.sensors.DeviceInfoSensor;
 import at.univie.sensorium.sensors.GPSLocationSensor;
+import at.univie.sensorium.sensors.InterfacesSensor;
 import at.univie.sensorium.sensors.NetworkLocationSensor;
 import at.univie.sensorium.sensors.RadioSensor;
 import at.univie.sensorium.sensors.WifiConnectionSensor;
@@ -65,6 +66,7 @@ public class SensorService extends Service {
 	private void startSensors(){
 		registry = SensorRegistry.getInstance();
 		registry.registerSensor(new DeviceInfoSensor(this));
+		registry.registerSensor(new InterfacesSensor(this));
 		registry.registerSensor(new RadioSensor(this));
 
 		registry.registerSensor(new NetworkLocationSensor(this));

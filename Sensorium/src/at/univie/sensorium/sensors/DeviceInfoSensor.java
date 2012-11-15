@@ -50,7 +50,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 	public DeviceInfoSensor(Context context) {
 		super(context);
 
-		name = "Device Info Sensor";
+		name = "General Device Information";
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);
 		vendorname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.VENDOR_NAME);

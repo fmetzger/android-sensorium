@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -79,7 +80,7 @@ public class SensoriumActivity extends Activity {
 			AlertDialog alertDialog;
 			alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("About Sensorium");
-			alertDialog.setMessage("To use Sensorium you first have to configure the privacy level of each individual sensor. Then you can connect to localhost TCP port 63090 (-63099) and use XMLRPC calls to interact with Sensorium. Have fun!");
+			alertDialog.setMessage(Html.fromHtml("To use Sensorium you first have to configure the privacy level of each individual sensor. Then you can connect to localhost TCP port 63090 (-63099) and use XMLRPC calls to interact with Sensorium. Visit <a href=\"https://github.com/fmetzger/android-sensorium\">https://github.com/fmetzger/android-sensorium</a> for further info. Have fun!"));
 			alertDialog.show();
 			return true;
 		default:
