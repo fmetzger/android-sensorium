@@ -45,8 +45,8 @@ public class SensorValue {
 	}
 
 	public static enum TYPE {
-		LATITUDE("latitude"), LONGITUDE("longitude"), TIMESTAMP("timestamp"),
-		ALTITUDE("altitude"), RELATIVE_DISTANCE("distance"), ACCURACY("accuracy"),
+		LATITUDE("latitude"), LONGITUDE("longitude"), TIMESTAMP("timestamp"), ADDRESS("address"),
+		ORIENTATION("orientation"), ALTITUDE("altitude"), RELATIVE_DISTANCE("distance"), ACCURACY("accuracy"),
 		CHARGE("charged"), OTHER(""), BATTERY_TECHNOLOGY("battery type"), PLUGGED("power source"),
 		MCCMNC("country code + network code"), LAC("location area code"),
 		MCC("mobile country code"), MNC("mobile network code"),TEMPERATURE("temperature"),
