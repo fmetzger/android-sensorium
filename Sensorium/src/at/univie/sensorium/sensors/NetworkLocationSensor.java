@@ -20,7 +20,13 @@
 
 package at.univie.sensorium.sensors;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,6 +43,8 @@ public class NetworkLocationSensor extends AbstractSensor {
 	private SensorValue latitude;
 	private SensorValue altitude;
 	private SensorValue accuracy;
+	private SensorValue address;
+	private SensorValue speed;
 
 	public NetworkLocationSensor(Context context) {
 		super(context);
@@ -48,6 +56,8 @@ public class NetworkLocationSensor extends AbstractSensor {
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);
 		altitude = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ALTITUDE);
 		accuracy = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ACCURACY);
+		address = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.ADDRESS);
+		speed = new SensorValue(SensorValue.UNIT.METERSPERSECOND, SensorValue.TYPE.VELOCITY);
 	}
 
 	@Override
@@ -60,7 +70,26 @@ public class NetworkLocationSensor extends AbstractSensor {
 				altitude.setValue(loc.getAltitude());
 				accuracy.setValue(loc.getAccuracy());
 				timestamp.setValue(loc.getTime());
+				speed.setValue(loc.getSpeed());
 				
+				Geocoder myLocation = new Geocoder(context.getApplicationContext(), Locale.getDefault());
+				List<Address> list = null;
+				try {
+					list = myLocation.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+					if (list != null && list.size() > 0) {
+						Address location = list.get(0);
+						String addressText = String.format("%s, %s, %s",
+								location.getMaxAddressLineIndex() > 0 ? location.getAddressLine(0) : "",
+										location.getLocality(), // location.getAdminArea(), 
+										location.getCountryName());
+						address.setValue(addressText);
+					}
+					else
+						address.setValue("n/a");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+								
 				notifyListeners();
 			}
 
@@ -78,7 +107,8 @@ public class NetworkLocationSensor extends AbstractSensor {
 
 		locationManager = ((LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-	}
+		
+	}	
 
 	@Override
 	protected void _disable() {

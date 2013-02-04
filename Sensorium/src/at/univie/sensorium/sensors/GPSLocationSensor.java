@@ -20,10 +20,16 @@
 
 package at.univie.sensorium.sensors;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.Context;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.GpsStatus.Listener;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -44,6 +50,7 @@ public class GPSLocationSensor extends AbstractSensor {
 	private SensorValue bearing;
 	private SensorValue speed;
 	private SensorValue satellites;
+	private SensorValue address;
 	
 	private static final long GPS_UPDATE_TIME_INTERVAL=3000;
 	
@@ -61,6 +68,7 @@ public class GPSLocationSensor extends AbstractSensor {
 		bearing = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.BEARING);
 		speed = new SensorValue(SensorValue.UNIT.METERSPERSECOND, SensorValue.TYPE.VELOCITY);
 		satellites = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.SATELLITES);
+		address = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.ADDRESS);
 	}
 
 	@Override
@@ -78,6 +86,24 @@ public class GPSLocationSensor extends AbstractSensor {
 				bearing.setValue(loc.getBearing());
 				speed.setValue(loc.getSpeed());
 				timestamp.setValue(loc.getTime());
+				
+				Geocoder myLocation = new Geocoder(context.getApplicationContext(), Locale.getDefault());
+				List<Address> list = null;
+				try {
+					list = myLocation.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+					if (list != null && list.size() > 0) {
+						Address location = list.get(0);
+						String addressText = String.format("%s, %s, %s",
+								location.getMaxAddressLineIndex() > 0 ? location.getAddressLine(0) : "",
+										location.getLocality(), // location.getAdminArea(), 
+										location.getCountryName());
+						address.setValue(addressText);
+					}
+					else
+						address.setValue("n/a");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
 				notifyListeners();
 			}
