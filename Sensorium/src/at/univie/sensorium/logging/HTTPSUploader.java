@@ -21,11 +21,11 @@
 package at.univie.sensorium.logging;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.HttpHost;
@@ -34,7 +34,6 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
@@ -51,29 +50,21 @@ public class HTTPSUploader {
 	private String username;
 	private String password;
 
-	private void post(List<File> files) {
+	public void uploadFiles(List<File> files) {
 		try {
 
 			DefaultHttpClient httpclient = new DefaultHttpClient();
-
 			HttpHost targetHost = new HttpHost(uri, -1, "https");
-
 			httpclient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(username, password));
 
 			HttpPost httppost = new HttpPost(posturl);
-			
-		    File file = new File("c:/TRASH/zaba_1.jpg");
 		    MultipartEntity mpEntity = new MultipartEntity();
-		    ContentBody cbFile = new FileBody(file, "image/jpeg");
-		    mpEntity.addPart("userfile", cbFile);
-
-
+		    for(File file: files){
+			    ContentBody cbFile = new FileBody(file, "binary/octet-stream");
+			    mpEntity.addPart("userfile", cbFile);
+		    }
+			//reqEntity.setChunked(true); // Send in multiple parts if needed
 		    httppost.setEntity(mpEntity);
-			
-			InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(file), -1);
-			reqEntity.setContentType("binary/octet-stream");
-			reqEntity.setChunked(true); // Send in multiple parts if needed
-			httppost.setEntity(reqEntity);
 			HttpResponse response = httpclient.execute(httppost);
 
 		} catch (FileNotFoundException e) {
@@ -94,8 +85,12 @@ public class HTTPSUploader {
 		}
 	}
 	
-	public void uploadFiles(List<String> files){
-		
+	public void upload(List<String> files){
+		List<File> fList = new LinkedList<File>();
+		for(String s: files){
+			fList.add(new File(s));
+		}
+		uploadFiles(fList);
 	}
 
 }

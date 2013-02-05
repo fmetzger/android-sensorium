@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +52,7 @@ public class JSONLogger implements SensorChangeListener{
 	
 	private Map<String, JsonWriter> jsonMap;
 	private Map<String, FileWriter> writerMap;
+	private List<File> files;
 	File extDir;
 	
 	
@@ -58,6 +60,7 @@ public class JSONLogger implements SensorChangeListener{
 		
 		jsonMap = new HashMap<String, JsonWriter>();
 		writerMap = new HashMap<String, FileWriter>();
+		files = new LinkedList<File>();
 		// create new json file or open existing
 		// TODO: needs to check if there is external storage, else die (toast message?) gracefully
 		extDir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
@@ -67,15 +70,14 @@ public class JSONLogger implements SensorChangeListener{
 	private JsonWriter getWriterForName(String sensorname){
 		JsonWriter writer = jsonMap.get(sensorname);
 		if (writer == null){
-			File extFile = new File(extDir, sensorname.substring(sensorname.lastIndexOf('.')+1) + ".json");
 			try {
-//				FileOutputStream f = new FileOutputStream(extFile);
-//				OutputStreamWriter fw = new OutputStreamWriter(f);
+				File extFile = new File(extDir, sensorname.substring(sensorname.lastIndexOf('.')+1) + ".json");
 				FileWriter fw = new FileWriter(extFile);
 				writer = new JsonWriter(fw);
 				writer.beginArray();
 				jsonMap.put(sensorname, writer);
 				writerMap.put(sensorname, fw);
+				files.add(extFile);
 			} catch (FileNotFoundException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
@@ -144,5 +146,9 @@ public class JSONLogger implements SensorChangeListener{
 			}
 
 		}
+	}
+	
+	private void upload(){
+		new HTTPSUploader().uploadFiles(files);
 	}
 }
