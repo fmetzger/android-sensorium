@@ -37,6 +37,7 @@ import com.google.gson.stream.JsonWriter;
 import android.os.Environment;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;
 import at.univie.sensorium.sensors.SensorValue;
@@ -93,7 +94,6 @@ public class JSONLogger implements SensorChangeListener{
 		return writer;
 	}
 	
-	// TODO: this needs to go through the privacy layer first!
 	private void writeObject(AbstractSensor sensor){
 		JsonWriter jw = getWriterForName(sensor.getClass().getName());
 		List<SensorValue> valuelist = sensor.getSensorValues();
@@ -101,7 +101,8 @@ public class JSONLogger implements SensorChangeListener{
 		try {
 			jw.beginObject();
 			for(SensorValue value: valuelist){
-				jw.name(value.getType().getName()).value(value.getValueRepresentation());
+				SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
+				jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
 			}
 			jw.endObject();
 			writerMap.get(sensor.getClass().getName()).flush();
