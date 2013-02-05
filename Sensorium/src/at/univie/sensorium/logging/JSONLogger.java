@@ -22,17 +22,13 @@ package at.univie.sensorium.logging;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.stream.JsonWriter;
 
 import android.os.Environment;
 import android.util.Log;
@@ -41,6 +37,8 @@ import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;
 import at.univie.sensorium.sensors.SensorValue;
+
+import com.google.gson.stream.JsonWriter;
 
 
 /**
