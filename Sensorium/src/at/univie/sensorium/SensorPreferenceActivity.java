@@ -25,9 +25,14 @@ import java.util.List;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.DialogPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import at.univie.sensorium.logging.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {
@@ -57,6 +62,12 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		autostartPref.setTitle("Sensor starts on boot");
 		autostartPref.setSummary("Keeps the sensor service running at all times.");
 		generalCat.addPreference(autostartPref);
+		
+		PreferenceCategory interfacesCat = new PreferenceCategory(this);
+		interfacesCat.setTitle("Interfaces & Data Upload");
+		root.addPreference(interfacesCat);
+		DialogPreference uploadPref = new HTTPSUploaderDialogPreference(this, null);
+		interfacesCat.addPreference(uploadPref);
 
 		PreferenceCategory sensorsCat = new PreferenceCategory(this);
 		sensorsCat.setTitle("Individual Sensors");
