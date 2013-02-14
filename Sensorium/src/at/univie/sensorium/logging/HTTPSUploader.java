@@ -39,23 +39,59 @@ import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
+import at.univie.sensorium.SensorRegistry;
 
-public class HTTPSUploader {
+public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 
 	
 	// TODO: store and sync urls/user/pw with android properties
-	private String uri;
+	private String host;
 	private String posturl;// = "https://www.example.com/foo.php";
 	private String username;
 	private String password;
+	
+	public void setHost(String host){
+		this.host = host;
+	}
+	public void setPosturl(String posturl){
+		this.posturl = posturl;
+	}
+	public void setUsername(String username){
+		this.username = username;
+	}
+	public void setPassword(String password){
+		this.password = password;
+	}
+	
+	public HTTPSUploader(String host, String posturl, String username, String password){
+		this.host = host;
+		this.posturl = posturl;
+		this.username = username;
+		this.password = password;
+	}
+	
+	@Override
+	protected String doInBackground(List<File>... params) {
+		uploadFiles(params[0]);
+		return "upload complete";
+	}
+	
+    protected void onPostExecute(String result) {
+        Toast x = Toast.makeText(SensorRegistry.getInstance().getContext(), result, Toast.LENGTH_SHORT);
+        x.show();
+    }
 
+	
+	
 	public void uploadFiles(List<File> files) {
 		try {
 
 			DefaultHttpClient httpclient = new DefaultHttpClient();
-			HttpHost targetHost = new HttpHost(uri, -1, "https");
-			httpclient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(username, password));
+			//HttpHost targetHost = new HttpHost(host, -1, "https");
+			//httpclient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(username, password));
 
 			HttpPost httppost = new HttpPost(posturl);
 		    MultipartEntity mpEntity = new MultipartEntity();
@@ -66,8 +102,15 @@ public class HTTPSUploader {
 			//reqEntity.setChunked(true); // Send in multiple parts if needed
 		    httppost.setEntity(mpEntity);
 			HttpResponse response = httpclient.execute(httppost);
+			
+			Log.d("HTTPRESPONSE", response.toString());
 
-		} catch (FileNotFoundException e) {
+		} catch (IllegalArgumentException e){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
+		}catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
@@ -92,5 +135,6 @@ public class HTTPSUploader {
 		}
 		uploadFiles(fList);
 	}
+
 
 }

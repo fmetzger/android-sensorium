@@ -29,7 +29,6 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import at.univie.sensorium.logging.JSONLogger;
-import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.BatterySensor;
 import at.univie.sensorium.sensors.BluetoothSensor;
 import at.univie.sensorium.sensors.DeviceInfoSensor;
@@ -42,7 +41,6 @@ import at.univie.sensorium.sensors.WifiSensor;
 
 public class SensorService extends Service {
 	private SensorRegistry registry;
-	private JSONLogger jsonlogger;
 
 	private static final int NOTIFICATION = 42;
 	private final IBinder mBinder = new LocalBinder();
@@ -89,10 +87,8 @@ public class SensorService extends Service {
 					"Thread already running, not spawning another one.");
 
 		// (temporarily) attach the JSON writer
-		jsonlogger = new JSONLogger();
-		for(AbstractSensor sensor: registry.getSensors()){
-			sensor.addListener(jsonlogger);
-		}
+		registry.setJSONLogger(new JSONLogger());
+		registry.getJSONLogger().init(registry.getSensors());
 	}
 	
 	@Override
@@ -110,7 +106,7 @@ public class SensorService extends Service {
 
 	@Override
 	public void onDestroy() {
-		jsonlogger.finalize();
+	registry.getJSONLogger().finalize();
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(NOTIFICATION);
 		Log.d("SeattleSensors", "SeattleSensors stopped");
 	}

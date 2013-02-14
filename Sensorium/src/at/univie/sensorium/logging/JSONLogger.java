@@ -50,6 +50,8 @@ import com.google.gson.stream.JsonWriter;
  */
 public class JSONLogger implements SensorChangeListener{
 	
+	private List<AbstractSensor> sensors;
+	
 	private Map<String, JsonWriter> jsonMap;
 	private Map<String, FileWriter> writerMap;
 	private List<File> files;
@@ -57,7 +59,14 @@ public class JSONLogger implements SensorChangeListener{
 	
 	
 	public JSONLogger() {
-		
+	}
+	
+	public void init(List<AbstractSensor> sensors){
+		this.sensors = sensors;
+		init();
+	}
+	
+	private void init(){
 		jsonMap = new HashMap<String, JsonWriter>();
 		writerMap = new HashMap<String, FileWriter>();
 		files = new LinkedList<File>();
@@ -65,6 +74,10 @@ public class JSONLogger implements SensorChangeListener{
 		// TODO: needs to check if there is external storage, else die (toast message?) gracefully
 		extDir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
 		extDir.mkdirs();
+		
+		for(AbstractSensor sensor: sensors){
+			sensor.addListener(this);
+		}
 	}
 	
 	private JsonWriter getWriterForName(String sensorname){
@@ -148,7 +161,9 @@ public class JSONLogger implements SensorChangeListener{
 		}
 	}
 	
-	private void upload(){
-		new HTTPSUploader().uploadFiles(files);
+	public void upload(){
+		finalize(); // close the json objects
+		new HTTPSUploader("httpbin.org/", "https://httpbin.org/post", null, null).uploadFiles(files);
+		init(); // restart the logging
 	}
 }

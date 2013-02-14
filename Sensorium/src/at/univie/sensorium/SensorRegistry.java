@@ -32,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
+import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorValue;
@@ -290,6 +291,16 @@ public class SensorRegistry {
 		}
 		return out;
 	}
+	
+	//TODO: think of a better way to retrieve generic shared objects
+	JSONLogger jsonlogger;
+	public JSONLogger getJSONLogger(){
+		return jsonlogger;
+	}
+	public void setJSONLogger(JSONLogger jsonlogger){
+		this.jsonlogger = jsonlogger;
+	}
+	
 	
 	public Context getContext(){
 		return context;
