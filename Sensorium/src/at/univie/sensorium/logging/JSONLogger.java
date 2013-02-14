@@ -163,7 +163,7 @@ public class JSONLogger implements SensorChangeListener{
 	
 	public void upload(){
 		finalize(); // close the json objects
-		new HTTPSUploader("httpbin.org/", "https://httpbin.org/post", null, null).uploadFiles(files);
+		new HTTPSUploader("homepage.univie.ac.at", "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php", null, null).execute(files);
 		init(); // restart the logging
 	}
 }

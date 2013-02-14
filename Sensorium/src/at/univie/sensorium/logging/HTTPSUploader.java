@@ -45,7 +45,6 @@ import android.widget.Toast;
 import at.univie.sensorium.SensorRegistry;
 
 public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
-
 	
 	// TODO: store and sync urls/user/pw with android properties
 	private String host;
@@ -86,7 +85,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 
 	
 	
-	public void uploadFiles(List<File> files) {
+	private void uploadFiles(List<File> files) {
 		try {
 
 			DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -128,13 +127,13 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 		}
 	}
 	
-	public void upload(List<String> files){
-		List<File> fList = new LinkedList<File>();
-		for(String s: files){
-			fList.add(new File(s));
-		}
-		uploadFiles(fList);
-	}
+//	public void upload(List<String> files){
+//		List<File> fList = new LinkedList<File>();
+//		for(String s: files){
+//			fList.add(new File(s));
+//		}
+//		uploadFiles(fList);
+//	}
 
 
 }
