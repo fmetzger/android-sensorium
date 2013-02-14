@@ -120,6 +120,9 @@ public class Privacy {
 		case LATITUDE:
 		case LONGITUDE:
 			return LocationPrivacy.anonymizeValue(val, l);
+			
+		case ADDRESS:
+			return LocationPrivacy.anonymizeAddress(val, l);
 
 		case CID:
 		case LAC:

@@ -41,6 +41,25 @@ public class LocationPrivacy extends Privacy {
 		}
 	}
 	
+
+	/**
+	 * Only return address in case of full access
+	 */
+	public static SensorValue anonymizeAddress(SensorValue val, PrivacyLevel l) {
+		switch (l) {
+		case NO:
+			return val;
+		case LOW:
+		case MED:
+		case HIGH:
+		case FULL:
+		default:
+			val.setValue("n/a");
+			return val;
+		}
+	}
+	
+	
 	/*
 	 * 
 	 * 1° longitude between 0km (pole 90°) and 111.3km (equator 0°) europe/us ~
@@ -57,5 +76,6 @@ public class LocationPrivacy extends Privacy {
 		return ret;
 
 	}
+
 
 }

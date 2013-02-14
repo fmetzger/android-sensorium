@@ -96,13 +96,13 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 		    MultipartEntity mpEntity = new MultipartEntity();
 		    for(File file: files){
 			    ContentBody cbFile = new FileBody(file, "binary/octet-stream");
-			    mpEntity.addPart("userfile", cbFile);
+			    mpEntity.addPart(file.toString(), cbFile);
 		    }
 			//reqEntity.setChunked(true); // Send in multiple parts if needed
 		    httppost.setEntity(mpEntity);
 			HttpResponse response = httpclient.execute(httppost);
 			
-			Log.d("HTTPRESPONSE", response.toString());
+			Log.d("HTTPRESPONSE", "Response status: "+ response.getStatusLine().getStatusCode());
 
 		} catch (IllegalArgumentException e){
 			StringWriter sw = new StringWriter();
@@ -126,14 +126,4 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 			Log.d("SeattleSensors", sw.toString());
 		}
 	}
-	
-//	public void upload(List<String> files){
-//		List<File> fList = new LinkedList<File>();
-//		for(String s: files){
-//			fList.add(new File(s));
-//		}
-//		uploadFiles(fList);
-//	}
-
-
 }
