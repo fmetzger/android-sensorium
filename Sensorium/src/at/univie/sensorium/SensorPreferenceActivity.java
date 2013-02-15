@@ -78,8 +78,14 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 			
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				// TODO en/disable the xmlrpc service here
-				return false;
+				if (newValue instanceof Boolean && (Boolean) newValue == true){
+					SensorRegistry.getInstance().startXMLRPCInterface();
+					Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting XMLRPC interface.", Toast.LENGTH_SHORT).show();
+				} else{
+					SensorRegistry.getInstance().stopXMLRPCInterface();
+					Toast.makeText(SensorRegistry.getInstance().getContext(), "Stopping XMLRPC interface.", Toast.LENGTH_SHORT).show();
+				}
+				return true;
 			}
 		});
 		

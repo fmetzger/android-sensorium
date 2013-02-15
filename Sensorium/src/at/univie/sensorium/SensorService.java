@@ -42,9 +42,6 @@ import at.univie.sensorium.sensors.WifiSensor;
 
 public class SensorService extends Service {
 	private SensorRegistry registry;
-
-	private Thread xmlrpcsensorserverthread;
-
 	private static final int NOTIFICATION = 42;
 	private final IBinder mBinder = new LocalBinder();
 
@@ -83,22 +80,13 @@ public class SensorService extends Service {
 		registry.registerSensor(new BluetoothSensor(this));
 		registry.startup(this);
 
-		startXMLRPCInterface();
+		registry.startXMLRPCInterface();
 
-		// (temporarily) attach the JSON writer
+		// attach the JSON writer
 		registry.setJSONLogger(new JSONLogger());
 		registry.getJSONLogger().init(registry.getSensors());
 	}
 
-	private void startXMLRPCInterface() {
-		if (!XMLRPCSensorServerThread.running) {
-			// (new Thread(new XMLRPCSensorServerThread())).start();
-			xmlrpcsensorserverthread = new Thread(new XMLRPCSensorServerThread());
-			xmlrpcsensorserverthread.start();
-		} else {
-			Log.d("SeattleSensors", "Thread already running, not spawning another one.");
-		}
-	}
 
 	@Override
 	public void onCreate() {

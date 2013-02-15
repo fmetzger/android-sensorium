@@ -32,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
+import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
 import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -304,5 +305,36 @@ public class SensorRegistry {
 	
 	public Context getContext(){
 		return context;
+	}
+	
+	XMLRPCSensorServerThread xmlrpcserverthread;
+	Thread x;
+	public void startXMLRPCInterface() {
+		if (!XMLRPCSensorServerThread.running) {
+			// (new Thread(new XMLRPCSensorServerThread())).start(); 
+			xmlrpcserverthread = new XMLRPCSensorServerThread();
+			x = new Thread(xmlrpcserverthread);
+			x.start();
+		} else {
+			Log.d("SeattleSensors", "XMLRPC thread already running, not spawning another one.");
+		}
+	}
+	public void stopXMLRPCInterface(){
+		if (XMLRPCSensorServerThread.running){
+			xmlrpcserverthread.stopThread();
+			x.interrupt();
+			try {
+				x.join();
+				XMLRPCSensorServerThread.running = false;
+			} catch (InterruptedException e) {
+				Log.d("SeattleSensors:", e.toString());
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			}
+		} else {
+			Log.d("SeattleSensors", "XMLRPC thread not running, not attempting to stop it.");
+		}
 	}
 }

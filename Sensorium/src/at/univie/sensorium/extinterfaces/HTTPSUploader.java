@@ -79,15 +79,13 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 	}
 	
     protected void onPostExecute(String result) {
-        Toast x = Toast.makeText(SensorRegistry.getInstance().getContext(), result, Toast.LENGTH_SHORT);
-        x.show();
+        Toast.makeText(SensorRegistry.getInstance().getContext(), result, Toast.LENGTH_SHORT).show();
     }
     
     @Override
     protected void onPreExecute() {
     	super.onPreExecute();
-		Toast x = Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting upload...", Toast.LENGTH_SHORT);
-		x.show();
+		Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting upload...", Toast.LENGTH_SHORT).show();
     }
 	
 	private void uploadFiles(List<File> files) {
