@@ -34,7 +34,7 @@ import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import at.univie.sensorium.logging.HTTPSUploaderDialogPreference;
+import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {

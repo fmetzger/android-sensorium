@@ -34,6 +34,7 @@ import java.util.Map;
 import android.os.Environment;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.extinterfaces.HTTPSUploader;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;
@@ -72,6 +73,7 @@ public class JSONLogger implements SensorChangeListener{
 		files = new LinkedList<File>();
 		// create new json file or open existing
 		// TODO: needs to check if there is external storage, else die (toast message?) gracefully
+		// TODO: move already existing files away to *.json.old
 		extDir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
 		extDir.mkdirs();
 		
@@ -162,9 +164,9 @@ public class JSONLogger implements SensorChangeListener{
 		}
 	}
 	
-	public void upload(){
+	public void upload(String url){
 		finalize(); // close the json objects
-		new HTTPSUploader("homepage.univie.ac.at", "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php", null, null).execute(files);
+		new HTTPSUploader("homepage.univie.ac.at", url, null, null).execute(files);
 		init(); // restart the logging
 	}
 }

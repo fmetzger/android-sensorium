@@ -10,6 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:inputType="textUri"
         android:ems="10"
         android:hint="POST URL" >
 

@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium.logging;
+package at.univie.sensorium.extinterfaces;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -82,8 +82,13 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
         Toast x = Toast.makeText(SensorRegistry.getInstance().getContext(), result, Toast.LENGTH_SHORT);
         x.show();
     }
-
-	
+    
+    @Override
+    protected void onPreExecute() {
+    	super.onPreExecute();
+		Toast x = Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting upload...", Toast.LENGTH_SHORT);
+		x.show();
+    }
 	
 	private void uploadFiles(List<File> files) {
 		try {

@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
 import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.sensors.BatterySensor;
 import at.univie.sensorium.sensors.BluetoothSensor;

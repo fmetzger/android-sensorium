@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.extinterfaces;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -31,6 +31,7 @@ import org.xmlrpc.android.MethodCall;
 import org.xmlrpc.android.XMLRPCServer;
 
 import android.util.Log;
+import at.univie.sensorium.SensorRegistry;
 
 public class XMLRPCSensorServerThread  implements Runnable{
 
