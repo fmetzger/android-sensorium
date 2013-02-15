@@ -26,6 +26,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.DialogPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
@@ -40,6 +42,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 	SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 	CheckBoxPreference autostartPref;
+	CheckBoxPreference xmlrpcPref;
 
 
 	@Override
@@ -64,8 +67,24 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		generalCat.addPreference(autostartPref);
 		
 		PreferenceCategory interfacesCat = new PreferenceCategory(this);
-		interfacesCat.setTitle("Interfaces & Data Upload");
+		interfacesCat.setTitle("External Interfaces");
 		root.addPreference(interfacesCat);
+		
+		xmlrpcPref = new CheckBoxPreference(this);
+		xmlrpcPref.setKey("xmlrpc_enabled");
+		xmlrpcPref.setTitle("Enable XMLRPC");
+		xmlrpcPref.setSummary("Make sensor data available through localhost XMLRPC.");
+		xmlrpcPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				// TODO en/disable the xmlrpc service here
+				return false;
+			}
+		});
+		
+		interfacesCat.addPreference(xmlrpcPref);
+		
 		DialogPreference uploadPref = new HTTPSUploaderDialogPreference(this, null);
 		interfacesCat.addPreference(uploadPref);
 

@@ -8,18 +8,54 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:ems="10" >
+        android:ems="10"
+        android:hint="POST URL" >
 
         <requestFocus />
     </EditText>
+
+    <CheckBox
+        android:id="@+id/upload_automatic_require_wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/upload_automatic_toggle"
+        android:text="automatic upload only on WiFi" />
+
+    <CheckBox
+        android:id="@+id/upload_automatic_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/uploadurl_text"
+        android:text="automatic upload" />
 
     <Button
         android:id="@+id/uploadpref_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/uploadurl_text"
-        android:layout_below="@+id/uploadurl_text"
-        android:text="Upload" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/upload_interval_selection"
+        android:layout_marginLeft="85dp"
+        android:text="upload now" />
+
+    <Spinner
+        android:id="@+id/upload_interval_selection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_toRightOf="@+id/textView1" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/upload_automatic_require_wifi"
+        android:text="automatic upload interval:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

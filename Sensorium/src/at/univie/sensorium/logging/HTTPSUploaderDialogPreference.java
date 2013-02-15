@@ -25,7 +25,9 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 import at.univie.sensorium.R;
 import at.univie.sensorium.SensorRegistry;
@@ -35,12 +37,19 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 	public HTTPSUploaderDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setDialogLayoutResource(R.layout.upload_dialogpreference);
-		setTitle("Upload Data");
+		setTitle("HTTPS Upload");
 	}
 	
 	@Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
+		
+		Spinner spinner = (Spinner) view.findViewById(R.id.upload_interval_selection);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(),
+		        R.array.upload_intervals, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		
 		
 		Button button = (Button) view.findViewById(R.id.uploadpref_button);
 		button.setOnClickListener(new OnClickListener() {
@@ -52,6 +61,8 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 				SensorRegistry.getInstance().getJSONLogger().upload();
 			}
 		});
+		
+		
 	}
 	
 //	@Override
