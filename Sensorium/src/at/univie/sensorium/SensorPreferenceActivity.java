@@ -49,7 +49,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setPreferenceScreen(createPreferenceHierarchy());
-		SensorServiceSingleton.getInstance().bindService(this);
+		((SensoriumApplication) getApplication()).bindService();
 	}
 
 	private PreferenceScreen createPreferenceHierarchy() {

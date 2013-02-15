@@ -43,6 +43,8 @@ import at.univie.sensorium.sensors.WifiSensor;
 public class SensorService extends Service {
 	private SensorRegistry registry;
 
+	private Thread xmlrpcsensorserverthread;
+
 	private static final int NOTIFICATION = 42;
 	private final IBinder mBinder = new LocalBinder();
 
@@ -52,20 +54,21 @@ public class SensorService extends Service {
 		startSensors();
 		return mBinder;
 	}
+
 	public class LocalBinder extends Binder {
 		SensorService getService() {
 			return SensorService.this;
 		}
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d("LocalService", "Received start id " + startId + ": " + intent);
 		startSensors();
 		return START_STICKY;
 	}
-	
-	private void startSensors(){
+
+	private void startSensors() {
 		registry = SensorRegistry.getInstance();
 		registry.registerSensor(new DeviceInfoSensor(this));
 		registry.registerSensor(new InterfacesSensor(this));
@@ -74,24 +77,29 @@ public class SensorService extends Service {
 		registry.registerSensor(new NetworkLocationSensor(this));
 		registry.registerSensor(new GPSLocationSensor(this));
 		registry.registerSensor(new BatterySensor(this));
-//		registry.registerSensor(new DummySensor(this));
+		// registry.registerSensor(new DummySensor(this));
 		registry.registerSensor(new WifiSensor(this));
 		registry.registerSensor(new WifiConnectionSensor(this));
 		registry.registerSensor(new BluetoothSensor(this));
 		registry.startup(this);
 
-		// start the XMLRPC server
-		if (!XMLRPCSensorServerThread.running)
-			(new Thread(new XMLRPCSensorServerThread())).start();
-		else
-			Log.d("SeattleSensors",
-					"Thread already running, not spawning another one.");
+		startXMLRPCInterface();
 
 		// (temporarily) attach the JSON writer
 		registry.setJSONLogger(new JSONLogger());
 		registry.getJSONLogger().init(registry.getSensors());
 	}
-	
+
+	private void startXMLRPCInterface() {
+		if (!XMLRPCSensorServerThread.running) {
+			// (new Thread(new XMLRPCSensorServerThread())).start();
+			xmlrpcsensorserverthread = new Thread(new XMLRPCSensorServerThread());
+			xmlrpcsensorserverthread.start();
+		} else {
+			Log.d("SeattleSensors", "Thread already running, not spawning another one.");
+		}
+	}
+
 	@Override
 	public void onCreate() {
 		Notification sensorsNot = new Notification();
@@ -103,11 +111,9 @@ public class SensorService extends Service {
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIFICATION, sensorsNot);
 	}
 
-
-
 	@Override
 	public void onDestroy() {
-	registry.getJSONLogger().finalize();
+		registry.getJSONLogger().finalize();
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(NOTIFICATION);
 		Log.d("SeattleSensors", "SeattleSensors stopped");
 	}

@@ -32,7 +32,7 @@ public class SensorDebugActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sensor_debug);
 
-		SensorServiceSingleton.getInstance().bindService(this);
+		((SensoriumApplication) getApplication()).bindService();
 
 		TextView t = (TextView) findViewById(R.id.sensoroutput);
 
