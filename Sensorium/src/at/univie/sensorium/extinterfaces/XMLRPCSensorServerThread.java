@@ -50,14 +50,23 @@ public class XMLRPCSensorServerThread implements Runnable {
 		running = true;
 		isstopped = false;
 		int i;
-		for (i = 0; i < portArray.length; i++) {
+		for (i = 0; i < portArray.length; i++) { // TODO: this is the culprit
+													// when trying to cancel the
+													// thread (loops over the
+													// next 10 ports and
+													// blocking them before
+													// failing
+			if (isstopped) { // escape the loop if we stopped XMLRPC
+				break;
+			}
 			SOCKET_PORT = portArray[i];
 			Log.d("SeattleSensors", "XMLRPC Server bonding on port... " + SOCKET_PORT);
 
 			try {
 				InetAddress localhost = InetAddress.getLocalHost();
 				ServerSocket socket = new ServerSocket(SOCKET_PORT, 10, localhost);
-				socket.setSoTimeout(5000); // wait for 10s at max to allow interrupting the thread
+				socket.setSoTimeout(5000); // wait for 10s at max to allow
+											// interrupting the thread
 				XMLRPCServer server = new XMLRPCServer();
 				Log.d("SeattleSensors", "XMLRPC Server listening on port " + SOCKET_PORT);
 
@@ -102,6 +111,8 @@ public class XMLRPCSensorServerThread implements Runnable {
 						}
 					} catch (SocketTimeoutException e) {
 						Log.d("SeattleSensors", "Listening socket timeout");
+						if (isstopped)
+							socket.close();
 					}
 
 				}
@@ -112,7 +123,6 @@ public class XMLRPCSensorServerThread implements Runnable {
 				e.printStackTrace(pw);
 				Log.d("SeattleSensors", sw.toString());
 			}
-
 		}
 
 		if (i == portArray.length) {

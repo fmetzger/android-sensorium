@@ -292,8 +292,7 @@ public class SensorRegistry {
 		}
 		return out;
 	}
-	
-	//TODO: think of a better way to retrieve generic shared objects
+
 	JSONLogger jsonlogger;
 	public JSONLogger getJSONLogger(){
 		return jsonlogger;
