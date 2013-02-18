@@ -21,6 +21,8 @@
 package at.univie.sensorium.extinterfaces;
 
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -29,14 +31,19 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import at.univie.sensorium.R;
 import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.privacy.Privacy;
 
 public class HTTPSUploaderDialogPreference extends DialogPreference {
 
 	EditText url;
+	Spinner interval;
+	CheckBox automatic;
+	CheckBox wifi;
 
 	public HTTPSUploaderDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -51,10 +58,10 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		url = (EditText) view.findViewById(R.id.uploadurl_text);
 		url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 
-		Spinner spinner = (Spinner) view.findViewById(R.id.upload_interval_selection);
+		interval = (Spinner) view.findViewById(R.id.upload_interval_selection);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.upload_intervals, android.R.layout.simple_spinner_item);
 
-		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		interval.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -70,7 +77,10 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 
 		});
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
+		interval.setAdapter(adapter);
+
+		automatic = (CheckBox) view.findViewById(R.id.upload_automatic_toggle);
+		wifi = (CheckBox) view.findViewById(R.id.upload_automatic_require_wifi);
 
 		Button button = (Button) view.findViewById(R.id.uploadpref_button);
 		button.setOnClickListener(new OnClickListener() {
@@ -80,5 +90,36 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 				SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
 			}
 		});
+	}
+
+	public static final String UPLOAD_URL_PREF = "upload_url";
+	public static final String UPLOAD_AUTOMATIC_PREF = "upload_automatic";
+	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
+	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
+
+	@Override
+	protected void onDialogClosed(boolean positiveResult) {
+		super.onDialogClosed(positiveResult);
+
+		if (positiveResult) {
+			Editor editor = getEditor();
+
+			editor.putString(UPLOAD_URL_PREF, url.getText().toString());
+			editor.putBoolean(UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
+			editor.putBoolean(UPLOAD_WIFI_PREF, wifi.isChecked());
+			editor.putInt(UPLOAD_INTERVAL_PREF, interval.getSelectedItemPosition()); // Item
+																						// or
+																						// ItemID
+																						// better?
+			editor.commit();
+		}
+	}
+
+	@Override
+	protected Object onGetDefaultValue(TypedArray ta, int index) {
+
+		int defaultValue = ta.getInt(index, Privacy.PrivacyLevel.FULL.value());
+		return defaultValue;
+
 	}
 }

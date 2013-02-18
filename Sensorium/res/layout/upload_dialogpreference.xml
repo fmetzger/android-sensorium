@@ -3,20 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/uploadurl_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:inputType="textUri"
-        android:ems="10"
-        android:hint="POST URL" >
-
-        <requestFocus />
-    </EditText>
-
     <CheckBox
         android:id="@+id/upload_automatic_require_wifi"
         android:layout_width="wrap_content"
@@ -58,5 +44,29 @@
         android:layout_below="@+id/upload_automatic_require_wifi"
         android:text="automatic upload interval:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="upload url:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/uploadurl_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView2"
+        android:ems="10"
+        android:hint="POST URL"
+        android:inputType="textUri" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

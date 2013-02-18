@@ -31,8 +31,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -43,7 +41,6 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 	CheckBoxPreference autostartPref;
 	CheckBoxPreference xmlrpcPref;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,32 +62,32 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		autostartPref.setTitle("Sensor starts on boot");
 		autostartPref.setSummary("Keeps the sensor service running at all times.");
 		generalCat.addPreference(autostartPref);
-		
+
 		PreferenceCategory interfacesCat = new PreferenceCategory(this);
 		interfacesCat.setTitle("External Interfaces");
 		root.addPreference(interfacesCat);
-		
+
 		xmlrpcPref = new CheckBoxPreference(this);
 		xmlrpcPref.setKey("xmlrpc_enabled");
 		xmlrpcPref.setTitle("Enable XMLRPC");
 		xmlrpcPref.setSummary("Make sensor data available through localhost XMLRPC.");
 		xmlrpcPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			
+
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if (newValue instanceof Boolean && (Boolean) newValue == true){
+				if (newValue instanceof Boolean && (Boolean) newValue == true) {
 					SensorRegistry.getInstance().startXMLRPCInterface();
 					Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting XMLRPC interface.", Toast.LENGTH_SHORT).show();
-				} else{
+				} else {
 					SensorRegistry.getInstance().stopXMLRPCInterface();
 					Toast.makeText(SensorRegistry.getInstance().getContext(), "Stopping XMLRPC interface.", Toast.LENGTH_SHORT).show();
 				}
 				return true;
 			}
 		});
-		
+
 		interfacesCat.addPreference(xmlrpcPref);
-		
+
 		DialogPreference uploadPref = new HTTPSUploaderDialogPreference(this, null);
 		interfacesCat.addPreference(uploadPref);
 
