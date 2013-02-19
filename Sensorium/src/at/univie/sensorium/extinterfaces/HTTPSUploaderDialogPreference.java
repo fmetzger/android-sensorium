@@ -25,9 +25,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Handler;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -45,12 +42,15 @@ import at.univie.sensorium.SensorRegistry;
 
 public class HTTPSUploaderDialogPreference extends DialogPreference {
 
+	public static final String UPLOAD_URL_PREF = "upload_url";
+	public static final String UPLOAD_AUTOMATIC_PREF = "upload_automatic";
+	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
+	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
+
 	private EditText url;
 	private Spinner intervalSel;
 	private CheckBox automatic;
 	private CheckBox wifi;
-
-	private long interval = 3600; // in s to use for the runnable handler
 
 	public HTTPSUploaderDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -101,10 +101,6 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 
 	}
 
-	public static final String UPLOAD_URL_PREF = "upload_url";
-	public static final String UPLOAD_AUTOMATIC_PREF = "upload_automatic";
-	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
-	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
 
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
@@ -126,12 +122,41 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		String sUrl = sPref.getString(UPLOAD_URL_PREF, "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 		Boolean bAuto = sPref.getBoolean(UPLOAD_AUTOMATIC_PREF, true);
 		Boolean bWifi = sPref.getBoolean(UPLOAD_WIFI_PREF, false);
-		Integer iIntervalPos = sPref.getInt(UPLOAD_INTERVAL_PREF, 0);
+		Long lInterval = sPref.getLong(UPLOAD_INTERVAL_PREF, 0);
 
 		url.setText(sUrl);
 		automatic.setChecked(bAuto);
 		wifi.setChecked(bWifi);
-		intervalSel.setSelection(iIntervalPos);
+		intervalSel.setSelection(getSpinnerPosForInterval(lInterval));
+	}
+	
+	
+	protected long retrieveInterval(){
+		long interval;
+		
+		if (intervalSel.getSelectedItem().equals("1h")) {
+			interval = 3600;
+		} else if (intervalSel.getSelectedItem().equals("1d")) {
+			interval = 86400; // 24*3600s
+		} else { // default value
+			interval = 3600;
+		}
+		
+		return  interval;
+	}
+	
+	protected int getSpinnerPosForInterval(long interval){
+		int pos;
+		
+		if (interval == 3600){
+			pos = ((ArrayAdapter) intervalSel.getAdapter()).getPosition("1h");
+		} else if (interval == 86400){
+			pos = ((ArrayAdapter) intervalSel.getAdapter()).getPosition("1d");
+		} else {
+			pos = 0;
+		}
+		
+		return pos;
 	}
 
 	@Override
@@ -142,17 +167,16 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		super.onClick();
+		
+		// TODO: update persisted values only when OK button pressed
+		
 		if (which == Dialog.BUTTON_POSITIVE) {
 
 			if (automatic.isChecked()) {
 				// update the prefs first
-				if (intervalSel.getSelectedItem().equals("1h")) {
-					interval = 3600;
-				} else if (intervalSel.getSelectedItem().equals("1d")) {
-					interval = 86400; // 24*3600s
-				}
+
 				
-				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), interval, wifi.isChecked());
+				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), retrieveInterval(), wifi.isChecked());
 			} else {
 				SensorRegistry.getInstance().getJSONLogger().cancelautoupload();
 			}

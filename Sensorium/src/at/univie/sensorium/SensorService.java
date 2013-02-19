@@ -25,10 +25,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
+import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.sensors.BatterySensor;
 import at.univie.sensorium.sensors.BluetoothSensor;
@@ -83,8 +85,20 @@ public class SensorService extends Service {
 		registry.startXMLRPCInterface();
 
 		// attach the JSON writer
-		registry.setJSONLogger(new JSONLogger());
+		createJSONLoggerUploader();
 		registry.getJSONLogger().init(registry.getSensors());
+	}
+	
+	private void createJSONLoggerUploader(){
+		registry.setJSONLogger(new JSONLogger());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		if(prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_AUTOMATIC_PREF, false)){
+			long interval = prefs.getLong(HTTPSUploaderDialogPreference.UPLOAD_INTERVAL_PREF, 3600);
+			boolean wifi = prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_WIFI_PREF, false);
+			String url =  prefs.getString(HTTPSUploaderDialogPreference.UPLOAD_URL_PREF, "");
+			
+			registry.getJSONLogger().autoupload(url, interval, wifi);
+		}
 	}
 
 
