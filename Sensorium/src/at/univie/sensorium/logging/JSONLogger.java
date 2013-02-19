@@ -31,7 +31,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.extinterfaces.HTTPSUploader;
@@ -169,4 +173,34 @@ public class JSONLogger implements SensorChangeListener{
 		new HTTPSUploader("homepage.univie.ac.at", url, null, null).execute(files);
 		init(); // restart the logging
 	}
+	
+	String url;
+	long interval;
+	boolean wifionly;
+	
+	public void autoupload(String url, long interval, boolean wifionly){
+		this.url = url;
+		this.interval = interval;
+		this.wifionly = wifionly;
+		handler.postDelayed(runnable, interval * 1000);
+	}
+	
+	public void cancelautoupload(){
+		handler.removeCallbacks(runnable); // TODO: check if this really stops the queue
+	}
+	
+	private Handler handler = new Handler();
+	private Runnable runnable = new Runnable() {
+		@Override
+		public void run() {
+
+			ConnectivityManager connManager = (ConnectivityManager) SensorRegistry.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+			if (!wifionly || (wifionly && mWifi.isConnected())) {
+				SensorRegistry.getInstance().getJSONLogger().upload(url);
+			}
+			handler.postDelayed(this, interval * 1000);
+		}
+	};
 }

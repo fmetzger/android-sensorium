@@ -139,21 +139,6 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		populateDialog();
 	}
 
-	private Handler handler = new Handler();
-	private Runnable runnable = new Runnable() {
-		@Override
-		public void run() {
-
-			ConnectivityManager connManager = (ConnectivityManager) SensorRegistry.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-			NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-			if (!wifi.isChecked() || (wifi.isChecked() && mWifi.isConnected())) {
-				SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
-			}
-			handler.postDelayed(this, interval * 1000);
-		}
-	};
-
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		super.onClick();
@@ -166,12 +151,10 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 				} else if (intervalSel.getSelectedItem().equals("1d")) {
 					interval = 86400; // 24*3600s
 				}
-				// create a new repeating runnable
-
-				handler.postDelayed(runnable, interval * 1000);
+				
+				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), interval, wifi.isChecked());
 			} else {
-				handler.removeCallbacks(runnable); // TODO: check if this really
-													// stops the queue
+				SensorRegistry.getInstance().getJSONLogger().cancelautoupload();
 			}
 
 		} else if (which == Dialog.BUTTON_NEGATIVE) {
