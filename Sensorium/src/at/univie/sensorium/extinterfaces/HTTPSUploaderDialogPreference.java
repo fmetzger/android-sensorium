@@ -20,11 +20,14 @@
 
 package at.univie.sensorium.extinterfaces;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -36,7 +39,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import at.univie.sensorium.R;
 import at.univie.sensorium.SensorRegistry;
-import at.univie.sensorium.privacy.Privacy;
 
 public class HTTPSUploaderDialogPreference extends DialogPreference {
 
@@ -56,7 +58,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		super.onBindDialogView(view);
 
 		url = (EditText) view.findViewById(R.id.uploadurl_text);
-		url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
+//		url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 
 		interval = (Spinner) view.findViewById(R.id.upload_interval_selection);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.upload_intervals, android.R.layout.simple_spinner_item);
@@ -64,9 +66,9 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		interval.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// TODO Auto-generated method stub
-
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				String selected = parent.getItemAtPosition(pos).toString();
+				Log.d("SEATTLESPINNER", selected);
 			}
 
 			@Override
@@ -90,6 +92,9 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 				SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
 			}
 		});
+		
+		populateDialog();
+		
 	}
 
 	public static final String UPLOAD_URL_PREF = "upload_url";
@@ -114,12 +119,34 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			editor.commit();
 		}
 	}
+	
+	protected void populateDialog(){
+		SharedPreferences sPref = getSharedPreferences();
+		String sUrl = sPref.getString(UPLOAD_URL_PREF, "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
+		Boolean bAuto = sPref.getBoolean(UPLOAD_AUTOMATIC_PREF, true);
+		Boolean bWifi = sPref.getBoolean(UPLOAD_WIFI_PREF, false);
+		Integer iIntervalPos = sPref.getInt(UPLOAD_INTERVAL_PREF, 0);
+		
+		url.setText(sUrl);
+		automatic.setChecked(bAuto);
+		wifi.setChecked(bWifi);
+		interval.setSelection(iIntervalPos);
+	}
+	
 
 	@Override
-	protected Object onGetDefaultValue(TypedArray ta, int index) {
-
-		int defaultValue = ta.getInt(index, Privacy.PrivacyLevel.FULL.value());
-		return defaultValue;
-
+	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+		populateDialog();
 	}
+
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		super.onClick();
+		if ( which == Dialog.BUTTON_POSITIVE){
+			
+		} else if (which == Dialog.BUTTON_NEGATIVE){
+			
+		}
+	}
+
 }
