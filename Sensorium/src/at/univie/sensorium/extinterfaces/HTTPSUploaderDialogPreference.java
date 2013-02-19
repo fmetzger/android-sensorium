@@ -25,6 +25,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -47,8 +49,8 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 	private Spinner intervalSel;
 	private CheckBox automatic;
 	private CheckBox wifi;
-	
-	private long interval = 3600;   // in s to use for the runnable handler
+
+	private long interval = 3600; // in s to use for the runnable handler
 
 	public HTTPSUploaderDialogPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -61,7 +63,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		super.onBindDialogView(view);
 
 		url = (EditText) view.findViewById(R.id.uploadurl_text);
-//		url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
+		// url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 
 		intervalSel = (Spinner) view.findViewById(R.id.upload_interval_selection);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.upload_intervals, android.R.layout.simple_spinner_item);
@@ -94,9 +96,9 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 				SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
 			}
 		});
-		
+
 		populateDialog();
-		
+
 	}
 
 	public static final String UPLOAD_URL_PREF = "upload_url";
@@ -114,58 +116,66 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			editor.putString(UPLOAD_URL_PREF, url.getText().toString());
 			editor.putBoolean(UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
 			editor.putBoolean(UPLOAD_WIFI_PREF, wifi.isChecked());
-			editor.putInt(UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition()); 
+			editor.putInt(UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 			editor.commit();
 		}
 	}
-	
-	protected void populateDialog(){
+
+	protected void populateDialog() {
 		SharedPreferences sPref = getSharedPreferences();
 		String sUrl = sPref.getString(UPLOAD_URL_PREF, "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 		Boolean bAuto = sPref.getBoolean(UPLOAD_AUTOMATIC_PREF, true);
 		Boolean bWifi = sPref.getBoolean(UPLOAD_WIFI_PREF, false);
 		Integer iIntervalPos = sPref.getInt(UPLOAD_INTERVAL_PREF, 0);
-		
+
 		url.setText(sUrl);
 		automatic.setChecked(bAuto);
 		wifi.setChecked(bWifi);
 		intervalSel.setSelection(iIntervalPos);
 	}
-	
 
 	@Override
 	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
 		populateDialog();
 	}
-	
 
 	private Handler handler = new Handler();
 	private Runnable runnable = new Runnable() {
-		   @Override
-		   public void run() {
-			   
-			   SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
-			   
-		      handler.postDelayed(this, interval*1000);
-		   }
-		};
+		@Override
+		public void run() {
+
+			ConnectivityManager connManager = (ConnectivityManager) SensorRegistry.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+			if (!wifi.isChecked() || (wifi.isChecked() && mWifi.isConnected())) {
+				SensorRegistry.getInstance().getJSONLogger().upload(url.getText().toString());
+			}
+			handler.postDelayed(this, interval * 1000);
+		}
+	};
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		super.onClick();
-		if ( which == Dialog.BUTTON_POSITIVE){	
-			// update the prefs first
-			if(intervalSel.getSelectedItem().equals("1h")){
-				interval = 3600;
-			} else if (intervalSel.getSelectedItem().equals("1d")){
-				interval = 86400; // 24*3600s
+		if (which == Dialog.BUTTON_POSITIVE) {
+
+			if (automatic.isChecked()) {
+				// update the prefs first
+				if (intervalSel.getSelectedItem().equals("1h")) {
+					interval = 3600;
+				} else if (intervalSel.getSelectedItem().equals("1d")) {
+					interval = 86400; // 24*3600s
+				}
+				// create a new repeating runnable
+
+				handler.postDelayed(runnable, interval * 1000);
+			} else {
+				handler.removeCallbacks(runnable); // TODO: check if this really
+													// stops the queue
 			}
-			// create a new repeating runnable
-			
-			handler.postDelayed(runnable, interval*1000);
-			
-		} else if (which == Dialog.BUTTON_NEGATIVE){
-			
+
+		} else if (which == Dialog.BUTTON_NEGATIVE) {
+			// don't change anything
 		}
 	}
 
