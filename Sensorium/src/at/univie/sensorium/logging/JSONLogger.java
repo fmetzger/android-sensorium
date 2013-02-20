@@ -92,7 +92,16 @@ public class JSONLogger implements SensorChangeListener{
 				File extFile = new File(extDir, filename);
 				if (extFile.exists()) {
 					  //get the first free filename.number
-					
+					int i = 0;
+					boolean done = false;
+					while (!done) {				  
+						File f = new File(extDir, filename+"."+String.valueOf(i++));
+						if (f.exists())
+							continue;
+						extFile.renameTo(f);
+						extFile = new File(extDir, filename); // reset extFile to original pointer
+						done = true;
+					  }
 					}
 				FileWriter fw = new FileWriter(extFile);
 				writer = new JsonWriter(fw);
