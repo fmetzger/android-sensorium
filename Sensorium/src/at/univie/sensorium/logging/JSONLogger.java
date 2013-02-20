@@ -75,9 +75,7 @@ public class JSONLogger implements SensorChangeListener{
 		jsonMap = new HashMap<String, JsonWriter>();
 		writerMap = new HashMap<String, FileWriter>();
 		files = new LinkedList<File>();
-		// create new json file or open existing
 		// TODO: needs to check if there is external storage, else die (toast message?) gracefully
-		// TODO: move already existing files away to *.json.old
 		extDir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
 		extDir.mkdirs();
 		
@@ -90,7 +88,12 @@ public class JSONLogger implements SensorChangeListener{
 		JsonWriter writer = jsonMap.get(sensorname);
 		if (writer == null){
 			try {
-				File extFile = new File(extDir, sensorname.substring(sensorname.lastIndexOf('.')+1) + ".json");
+				String filename = sensorname.substring(sensorname.lastIndexOf('.')+1) + ".json";
+				File extFile = new File(extDir, filename);
+				if (extFile.exists()) {
+					  //get the first free filename.number
+					
+					}
 				FileWriter fw = new FileWriter(extFile);
 				writer = new JsonWriter(fw);
 				writer.beginArray();
@@ -119,7 +122,7 @@ public class JSONLogger implements SensorChangeListener{
 		
 		try {
 			jw.beginObject();
-			jw.name("privacy-level").value(sensor.getPrivacylevel().toString());
+			jw.name("privacy-level").value(sensor.getPrivacylevel().value());
 			for(SensorValue value: valuelist){
 				SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
 				jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
