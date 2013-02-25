@@ -16,7 +16,7 @@ installation on the device via XMLRPC. Sensors include:
 ## Develop ##
 
 1. Extend the AbstractSensor class
-
+2. Implement 
 
 ## Sensors ##
 
