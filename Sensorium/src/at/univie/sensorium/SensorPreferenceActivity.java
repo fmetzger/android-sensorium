@@ -70,6 +70,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		xmlrpcPref = new CheckBoxPreference(this);
 		xmlrpcPref.setKey("xmlrpc_enabled");
 		xmlrpcPref.setTitle("Enable XMLRPC");
+		xmlrpcPref.setDefaultValue(true);
 		xmlrpcPref.setSummary("Make sensor data available through localhost XMLRPC.");
 		xmlrpcPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 

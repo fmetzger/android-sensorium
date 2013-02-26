@@ -52,7 +52,8 @@ public class GPSLocationSensor extends AbstractSensor {
 	private SensorValue satellites;
 	private SensorValue address;
 	
-	private static final long GPS_UPDATE_TIME_INTERVAL=3000;
+	private static final long GPS_UPDATE_TIME_INTERVAL=10000; // milliseconds
+	private static final long GPS_UPDATE_MINIMAL_DISTANCE=30; // meters
 	
 	
 	public GPSLocationSensor(Context context) {
@@ -144,7 +145,7 @@ public class GPSLocationSensor extends AbstractSensor {
 		locationManager = ((LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE));
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, GPS_UPDATE_TIME_INTERVAL,
-				0, locationListener);
+				GPS_UPDATE_MINIMAL_DISTANCE, locationListener);
 		locationManager.addGpsStatusListener(gpsStatusListener);
 	}
 

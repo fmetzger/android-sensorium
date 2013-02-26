@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -310,21 +309,26 @@ public class SensorRegistry {
 	XMLRPCSensorServerThread xmlrpcserverthread;
 	Thread x;
 	public void startXMLRPCInterface() {
+		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		if(prefs.getBoolean("sensor_autostart", false)){
+		boolean xmlrpc_enabled = prefs.getBoolean("xmlrpc_enabled", true);
+		if(xmlrpc_enabled){
 			Log.d("SeattleSensors","starting XMLRPC interface");
-			Intent myintent = new Intent(context, SensorService.class);
-			context.startService(myintent);
+			xmlrpcserverthread = new XMLRPCSensorServerThread();
+			x = new Thread(xmlrpcserverthread);
+			x.start();
+			return;
 		} else {
 			Log.d("SeattleSensors","Not starting XMLRPC interface, preference disabled");
 		}
 		
 		
 		if (!XMLRPCSensorServerThread.running) {
-			// (new Thread(new XMLRPCSensorServerThread())).start(); 
+			Log.d("SeattleSensors","starting XMLRPC interface");
 			xmlrpcserverthread = new XMLRPCSensorServerThread();
 			x = new Thread(xmlrpcserverthread);
 			x.start();
+			//return;
 		} else {
 			Log.d("SeattleSensors", "XMLRPC thread already running, not spawning another one.");
 		}

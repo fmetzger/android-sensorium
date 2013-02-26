@@ -134,7 +134,7 @@ public class Privacy {
 			return anonymizesignalstrength(val, l);
 
 		default:
-			Log.d("SeattleSensors", "No known privacy methods for type " + val.getType().getName());
+//			Log.d("SeattleSensors", "No known privacy methods for type " + val.getType().getName());
 			return val;
 		}
 	}

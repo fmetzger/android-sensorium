@@ -113,6 +113,7 @@ public class XMLRPCSensorServerThread implements Runnable {
 						Log.d("SeattleSensors", "Listening socket timeout");
 						if (isstopped)
 							socket.close();
+							running = false;
 					}
 
 				}
