@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import at.univie.sensorium.SensorRegistry;
 
 public class InterfacesSensor extends AbstractSensor {
 
@@ -46,7 +47,7 @@ public class InterfacesSensor extends AbstractSensor {
 	@Override
 	protected void _enable() {
 		interfaceFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-		interfaceIntent = context.getApplicationContext().registerReceiver(interfaceReceiver, interfaceFilter);
+		interfaceIntent = getContext().getApplicationContext().registerReceiver(interfaceReceiver, interfaceFilter);
 
 		Log.d("SEATTLE DET STATE", connectivityManager.getActiveNetworkInfo().getDetailedState().toString());
 		// Log.d("SEATTLE EXTRA",
@@ -70,7 +71,7 @@ public class InterfacesSensor extends AbstractSensor {
 
 		@Override
 		protected Object doInBackground(Object... params) {
-			ConnectivityManager connMananger = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+			ConnectivityManager connMananger = (ConnectivityManager) SensorRegistry.getInstance().getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo netInfo = connMananger.getActiveNetworkInfo();
 			LinkedList<String> addresses = new LinkedList<String>();
 			try {

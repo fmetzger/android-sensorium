@@ -38,7 +38,7 @@ import at.univie.sensorium.sensors.SensorValue;
 public class Privacy {
 
 	public static enum PrivacyLevel {
-		NO(0, "Full Sensor Access"), LOW(1, "Low Privacy"), MED(2, "Medium Privacy"), HIGH(4, "High Privacy"), FULL(5, "Sensor Disabled");
+		NO(0, "Full Sensor Access"), LOW(1, "Low Privacy"), MED(2, "Medium Privacy"), HIGH(3, "High Privacy"), FULL(4, "Sensor Disabled");
 
 		private int value;
 		private String name;
@@ -59,15 +59,15 @@ public class Privacy {
 
 		public static PrivacyLevel fromInt(int x) {
 			switch (x) {
-			case 4:
+			case 0:
 				return NO;
-			case 3:
+			case 1:
 				return LOW;
 			case 2:
 				return MED;
-			case 1:
+			case 3:
 				return HIGH;
-			case 0:
+			case 4:
 				return FULL;
 			}
 			return null;

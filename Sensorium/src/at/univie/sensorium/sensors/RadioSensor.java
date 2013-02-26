@@ -68,7 +68,7 @@ public class RadioSensor extends AbstractSensor {
 	@Override
 	protected void _enable() {
 
-		telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
+		telephonyManager = ((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE));
 		GsmCellLocation gsmCell = (GsmCellLocation) telephonyManager.getCellLocation();
 
 		timestamp.setValue(System.currentTimeMillis());

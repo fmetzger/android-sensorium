@@ -77,7 +77,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 
 	@Override
 	protected void _enable() {
-		TelephonyManager telephonyManager = ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE));
+		TelephonyManager telephonyManager = ((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE));
 		String imei = telephonyManager.getDeviceId();
 		if (imei != null)
 				tac.setValue(imei.substring(0, 6));
@@ -86,7 +86,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 		vendorname.setValue(Build.MANUFACTURER);
 		modelname.setValue(Build.MODEL);
 		
-		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		ActivityManager activityManager = (ActivityManager) getContext().getSystemService(Context.ACTIVITY_SERVICE);
 		memoryInfo = new ActivityManager.MemoryInfo();
 		activityManager.getMemoryInfo(memoryInfo);
 		

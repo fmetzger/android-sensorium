@@ -42,7 +42,7 @@ public class WifiSensor extends AbstractSensor {
 		@Override
 		public void run() {
 			wifiFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-			wifiIntent = context.getApplicationContext().registerReceiver(wifiReceiver, wifiFilter);
+			wifiIntent = getContext().getApplicationContext().registerReceiver(wifiReceiver, wifiFilter);
 			scannedDevices.clear();
 			mainWifi.startScan();		        		
 			Log.d("scanTask", "restart scanning");
@@ -53,7 +53,7 @@ public class WifiSensor extends AbstractSensor {
 	
 	@Override
 	protected void _enable() {
-		mainWifi =  (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		mainWifi =  (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
 		
 		wifiReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
@@ -88,7 +88,7 @@ public class WifiSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 		if(wifiIntent != null)
-			context.getApplicationContext().unregisterReceiver(wifiReceiver);
+			getContext().getApplicationContext().unregisterReceiver(wifiReceiver);
 		handler.removeCallbacks(scanTask);
 		scannedDevices.clear();
 		scannedDevicesSV.setValue(scannedDevices);

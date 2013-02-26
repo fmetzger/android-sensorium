@@ -72,7 +72,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 				timestamp.setValue(loc.getTime());
 				speed.setValue(loc.getSpeed());
 				
-				Geocoder myLocation = new Geocoder(context.getApplicationContext(), Locale.getDefault());
+				Geocoder myLocation = new Geocoder(getContext().getApplicationContext(), Locale.getDefault());
 				List<Address> list = null;
 				try {
 					list = myLocation.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
@@ -105,7 +105,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 			}
 		};
 
-		locationManager = ((LocationManager) context.getSystemService(Context.LOCATION_SERVICE));
+		locationManager = ((LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE));
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		
 	}	

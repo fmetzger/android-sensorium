@@ -39,7 +39,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 	private Runnable scanTask = new Runnable() {
 		@Override
 		public void run() {			
-			mainWifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+			mainWifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
 			WifiInfo info = mainWifi.getConnectionInfo();  // the network that Android is connected to
 			ssid.setValue(info.getSSID());
 			ssid_hidden.setValue(info.getHiddenSSID());

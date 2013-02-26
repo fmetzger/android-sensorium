@@ -41,11 +41,9 @@ public abstract class AbstractSensor {
 	private String description = "";
 	private Privacy.PrivacyLevel plevel;
 
-	protected static Context context;
 	protected String name = "";
 
 	public AbstractSensor(Context context) {
-		this.context = context;
 		this.listeners = new LinkedList<SensorChangeListener>();
 		this.plevel = Privacy.PrivacyLevel.FULL;
 	}
@@ -55,7 +53,7 @@ public abstract class AbstractSensor {
 			try {
 				_enable();
 
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
 
 				int state = prefs.getInt(this.getClass().getName() + "-level", Privacy.PrivacyLevel.FULL.value());
@@ -79,7 +77,7 @@ public abstract class AbstractSensor {
 	public void disable() {
 		// if(enabled){
 		try {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 			prefs.edit().putBoolean(this.getClass().getName(), false).commit();
 			enabled = false;
 
@@ -188,5 +186,13 @@ public abstract class AbstractSensor {
 		for (SensorValue s : getSensorValues()) {
 			s.unsetValue();
 		}
+	}
+	
+	/**
+	 * Convenience method to access the application context
+	 * @return
+	 */
+	protected Context getContext(){
+		return SensorRegistry.getInstance().getContext();
 	}
 }

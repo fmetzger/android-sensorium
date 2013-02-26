@@ -44,8 +44,8 @@ import at.univie.sensorium.sensors.AbstractSensor;
  */
 public class SensorPreference extends Preference implements OnSeekBarChangeListener {
 	
-	private int mMaxValue = 100;
-	private int mMinValue = 0;
+	private final int mMaxValue = Privacy.PrivacyLevel.FULL.value();
+	private final int mMinValue = Privacy.PrivacyLevel.NO.value();
 	private int mInterval = 1;
 	private int mCurrentValue;
 	
@@ -56,24 +56,20 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 
 	public SensorPreference(Context context, AbstractSensor sensor) {
 		super(context);
-
-		mMaxValue = Privacy.PrivacyLevel.NO.value();
-		mMinValue = Privacy.PrivacyLevel.FULL.value();
-
-		mInterval = 1;
-
-		mPrivacyLevel = new SeekBar(context);
-		mPrivacyLevel.setMax(mMaxValue - mMinValue);
-		mPrivacyLevel.setOnSeekBarChangeListener(this);
-		
+		init(context);
 		this.sensor = sensor;
 	}
 	
 	public SensorPreference(Context context) {
 		super(context);
-
-		mMaxValue = Privacy.PrivacyLevel.NO.value();
-		mMinValue = Privacy.PrivacyLevel.FULL.value();
+		init(context);
+	}
+	
+	private void init(Context context){
+//		mMaxValue = Privacy.PrivacyLevel.NO.value();
+//		mMinValue = Privacy.PrivacyLevel.FULL.value();
+//		mMinValue = Privacy.PrivacyLevel.NO.value();
+//		mMaxValue = Privacy.PrivacyLevel.FULL.value();
 
 		mInterval = 1;
 
@@ -152,7 +148,8 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		int newValue = progress + mMinValue;
+//		int newValue = progress + mMinValue;
+		int newValue = mMaxValue - progress; // slider is reverse to the actual values, so subtract maxval
 
 		if (newValue > mMaxValue)
 			newValue = mMaxValue;
@@ -165,6 +162,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 			seekBar.setProgress(mCurrentValue - mMinValue);
 			return;
 		}
+		Log.d("SENSORVALUE", String.valueOf(newValue));
 		sensor.setPrivacylevel(Privacy.PrivacyLevel.fromInt(newValue));
 		if(newValue == Privacy.PrivacyLevel.FULL.value() && sensor.isEnabled()){
 			sensor.disable();

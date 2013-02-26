@@ -56,7 +56,7 @@ public class BluetoothSensor extends AbstractSensor {
 		public void run() {			
 			IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 			filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-			bluetoothIntent = context.getApplicationContext().registerReceiver(bluetoothReceiver, filter);
+			bluetoothIntent = getContext().getApplicationContext().registerReceiver(bluetoothReceiver, filter);
 			bluetoothAdapter.startDiscovery();	        		
 			Log.d("scanTask", "restart bluetooth scanning");
 			
@@ -123,7 +123,7 @@ public class BluetoothSensor extends AbstractSensor {
 	@Override
 	protected void _disable() {
 		if(bluetoothIntent != null)
-			context.getApplicationContext().unregisterReceiver(bluetoothReceiver);
+			getContext().getApplicationContext().unregisterReceiver(bluetoothReceiver);
 		handler.removeCallbacks(scanTask);
 		scannedDevices.clear();
 		sScannedDevices.setValue(scannedDevices);
