@@ -131,10 +131,8 @@ public class JSONLogger implements SensorChangeListener{
 		
 		try {
 			jw.beginObject();
-			Log.d("WRITER", sensor.getName());
-			Log.d("WRITER", sensor.getPrivacylevel().toString());
-			Log.d("WRITER", sensor.getPrivacylevel().name());
-			jw.name("privacy-level").value(sensor.getPrivacylevel().value());
+			Log.d("WRITER", String.valueOf(sensor.getPrivacylevel().value()));
+			jw.name("privacy-level").value(sensor.getPrivacylevel().name());
 			for(SensorValue value: valuelist){
 				SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
 				jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
