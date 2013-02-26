@@ -20,9 +20,6 @@
 
 package at.univie.sensorium;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
@@ -35,18 +32,15 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import at.univie.sensorium.R;
 import at.univie.sensorium.privacy.Privacy;
+import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 import at.univie.sensorium.sensors.AbstractSensor;
 
-/**
- * adapted from: http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
- */
 public class SensorPreference extends Preference implements OnSeekBarChangeListener {
 
 	private final int mMaxValue = Privacy.PrivacyLevel.FULL.value();
-	private final int mMinValue = Privacy.PrivacyLevel.NO.value();
-	private int mCurrentValue;
+	
+	private int mCurrentValue; // the current privacy level value, NOT the slider pos value!
 
 	private AbstractSensor sensor;
 
@@ -66,92 +60,54 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 
 	private void init(Context context) {
 		mPrivacyLevel = new SeekBar(context);
-		mPrivacyLevel.setMax(mMaxValue - mMinValue);
+		mPrivacyLevel.setMax(mMaxValue);
 		mPrivacyLevel.setOnSeekBarChangeListener(this);
 	}
 
 	@Override
 	protected View onCreateView(ViewGroup parent) {
+		LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		RelativeLayout layout = (RelativeLayout) mInflater.inflate(R.layout.sensor_preference_item, parent, false);
 
-		RelativeLayout layout = null;
-
-		try {
-			LayoutInflater mInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			layout = (RelativeLayout) mInflater.inflate(R.layout.sensor_preference_item, parent, false);
-
-			TextView title = (TextView) layout.findViewById(R.id.seekBarTitle);
-			title.setText(sensor.getName());
-			TextView summary = (TextView) layout.findViewById(R.id.seekBarSummary);
-			summary.setText(sensor.getDescription());
-		} catch (Exception e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
-		}
+		TextView title = (TextView) layout.findViewById(R.id.seekBarTitle);
+		title.setText(sensor.getName());
+		TextView summary = (TextView) layout.findViewById(R.id.seekBarSummary);
+		summary.setText(sensor.getDescription());
 
 		return layout;
-
 	}
 
 	@Override
 	public void onBindView(View view) {
 		super.onBindView(view);
 
-		try {
-			ViewParent oldContainer = mPrivacyLevel.getParent();
-			ViewGroup newContainer = (ViewGroup) view.findViewById(R.id.seekBarPrefBarContainer);
+		ViewParent oldContainer = mPrivacyLevel.getParent();
+		ViewGroup newContainer = (ViewGroup) view.findViewById(R.id.seekBarPrefBarContainer);
 
-			if (oldContainer != newContainer) {
-				if (oldContainer != null) {
-					((ViewGroup) oldContainer).removeView(mPrivacyLevel);
-				}
-				newContainer.removeAllViews();
-				newContainer.addView(mPrivacyLevel, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		if (oldContainer != newContainer) {
+			if (oldContainer != null) {
+				((ViewGroup) oldContainer).removeView(mPrivacyLevel);
 			}
-		} catch (Exception e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			newContainer.removeAllViews();
+			newContainer.addView(mPrivacyLevel, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		}
-
 		updateView(view);
 	}
 
 	protected void updateView(View view) {
-
-		try {
-			RelativeLayout layout = (RelativeLayout) view;
-
-			mStatusText = (TextView) layout.findViewById(R.id.seekBarPrefValue);
-			mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
-			mStatusText.setMinimumWidth(30);
-			mPrivacyLevel.setProgress(mCurrentValue - mMinValue);
-
-		} catch (Exception e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
-		}
-
+		RelativeLayout layout = (RelativeLayout) view;
+		mStatusText = (TextView) layout.findViewById(R.id.seekBarPrefValue);
+		mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
+		mStatusText.setMinimumWidth(30);
+		mPrivacyLevel.setProgress(mMaxValue - mCurrentValue);
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		
 		// slider is reverse to the actual values, so subtract maxval
 		int newValue = mMaxValue - progress;
 
-		if (newValue > mMaxValue)
-			newValue = mMaxValue;
-		else if (newValue < mMinValue)
-			newValue = mMinValue;
-
-		if (!callChangeListener(newValue)) {
-			seekBar.setProgress(mCurrentValue - mMinValue);
-			return;
-		}
 		sensor.setPrivacylevel(Privacy.PrivacyLevel.fromInt(newValue));
 		if (newValue == Privacy.PrivacyLevel.FULL.value() && sensor.isEnabled()) {
 			sensor.disable();
@@ -172,13 +128,12 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		// notifyChanged(); // this interferes with our reversed slider values
 	}
 
 	@Override
 	protected Object onGetDefaultValue(TypedArray ta, int index) {
-		int defaultValue = ta.getInt(index, Privacy.PrivacyLevel.FULL.value());
-		return defaultValue;
+		return ta.getInt(index, PrivacyLevel.FULL.value());
+
 	}
 
 	@Override
@@ -187,7 +142,6 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		if (restoreValue) {
 			mCurrentValue = getPersistedInt(mCurrentValue);
 		} else {
-			persistInt((Integer) defaultValue);
 			mCurrentValue = (Integer) defaultValue;
 		}
 	}
@@ -196,5 +150,4 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
 	}
-
 }
