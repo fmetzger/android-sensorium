@@ -47,9 +47,9 @@ public class RadioSensor extends AbstractSensor {
 
 
 	
-	public RadioSensor(Context context) {
-		super(context);
-		name = "Radio Cell Info Sensor";
+	public RadioSensor() {
+		super();
+		name = "Radio Cell Information";
 
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		mcc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MCC);

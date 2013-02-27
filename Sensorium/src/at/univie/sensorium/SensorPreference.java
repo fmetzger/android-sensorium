@@ -39,8 +39,11 @@ import at.univie.sensorium.sensors.AbstractSensor;
 public class SensorPreference extends Preference implements OnSeekBarChangeListener {
 
 	private final int mMaxValue = Privacy.PrivacyLevel.FULL.value();
-	
-	private int mCurrentValue; // the current privacy level value, NOT the slider pos value!
+
+	/**
+	 * represents the current privacy level value, NOT the slider pos value!
+	 */
+	private int mCurrentValue;
 
 	private AbstractSensor sensor;
 
@@ -104,7 +107,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		
+
 		// slider is reverse to the actual values, so subtract maxval
 		int newValue = mMaxValue - progress;
 
@@ -133,12 +136,10 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	@Override
 	protected Object onGetDefaultValue(TypedArray ta, int index) {
 		return ta.getInt(index, PrivacyLevel.FULL.value());
-
 	}
 
 	@Override
 	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-
 		if (restoreValue) {
 			mCurrentValue = getPersistedInt(mCurrentValue);
 		} else {

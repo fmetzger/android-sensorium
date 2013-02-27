@@ -36,16 +36,18 @@ public class InterfacesSensor extends AbstractSensor {
 		}
 	};
 
-	public InterfacesSensor(final Context context) {
-		super(context);
+	public InterfacesSensor() {
+		super();
 		name = "Network Interfaces";
 		ipaddresses = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.DEVICE_IP);
-		connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		
 
 	}
 
 	@Override
 	protected void _enable() {
+		connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+		
 		interfaceFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		interfaceIntent = getContext().getApplicationContext().registerReceiver(interfaceReceiver, interfaceFilter);
 

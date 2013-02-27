@@ -31,8 +31,8 @@ import android.util.Log;
  */
 public class DummySensor extends AbstractSensor {
 
-	public DummySensor(Context context) {
-		super(context);
+	public DummySensor() {
+		super();
 		this.name = "Test Sensor";
 	}
 	

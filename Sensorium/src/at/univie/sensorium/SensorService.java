@@ -20,18 +20,23 @@
 
 package at.univie.sensorium;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.logging.JSONLogger;
+import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.BatterySensor;
 import at.univie.sensorium.sensors.BluetoothSensor;
 import at.univie.sensorium.sensors.DeviceInfoSensor;
@@ -68,18 +73,47 @@ public class SensorService extends Service {
 	}
 
 	private void startSensors() {
+		
 		registry = SensorRegistry.getInstance();
-		registry.registerSensor(new DeviceInfoSensor(this));
-		registry.registerSensor(new InterfacesSensor(this));
-		registry.registerSensor(new RadioSensor(this));
-
-		registry.registerSensor(new NetworkLocationSensor(this));
-		registry.registerSensor(new GPSLocationSensor(this));
-		registry.registerSensor(new BatterySensor(this));
-		// registry.registerSensor(new DummySensor(this));
-		registry.registerSensor(new WifiSensor(this));
-		registry.registerSensor(new WifiConnectionSensor(this));
-		registry.registerSensor(new BluetoothSensor(this));
+		
+		Resources res = getResources();
+		String[] sensorclassnames = res.getStringArray(R.array.sensors);
+		
+		for (String classname: sensorclassnames){
+			Log.d("SENSORS", classname);
+			try {
+				AbstractSensor s = (AbstractSensor) Class.forName(classname).newInstance();
+				registry.registerSensor(s);
+			} catch (ClassNotFoundException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			} catch (InstantiationException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			} catch (IllegalAccessException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d("SeattleSensors", sw.toString());
+			}
+		}
+		
+		
+//		registry.registerSensor(new DeviceInfoSensor());
+//		registry.registerSensor(new InterfacesSensor());
+//		registry.registerSensor(new RadioSensor());
+//
+//		registry.registerSensor(new NetworkLocationSensor());
+//		registry.registerSensor(new GPSLocationSensor());
+//		registry.registerSensor(new BatterySensor());
+//		// registry.registerSensor(new DummySensor(this));
+//		registry.registerSensor(new WifiSensor());
+//		registry.registerSensor(new WifiConnectionSensor());
+//		registry.registerSensor(new BluetoothSensor());
 		registry.startup(this);
 
 		registry.startXMLRPCInterface();

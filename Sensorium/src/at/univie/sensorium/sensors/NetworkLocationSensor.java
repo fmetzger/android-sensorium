@@ -46,10 +46,10 @@ public class NetworkLocationSensor extends AbstractSensor {
 	private SensorValue address;
 	private SensorValue speed;
 
-	public NetworkLocationSensor(Context context) {
-		super(context);
+	public NetworkLocationSensor() {
+		super();
 
-		name = "Network Loc Sensor";
+		name = "Network Location";
 		
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);

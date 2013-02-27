@@ -21,9 +21,9 @@ public class WifiConnectionSensor extends AbstractSensor {
 	String AP = "";  // the AP that is connected to
 	private int scan_interval = 10; // sec
 
-	public WifiConnectionSensor(Context context){
-		super(context);
-		name = "Wifi Connection Sensor";
+	public WifiConnectionSensor(){
+		super();
+		name = "Wifi Connections";
 		
 		ssid = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SSID);
 		ssid_hidden = new SensorValue(SensorValue.UNIT.OTHER, SensorValue.TYPE.SSID_HIDDEN);

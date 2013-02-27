@@ -48,10 +48,10 @@ public class DeviceInfoSensor extends AbstractSensor {
 	private Handler handler = new Handler();
 	private int scan_interval = 30; // sec
 	
-	public DeviceInfoSensor(Context context) {
-		super(context);
+	public DeviceInfoSensor() {
+		super();
 
-		name = "General Device Information";
+		name = "Device Information";
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);

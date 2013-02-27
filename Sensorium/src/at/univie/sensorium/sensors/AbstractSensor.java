@@ -43,7 +43,7 @@ public abstract class AbstractSensor {
 
 	protected String name = "";
 
-	public AbstractSensor(Context context) {
+	public AbstractSensor() {
 		this.listeners = new LinkedList<SensorChangeListener>();
 		this.plevel = Privacy.PrivacyLevel.FULL;
 	}
@@ -189,7 +189,9 @@ public abstract class AbstractSensor {
 	}
 	
 	/**
-	 * Convenience method to access the application context
+	 * Convenience method to access the application context.
+	 * However, you should not call this in your sensor constructor,
+	 * the value might not be initialized yet
 	 * @return
 	 */
 	protected Context getContext(){

@@ -40,9 +40,9 @@ public class BatterySensor extends AbstractSensor {
 	
 	
 
-	public BatterySensor(Context context) {
-		super(context);
-		name = "Battery Sensor";
+	public BatterySensor() {
+		super();
+		name = "Battery Information";
 		
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		level = new SensorValue(SensorValue.UNIT.RELATIVE, SensorValue.TYPE.CHARGE);

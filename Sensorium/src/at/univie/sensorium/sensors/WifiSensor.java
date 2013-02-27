@@ -30,9 +30,9 @@ public class WifiSensor extends AbstractSensor {
 	private int totalSize;
 	private int scan_interval = 10; // sec	
 
-	public WifiSensor(Context context) {
-		super(context);
-		name = "Wifi Scan Sensor";
+	public WifiSensor() {
+		super();
+		name = "Wifi Scan";
 		
 		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.DEVICE_IP);	
 		scannedDevices = new LinkedList<WifiDevice>();
@@ -67,7 +67,7 @@ public class WifiSensor extends AbstractSensor {
 		        for(int i = 0; i < length; i++){
 		        	ScanResult result = wifiList.get(i);
 		        	String message = String.format("%s. %s \t BSSID: %s \t Signal level: %d dBm \t " +
-		        			"capabilities: %s \t frequency: %.3f GHz", new Integer(i+1).toString(), 
+		        			"capabilities: %s \t frequency: %.3f GHz", Integer.valueOf(i+1).toString(), 
 		        			result.SSID, result.BSSID, result.level, result.capabilities, 
 		        			(float)result.frequency/1000);
 		        	SensorRegistry.getInstance().log("WiFi", message);

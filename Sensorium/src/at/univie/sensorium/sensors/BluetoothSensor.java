@@ -39,8 +39,8 @@ public class BluetoothSensor extends AbstractSensor {
 	
 	private int scan_interval = 10; // sec
 
-	public BluetoothSensor(Context context) {
-		super(context);
+	public BluetoothSensor() {
+		super();
 		name = "Bluetooth Sensor";
 		
 		localDeviceName = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);

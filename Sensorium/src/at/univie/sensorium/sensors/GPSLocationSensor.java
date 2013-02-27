@@ -56,10 +56,10 @@ public class GPSLocationSensor extends AbstractSensor {
 	private static final long GPS_UPDATE_MINIMAL_DISTANCE=30; // meters
 	
 	
-	public GPSLocationSensor(Context context) {
-		super(context);
+	public GPSLocationSensor() {
+		super();
 
-		name = "GPS Loc Sensor";
+		name = "GPS Location";
 		
 		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
