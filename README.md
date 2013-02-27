@@ -15,10 +15,22 @@ installation on the device via XMLRPC. Sensors include:
 
 ## Develop ##
 
-1. Extend the AbstractSensor class
-2. Implement 
+### Implementing New Sensors ###
 
-## Sensors ##
+1. Extend the AbstractSensor class
+2. Implement your sensor reading stuff, putting all values to be published in SensorValue objects
+3. Call notifyListeners() whenever your Sensors wants to have its values updated
+4. Put your class name into the res/values/sensors.xml to get it loaded
+
+### Implementing New External Interfaces ###
+
+Currently, we either talk through XMLRPC to your locally running code or we push JSON data to Web Servers.
+
+Have better ways of communicating your sensors? Implement it! Here's what you need to do:
+
+1. ...
+
+## Available Sensors ##
 
 To enable sensors, either altogether or individually, go to the "SETTINGS" menu. 
 Under "GENERAL PREFERENCE", users can select whether to start the sensor 

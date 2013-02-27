@@ -33,19 +33,11 @@ import android.content.res.Resources;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.sensors.AbstractSensor;
-import at.univie.sensorium.sensors.BatterySensor;
-import at.univie.sensorium.sensors.BluetoothSensor;
-import at.univie.sensorium.sensors.DeviceInfoSensor;
-import at.univie.sensorium.sensors.GPSLocationSensor;
-import at.univie.sensorium.sensors.InterfacesSensor;
-import at.univie.sensorium.sensors.NetworkLocationSensor;
-import at.univie.sensorium.sensors.RadioSensor;
-import at.univie.sensorium.sensors.WifiConnectionSensor;
-import at.univie.sensorium.sensors.WifiSensor;
 
 public class SensorService extends Service {
 	private SensorRegistry registry;
@@ -54,8 +46,8 @@ public class SensorService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		Log.d("LocalService", "Received bind intent");
-		startSensors();
+		Log.d("LocalService", "Received bind intent: " + intent);
+		init();
 		return mBinder;
 	}
 
@@ -68,22 +60,26 @@ public class SensorService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d("LocalService", "Received start id " + startId + ": " + intent);
-		startSensors();
+		init();
 		return START_STICKY;
 	}
 
-	private void startSensors() {
-		
+	private void init() {
 		registry = SensorRegistry.getInstance();
-		
+		startSensors();
+		registry.startup(this);
+		startExtInterfaces();
+	}
+
+	private void startSensors() {
 		Resources res = getResources();
 		String[] sensorclassnames = res.getStringArray(R.array.sensors);
-		
-		for (String classname: sensorclassnames){
+
+		for (String classname : sensorclassnames) {
 			Log.d("SENSORS", classname);
 			try {
 				AbstractSensor s = (AbstractSensor) Class.forName(classname).newInstance();
-				registry.registerSensor(s);
+				SensorRegistry.getInstance().registerSensor(s);
 			} catch (ClassNotFoundException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
@@ -101,50 +97,39 @@ public class SensorService extends Service {
 				Log.d("SeattleSensors", sw.toString());
 			}
 		}
-		
-		
-//		registry.registerSensor(new DeviceInfoSensor());
-//		registry.registerSensor(new InterfacesSensor());
-//		registry.registerSensor(new RadioSensor());
-//
-//		registry.registerSensor(new NetworkLocationSensor());
-//		registry.registerSensor(new GPSLocationSensor());
-//		registry.registerSensor(new BatterySensor());
-//		// registry.registerSensor(new DummySensor(this));
-//		registry.registerSensor(new WifiSensor());
-//		registry.registerSensor(new WifiConnectionSensor());
-//		registry.registerSensor(new BluetoothSensor());
-		registry.startup(this);
+	}
 
+	private void startExtInterfaces() {
 		registry.startXMLRPCInterface();
-
-		// attach the JSON writer
 		createJSONLoggerUploader();
 		registry.getJSONLogger().init(registry.getSensors());
 	}
-	
-	private void createJSONLoggerUploader(){
+
+	private void createJSONLoggerUploader() {
 		registry.setJSONLogger(new JSONLogger());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if(prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_AUTOMATIC_PREF, false)){
+		if (prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_AUTOMATIC_PREF, false)) {
 			long interval = prefs.getLong(HTTPSUploaderDialogPreference.UPLOAD_INTERVAL_PREF, 3600);
 			boolean wifi = prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_WIFI_PREF, false);
-			String url =  prefs.getString(HTTPSUploaderDialogPreference.UPLOAD_URL_PREF, "");
-			
+			String url = prefs.getString(HTTPSUploaderDialogPreference.UPLOAD_URL_PREF, "");
 			registry.getJSONLogger().autoupload(url, interval, wifi);
 		}
 	}
 
-
 	@Override
 	public void onCreate() {
-		Notification sensorsNot = new Notification();
-		sensorsNot.icon = R.drawable.ic_launcher;
-		sensorsNot.when = System.currentTimeMillis();
-		Intent notificationIntent = new Intent(this, SensoriumActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		sensorsNot.setLatestEventInfo(this, "SeattleSensors", "running", contentIntent);
-		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(NOTIFICATION, sensorsNot);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, SensoriumActivity.class),PendingIntent.FLAG_CANCEL_CURRENT);
+		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+		builder.setContentIntent(contentIntent)
+		            .setSmallIcon(R.drawable.ic_launcher)
+		            .setWhen(System.currentTimeMillis())
+		            .setAutoCancel(true)
+		            .setContentTitle("SeattleSensors")
+		            .setContentText("running");
+		Notification n = builder.build();
+		nm.notify(NOTIFICATION, n);
 	}
 
 	@Override
