@@ -149,9 +149,9 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		int pos;
 		
 		if (interval == 3600){
-			pos = ((ArrayAdapter) intervalSel.getAdapter()).getPosition("1h");
+			pos = ((ArrayAdapter<String>) intervalSel.getAdapter()).getPosition("1h");
 		} else if (interval == 86400){
-			pos = ((ArrayAdapter) intervalSel.getAdapter()).getPosition("1d");
+			pos = ((ArrayAdapter<String>) intervalSel.getAdapter()).getPosition("1d");
 		} else {
 			pos = 0;
 		}

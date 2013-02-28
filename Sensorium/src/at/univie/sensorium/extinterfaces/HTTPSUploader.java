@@ -98,7 +98,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 			HttpPost httppost = new HttpPost(posturl);
 		    MultipartEntity mpEntity = new MultipartEntity();
 		    for(File file: files){
-			    ContentBody cbFile = new FileBody(file, "binary/octet-stream");
+			    ContentBody cbFile = new FileBody(file, "application/json");
 			    mpEntity.addPart(file.toString(), cbFile);
 		    }
 			//reqEntity.setChunked(true); // Send in multiple parts if needed
