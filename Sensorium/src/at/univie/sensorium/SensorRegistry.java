@@ -311,7 +311,7 @@ public class SensorRegistry {
 	public void startXMLRPCInterface() {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean xmlrpc_enabled = prefs.getBoolean("xmlrpc_enabled", true);
+		boolean xmlrpc_enabled = prefs.getBoolean(SensorPreferenceActivity.INTERFACES_XMLRPC_PREF, true);
 		if(xmlrpc_enabled){
 			Log.d("SeattleSensors","starting XMLRPC interface");
 			xmlrpcserverthread = new XMLRPCSensorServerThread();

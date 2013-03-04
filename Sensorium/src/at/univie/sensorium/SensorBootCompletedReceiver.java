@@ -33,7 +33,7 @@ public class SensorBootCompletedReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		if(prefs.getBoolean("sensor_autostart", false)){
+		if(prefs.getBoolean(SensorPreferenceActivity.SENSOR_AUTOSTART_PREF, false)){
 			Log.d("SeattleSensors","boot completed receiver starting service");
 			Intent myintent = new Intent(context, SensorService.class);
 			context.startService(myintent);

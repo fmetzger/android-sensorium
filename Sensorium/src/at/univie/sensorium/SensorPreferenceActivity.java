@@ -36,6 +36,9 @@ import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {
+	
+	public static final String SENSOR_AUTOSTART_PREF = "sensor_autostart";
+	public static final String INTERFACES_XMLRPC_PREF = "xmlrpc_enabled";
 
 	SharedPreferences.OnSharedPreferenceChangeListener listener;
 
@@ -58,7 +61,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		root.addPreference(generalCat);
 
 		autostartPref = new CheckBoxPreference(this);
-		autostartPref.setKey("sensor_autostart");
+		autostartPref.setKey(SENSOR_AUTOSTART_PREF);
 		autostartPref.setTitle("Sensor starts on boot");
 		autostartPref.setSummary("Keeps the sensor service running at all times.");
 		generalCat.addPreference(autostartPref);
@@ -68,7 +71,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		root.addPreference(interfacesCat);
 
 		xmlrpcPref = new CheckBoxPreference(this);
-		xmlrpcPref.setKey("xmlrpc_enabled");
+		xmlrpcPref.setKey("INTERFACES_XMLRPC_PREF");
 		xmlrpcPref.setTitle("Enable XMLRPC");
 		xmlrpcPref.setDefaultValue(true);
 		xmlrpcPref.setSummary("Make sensor data available through localhost XMLRPC.");
@@ -100,7 +103,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 		for (AbstractSensor sensor : sensors) {
 			SensorPreference sPref = new SensorPreference(this, sensor);
-			sPref.setKey(sensor.getClass().getName() + "-level");
+			sPref.setKey(sensor.getClass().getName() + "-privacylevel");
 			sensorsCat.addPreference(sPref);
 		}
 		return root;

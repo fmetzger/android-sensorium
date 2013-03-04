@@ -56,7 +56,7 @@ public abstract class AbstractSensor {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
 
-				int state = prefs.getInt(this.getClass().getName() + "-level", Privacy.PrivacyLevel.FULL.value());
+				int state = prefs.getInt(this.getClass().getName() + "-privacylevel", Privacy.PrivacyLevel.FULL.value());
 				setPrivacylevel(PrivacyLevel.fromInt(state));
 
 				enabled = true;

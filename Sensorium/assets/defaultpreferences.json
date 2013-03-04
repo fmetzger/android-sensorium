@@ -1,0 +1,29 @@
+ [
+   {
+     "upload_url": "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php",
+     "upload_automatic": "true",
+     "upload_wifi": "false",
+     "upload_interval": "0",
+	
+	"at.univie.sensorium.sensors.BatterySensor", "true",
+	"at.univie.sensorium.sensors.GPSLocationSensor", "true",
+	"at.univie.sensorium.sensors.DeviceInfoSensor", "true",
+	"at.univie.sensorium.sensors.NetworkLocationSensor", "true",
+	"at.univie.sensorium.sensors.RadioSensor", "true",
+	"at.univie.sensorium.sensors.BluetoothSensor", "false",
+	"at.univie.sensorium.sensors.WifiConnectionSensor", "false",
+	"at.univie.sensorium.sensors.WifiSensor", "false",
+	
+	
+	"at.univie.sensorium.sensors.BatterySensor-privacylevel", "NO",
+	"at.univie.sensorium.sensors.BluetoothSensor-privacylevel", "FULL",
+	"at.univie.sensorium.sensors.GPSLocationSensor-privacylevel", "NO",
+	"at.univie.sensorium.sensors.DeviceInfoSensor-privacylevel", "NO",
+	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel", "NO",
+	"at.univie.sensorium.sensors.RadioSensor-privacylevel", "NO",
+	"at.univie.sensorium.sensors.WifiConnectionSensor-privacylevel", "FULL",
+	"at.univie.sensorium.sensors.WifiSensor-privacylevel", "FULL"
+	 
+   }
+ ]
+ 
