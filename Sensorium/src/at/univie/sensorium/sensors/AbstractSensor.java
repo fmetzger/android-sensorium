@@ -177,6 +177,8 @@ public abstract class AbstractSensor {
 	}
 
 	public void setPrivacylevel(Privacy.PrivacyLevel privacylevel) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.edit().putInt(this.getClass().getName() + "-privacylevel", Privacy.PrivacyLevel.FULL.value()).commit();
 		this.plevel = privacylevel;
 		notifyListeners();
 	}
@@ -196,5 +198,17 @@ public abstract class AbstractSensor {
 	 */
 	protected Context getContext(){
 		return SensorRegistry.getInstance().getContext();
+	}
+	
+	public String getSensorStateDescription(){
+		String sensorstate = "state unavailable";
+//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SensorRegistry.getInstance().getContext());
+//		boolean enabled = prefs.getBoolean(this.getClass().getName(), true);
+		if(!enabled)
+			sensorstate = "Sensor disabled";
+		else
+			sensorstate = this.getPrivacylevel().toString();
+		
+		return sensorstate;
 	}
 }

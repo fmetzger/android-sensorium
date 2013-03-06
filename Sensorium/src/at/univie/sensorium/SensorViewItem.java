@@ -22,6 +22,8 @@ package at.univie.sensorium;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.TextView;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;
@@ -62,7 +64,8 @@ public class SensorViewItem implements SensorChangeListener {
 			sTypes.append(v.getType().getName() + "\n");
 		}
 		textViewSensorName.setText(sensor.getName());
-		textViewSensorPrivacyLevel.setText(sensor.getPrivacylevel().toString());
+		
+		textViewSensorPrivacyLevel.setText(sensor.getSensorStateDescription());
 		textViewSensorValues.setText(sValues.toString());
 		textViewSensorUnits.setText(" " + sUnits.toString());
 		textViewSensorTypes.setText(sTypes.toString());

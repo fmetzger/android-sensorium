@@ -1,35 +1,52 @@
 package at.univie.sensorium.extinterfaces;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.message.BasicNameValuePair;
 
-import com.google.gson.stream.JsonReader;
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.google.gson.stream.JsonReader;
 
 
 public class PreferenceJSONLoader {
 	
-	public PreferenceJSONLoader(){
+	SharedPreferences prefs;
+	
+	public PreferenceJSONLoader(Context context){
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	}
+	
+	public void loadPrefsFromFile(String filename){
+		try {
+			FileInputStream stream = new FileInputStream(new File(filename));
+			loadPrefsFromStream(stream);
+		} catch (FileNotFoundException e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
+		}
 		
 	}
 
-	public void loadPrefsFromFile(String filename){
-		File prefsFile = new File(filename);
-		FileReader fw;
+	public void loadPrefsFromStream(InputStream input){
 		List<BasicNameValuePair> prefs = new LinkedList<BasicNameValuePair>(); 
 		try {
-			fw = new FileReader(prefsFile);
-			JsonReader reader = new JsonReader(fw);
+			InputStreamReader isreader = new InputStreamReader(input);
+			JsonReader reader = new JsonReader(isreader);
 			reader.beginArray(); // do we have an array or just a single object?
 
 		     reader.beginObject();
@@ -51,8 +68,10 @@ public class PreferenceJSONLoader {
 			e.printStackTrace(pw);
 			Log.d("SeattleSensors", sw.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d("SeattleSensors", sw.toString());
 		}
 		
 	}

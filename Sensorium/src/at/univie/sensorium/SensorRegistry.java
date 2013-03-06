@@ -69,7 +69,7 @@ public class SensorRegistry {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		for (AbstractSensor sensor : sensors) {
 			try {
-				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), false);
+				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), true);
 				Log.d("SeattleSensors", sensor.getClass().getName() + ": " + savedstate);
 				if (savedstate)
 					sensor.enable();

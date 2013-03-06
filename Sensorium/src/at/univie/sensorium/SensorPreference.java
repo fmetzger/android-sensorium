@@ -100,7 +100,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 	protected void updateView(View view) {
 		RelativeLayout layout = (RelativeLayout) view;
 		mStatusText = (TextView) layout.findViewById(R.id.seekBarPrefValue);
-		mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
+		mStatusText.setText(sensor.getSensorStateDescription());
 		mStatusText.setMinimumWidth(30);
 		mPrivacyLevel.setProgress(mMaxValue - mCurrentValue);
 	}
@@ -121,7 +121,7 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		}
 		mCurrentValue = newValue;
 
-		mStatusText.setText(Privacy.PrivacyLevel.fromInt(mCurrentValue).toString());
+		mStatusText.setText(sensor.getSensorStateDescription());
 		persistInt(newValue);
 	}
 
