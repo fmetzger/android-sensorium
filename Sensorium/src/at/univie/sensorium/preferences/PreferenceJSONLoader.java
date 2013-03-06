@@ -1,4 +1,4 @@
-package at.univie.sensorium.extinterfaces;
+package at.univie.sensorium.preferences;
 
 import java.io.File;
 import java.io.FileInputStream;

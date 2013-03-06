@@ -36,8 +36,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
-import at.univie.sensorium.extinterfaces.PreferenceJSONLoader;
 import at.univie.sensorium.logging.JSONLogger;
+import at.univie.sensorium.preferences.PreferenceJSONLoader;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorService extends Service {

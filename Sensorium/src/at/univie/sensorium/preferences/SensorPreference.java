@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -32,6 +32,9 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import at.univie.sensorium.R;
+import at.univie.sensorium.R.id;
+import at.univie.sensorium.R.layout;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 import at.univie.sensorium.sensors.AbstractSensor;

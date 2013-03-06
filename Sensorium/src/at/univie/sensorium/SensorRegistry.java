@@ -34,6 +34,7 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
 import at.univie.sensorium.logging.JSONLogger;
+import at.univie.sensorium.preferences.SensorPreferenceActivity;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorValue;

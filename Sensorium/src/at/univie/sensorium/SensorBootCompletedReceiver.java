@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import at.univie.sensorium.preferences.SensorPreferenceActivity;
 
 public class SensorBootCompletedReceiver extends BroadcastReceiver {
 

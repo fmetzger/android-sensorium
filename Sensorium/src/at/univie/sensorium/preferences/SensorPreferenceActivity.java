@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.preferences;
 
 import java.util.List;
 
@@ -32,6 +32,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
+import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.SensoriumApplication;
 import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
 

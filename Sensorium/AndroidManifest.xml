@@ -43,7 +43,7 @@
                 android:value="at.univie.sensorium.SeattleSensorsActivity" />
         </activity>
         <activity
-            android:name=".SensorPreferenceActivity"
+            android:name="at.univie.sensorium.preferences.SensorPreferenceActivity"
             android:label="@string/title_activity_sensor_config" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
