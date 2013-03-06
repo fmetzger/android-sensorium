@@ -68,8 +68,8 @@ public class SensorService extends Service {
 	private void init() {
 		
 		PreferenceJSONLoader loader = new PreferenceJSONLoader(this);
+		loader.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
 		
-		loader.loadPrefsFromStream(getResources().openRawResource(R.raw.defaultpreferences));
 		
 		registry = SensorRegistry.getInstance();
 		startSensors();
