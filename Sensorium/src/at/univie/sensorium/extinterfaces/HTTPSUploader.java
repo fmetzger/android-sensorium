@@ -41,6 +41,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 import at.univie.sensorium.SensorRegistry;
 
@@ -76,21 +77,26 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 	private void uploadFiles(List<File> files) {
 		try {
 
-			DefaultHttpClient httpclient = new DefaultHttpClient();
-			//HttpHost targetHost = new HttpHost(host, -1, "https");
-			//httpclient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(username, password));
+			if (URLUtil.isValidUrl(posturl)){
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				//HttpHost targetHost = new HttpHost(host, -1, "https");
+				//httpclient.getCredentialsProvider().setCredentials(new AuthScope(targetHost.getHostName(), targetHost.getPort()), new UsernamePasswordCredentials(username, password));
 
-			HttpPost httppost = new HttpPost(posturl);
-		    MultipartEntity mpEntity = new MultipartEntity();
-		    for(File file: files){
-			    ContentBody cbFile = new FileBody(file, "application/json");
-			    mpEntity.addPart(file.toString(), cbFile);
-		    }
-			//reqEntity.setChunked(true); // Send in multiple parts if needed
-		    httppost.setEntity(mpEntity);
-			HttpResponse response = httpclient.execute(httppost);
-			
-			Log.d("HTTPRESPONSE", "Response status: "+ response.getStatusLine().getStatusCode());
+				HttpPost httppost = new HttpPost(posturl);
+			    MultipartEntity mpEntity = new MultipartEntity();
+			    for(File file: files){
+				    ContentBody cbFile = new FileBody(file, "application/json");
+				    mpEntity.addPart(file.toString(), cbFile);
+			    }
+				//reqEntity.setChunked(true); // Send in multiple parts if needed
+			    httppost.setEntity(mpEntity);
+				HttpResponse response = httpclient.execute(httppost);
+				
+				Log.d("SeattleSensors", "Http upload completed with response: "+ response.getStatusLine().getStatusCode());
+			} else {
+				Log.d("SeattleSensors", "Invalid http upload url, aborting.");
+			}
+
 
 		} catch (IllegalArgumentException e){
 			StringWriter sw = new StringWriter();
