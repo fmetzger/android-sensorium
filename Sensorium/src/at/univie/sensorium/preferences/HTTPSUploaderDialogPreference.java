@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium.extinterfaces;
+package at.univie.sensorium.preferences;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -41,11 +41,6 @@ import at.univie.sensorium.R;
 import at.univie.sensorium.SensorRegistry;
 
 public class HTTPSUploaderDialogPreference extends DialogPreference {
-
-	public static final String UPLOAD_URL_PREF = "upload_url";
-	public static final String UPLOAD_AUTOMATIC_PREF = "upload_automatic";
-	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
-	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
 
 	private EditText url;
 	private Spinner intervalSel;
@@ -101,7 +96,6 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 
 	}
 
-
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
 		super.onDialogClosed(positiveResult);
@@ -109,31 +103,29 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		if (positiveResult) {
 			Editor editor = getEditor();
 
-			editor.putString(UPLOAD_URL_PREF, url.getText().toString());
-			editor.putBoolean(UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
-			editor.putBoolean(UPLOAD_WIFI_PREF, wifi.isChecked());
-			editor.putInt(UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
+			editor.putString(Preferences.UPLOAD_URL_PREF, url.getText().toString());
+			editor.putBoolean(Preferences.UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
+			editor.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
+			editor.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 			editor.commit();
 		}
 	}
 
 	protected void populateDialog() {
 		SharedPreferences sPref = getSharedPreferences();
-		String sUrl = sPref.getString(UPLOAD_URL_PREF, "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
-		Boolean bAuto = sPref.getBoolean(UPLOAD_AUTOMATIC_PREF, true);
-		Boolean bWifi = sPref.getBoolean(UPLOAD_WIFI_PREF, false);
-		Long lInterval = sPref.getLong(UPLOAD_INTERVAL_PREF, 0);
+		String sUrl = sPref.getString(Preferences.UPLOAD_URL_PREF, "");
+		Boolean bAuto = sPref.getBoolean(Preferences.UPLOAD_AUTOMATIC_PREF, true);
+		Boolean bWifi = sPref.getBoolean(Preferences.UPLOAD_WIFI_PREF, false);
+		Integer lInterval = sPref.getInt(Preferences.UPLOAD_INTERVAL_PREF, 3600);
 
 		url.setText(sUrl);
 		automatic.setChecked(bAuto);
 		wifi.setChecked(bWifi);
 		intervalSel.setSelection(getSpinnerPosForInterval(lInterval));
 	}
-	
-	
-	protected long retrieveInterval(){
-		long interval;
-		
+
+	protected int retrieveInterval() {
+		int interval;
 		if (intervalSel.getSelectedItem().equals("1h")) {
 			interval = 3600;
 		} else if (intervalSel.getSelectedItem().equals("1d")) {
@@ -141,21 +133,18 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		} else { // default value
 			interval = 3600;
 		}
-		
-		return  interval;
+		return interval;
 	}
-	
-	protected int getSpinnerPosForInterval(long interval){
+
+	protected int getSpinnerPosForInterval(int interval) {
 		int pos;
-		
-		if (interval == 3600){
+		if (interval == 3600) {
 			pos = ((ArrayAdapter<String>) intervalSel.getAdapter()).getPosition("1h");
-		} else if (interval == 86400){
+		} else if (interval == 86400) {
 			pos = ((ArrayAdapter<String>) intervalSel.getAdapter()).getPosition("1d");
 		} else {
 			pos = 0;
 		}
-		
 		return pos;
 	}
 
@@ -167,20 +156,16 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		super.onClick();
-		
-		// TODO: update persisted values only when OK button pressed
-		
-		if (which == Dialog.BUTTON_POSITIVE) {
 
+		// TODO: update persisted values only when OK button pressed
+
+		if (which == Dialog.BUTTON_POSITIVE) {
 			if (automatic.isChecked()) {
 				// update the prefs first
-
-				
 				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), retrieveInterval(), wifi.isChecked());
 			} else {
 				SensorRegistry.getInstance().getJSONLogger().cancelautoupload();
 			}
-
 		} else if (which == Dialog.BUTTON_NEGATIVE) {
 			// don't change anything
 		}

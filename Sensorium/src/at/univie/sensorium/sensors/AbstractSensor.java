@@ -27,8 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.privacy.Privacy;
@@ -53,11 +51,9 @@ public abstract class AbstractSensor {
 			try {
 				_enable();
 
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-				prefs.edit().putBoolean(this.getClass().getName(), true).commit();
+				SensorRegistry.getInstance().getPreferences().putBoolean(this.getClass().getName(), true);
 
-				int state = prefs.getInt(this.getClass().getName() + "-privacylevel", Privacy.PrivacyLevel.FULL.value());
-				setPrivacylevel(PrivacyLevel.fromInt(state));
+				setPrivacylevel(PrivacyLevel.fromInt(SensorRegistry.getInstance().getPreferences().getInt(this.getClass().getName() + "-privacylevel", Privacy.PrivacyLevel.FULL.value())));
 
 				enabled = true;
 				notifyListeners();
@@ -77,8 +73,7 @@ public abstract class AbstractSensor {
 	public void disable() {
 		// if(enabled){
 		try {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-			prefs.edit().putBoolean(this.getClass().getName(), false).commit();
+			SensorRegistry.getInstance().getPreferences().putBoolean(this.getClass().getName(), false);
 			enabled = false;
 
 			_disable();
@@ -177,8 +172,7 @@ public abstract class AbstractSensor {
 	}
 
 	public void setPrivacylevel(Privacy.PrivacyLevel privacylevel) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.edit().putInt(this.getClass().getName() + "-privacylevel", Privacy.PrivacyLevel.FULL.value()).commit();
+		SensorRegistry.getInstance().getPreferences().putInt(this.getClass().getName() + "-privacylevel", privacylevel.value());
 		this.plevel = privacylevel;
 		notifyListeners();
 	}

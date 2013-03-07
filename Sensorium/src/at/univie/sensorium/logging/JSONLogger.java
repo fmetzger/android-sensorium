@@ -182,19 +182,19 @@ public class JSONLogger implements SensorChangeListener{
 	
 	public void upload(String url){
 		finalize(); // close the json objects
-		new HTTPSUploader("homepage.univie.ac.at", url, null, null).execute(files);
+		new HTTPSUploader(url, null, null).execute(files);
 		init(); // restart the logging
 	}
 	
 	String url;
-	long interval;
+	int interval;
 	boolean wifionly;
 	
-	public void autoupload(String url, long interval, boolean wifionly){
+	public void autoupload(String url, int interval, boolean wifionly){
 		this.url = url;
 		this.interval = interval;
 		this.wifionly = wifionly;
-		handler.postDelayed(runnable, interval * 1000);
+		handler.postDelayed(runnable, ((long) interval) * 1000);
 	}
 	
 	public void cancelautoupload(){
@@ -212,7 +212,7 @@ public class JSONLogger implements SensorChangeListener{
 			if (!wifionly || (wifionly && mWifi.isConnected())) {
 				SensorRegistry.getInstance().getJSONLogger().upload(url);
 			}
-			handler.postDelayed(this, interval * 1000);
+			handler.postDelayed(this, ((long) interval) * 1000);
 		}
 	};
 }

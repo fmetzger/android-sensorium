@@ -47,26 +47,11 @@ import at.univie.sensorium.SensorRegistry;
 public class HTTPSUploader extends AsyncTask<List<File>, Void, String>{
 	
 	// TODO: store and sync urls/user/pw with android properties
-	private String host;
 	private String posturl;// = "https://www.example.com/foo.php";
 	private String username;
 	private String password;
 	
-	public void setHost(String host){
-		this.host = host;
-	}
-	public void setPosturl(String posturl){
-		this.posturl = posturl;
-	}
-	public void setUsername(String username){
-		this.username = username;
-	}
-	public void setPassword(String password){
-		this.password = password;
-	}
-	
-	public HTTPSUploader(String host, String posturl, String username, String password){
-		this.host = host;
+	public HTTPSUploader(String posturl, String username, String password){
 		this.posturl = posturl;
 		this.username = username;
 		this.password = password;

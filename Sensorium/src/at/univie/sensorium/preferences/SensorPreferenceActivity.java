@@ -34,14 +34,10 @@ import android.preference.PreferenceScreen;
 import android.widget.Toast;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.SensoriumApplication;
-import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {
 	
-	public static final String SENSOR_AUTOSTART_PREF = "sensor_autostart";
-	public static final String INTERFACES_XMLRPC_PREF = "xmlrpc_enabled";
-
 	SharedPreferences.OnSharedPreferenceChangeListener listener;
 
 	CheckBoxPreference autostartPref;
@@ -63,7 +59,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		root.addPreference(generalCat);
 
 		autostartPref = new CheckBoxPreference(this);
-		autostartPref.setKey(SENSOR_AUTOSTART_PREF);
+		autostartPref.setKey(Preferences.SENSOR_AUTOSTART_PREF);
 		autostartPref.setTitle("Sensor starts on boot");
 		autostartPref.setSummary("Keeps the sensor service running at all times.");
 		generalCat.addPreference(autostartPref);
@@ -73,7 +69,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 		root.addPreference(interfacesCat);
 
 		xmlrpcPref = new CheckBoxPreference(this);
-		xmlrpcPref.setKey("INTERFACES_XMLRPC_PREF");
+		xmlrpcPref.setKey(Preferences.INTERFACES_XMLRPC_PREF);
 		xmlrpcPref.setTitle("Enable XMLRPC");
 		xmlrpcPref.setDefaultValue(true);
 		xmlrpcPref.setSummary("Make sensor data available through localhost XMLRPC.");

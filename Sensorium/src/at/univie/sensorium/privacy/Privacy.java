@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.sensors.SensorValue;
 
 public class Privacy {
@@ -173,12 +174,11 @@ public class Privacy {
 
 	protected static SensorValue salt(SensorValue val) {
 		// load stored seed or generate a new one
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SensorRegistry.getInstance().getContext());
-		String salt = prefs.getString("Sensorium-Salt", "");
+		String salt = SensorRegistry.getInstance().getPreferences().getString(Preferences.PRIVACY_HASH, "");
 		if (salt.equals("")){
 			SecureRandom random = new SecureRandom();
 			salt = (new BigInteger(130, random)).toString(32);
-			prefs.edit().putString("Sensorium-Salt", salt);
+			SensorRegistry.getInstance().getPreferences().putString(Preferences.PRIVACY_HASH, salt);
 		}
 		Log.d("Sensorium", "Salt is "+salt);
 		

@@ -34,6 +34,7 @@ import android.util.Log;
 import android.widget.TextView;
 import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
 import at.univie.sensorium.logging.JSONLogger;
+import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.preferences.SensorPreferenceActivity;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -51,6 +52,9 @@ public class SensorRegistry {
 	private TextView textoutput;
 	
 	private Context context;
+	private Preferences preferences;
+
+	private JSONLogger jsonlogger;
 
 	protected SensorRegistry() {
 		sensors = new LinkedList<AbstractSensor>();
@@ -119,14 +123,6 @@ public class SensorRegistry {
 		bufferedLines++;
 		if (textoutput != null)
 			textoutput.setText(Html.fromHtml(debugBuffer.toString()), TextView.BufferType.SPANNABLE);
-	}
-
-	public void setDebugView(TextView t) {
-		this.textoutput = t;
-	}
-
-	public List<AbstractSensor> getSensors() {
-		return this.sensors;
 	}
 
 	public AbstractSensor getSensorForClassname(String classname) {
@@ -293,26 +289,13 @@ public class SensorRegistry {
 		}
 		return out;
 	}
-
-	JSONLogger jsonlogger;
-	public JSONLogger getJSONLogger(){
-		return jsonlogger;
-	}
-	public void setJSONLogger(JSONLogger jsonlogger){
-		this.jsonlogger = jsonlogger;
-	}
-	
-	
-	public Context getContext(){
-		return context;
-	}
 	
 	XMLRPCSensorServerThread xmlrpcserverthread;
 	Thread x;
 	public void startXMLRPCInterface() {
 		
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean xmlrpc_enabled = prefs.getBoolean(SensorPreferenceActivity.INTERFACES_XMLRPC_PREF, true);
+		boolean xmlrpc_enabled = prefs.getBoolean(Preferences.INTERFACES_XMLRPC_PREF, true);
 		if(xmlrpc_enabled){
 			Log.d("SeattleSensors","starting XMLRPC interface");
 			xmlrpcserverthread = new XMLRPCSensorServerThread();
@@ -334,6 +317,7 @@ public class SensorRegistry {
 			Log.d("SeattleSensors", "XMLRPC thread already running, not spawning another one.");
 		}
 	}
+	
 	public void stopXMLRPCInterface(){
 		if (XMLRPCSensorServerThread.running){
 			xmlrpcserverthread.stopThread();
@@ -351,5 +335,27 @@ public class SensorRegistry {
 		} else {
 			Log.d("SeattleSensors", "XMLRPC thread not running, not attempting to stop it.");
 		}
+	}
+	
+	public JSONLogger getJSONLogger(){
+		return jsonlogger;
+	}
+	public void setJSONLogger(JSONLogger jsonlogger){
+		this.jsonlogger = jsonlogger;
+	}
+	public Context getContext(){
+		return context;
+	}
+	public Preferences getPreferences() {
+		return preferences;
+	}
+	public void setPreferences(Preferences preferences) {
+		this.preferences = preferences;
+	}
+	public void setDebugView(TextView t) {
+		this.textoutput = t;
+	}
+	public List<AbstractSensor> getSensors() {
+		return this.sensors;
 	}
 }

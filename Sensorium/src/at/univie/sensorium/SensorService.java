@@ -35,9 +35,9 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import at.univie.sensorium.extinterfaces.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.logging.JSONLogger;
-import at.univie.sensorium.preferences.PreferenceJSONLoader;
+import at.univie.sensorium.preferences.HTTPSUploaderDialogPreference;
+import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorService extends Service {
@@ -67,11 +67,14 @@ public class SensorService extends Service {
 
 	private void init() {
 		
-		PreferenceJSONLoader loader = new PreferenceJSONLoader(this);
-		loader.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
-		
-		
+		Preferences preferences = new Preferences(this);
 		registry = SensorRegistry.getInstance();
+		registry.setPreferences(preferences);
+		
+		preferences.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
+		
+		
+		
 		startSensors();
 		registry.startup(this);
 		startExtInterfaces();
@@ -113,11 +116,11 @@ public class SensorService extends Service {
 
 	private void createJSONLoggerUploader() {
 		registry.setJSONLogger(new JSONLogger());
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if (prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_AUTOMATIC_PREF, false)) {
-			long interval = prefs.getLong(HTTPSUploaderDialogPreference.UPLOAD_INTERVAL_PREF, 3600);
-			boolean wifi = prefs.getBoolean(HTTPSUploaderDialogPreference.UPLOAD_WIFI_PREF, false);
-			String url = prefs.getString(HTTPSUploaderDialogPreference.UPLOAD_URL_PREF, "");
+		Preferences prefs = SensorRegistry.getInstance().getPreferences();
+		if (prefs.getBoolean(Preferences.UPLOAD_AUTOMATIC_PREF, false)) {
+			int interval = prefs.getInt(Preferences.UPLOAD_INTERVAL_PREF, 3600);
+			boolean wifi = prefs.getBoolean(Preferences.UPLOAD_WIFI_PREF, false);
+			String url = prefs.getString(Preferences.UPLOAD_URL_PREF, "");
 			registry.getJSONLogger().autoupload(url, interval, wifi);
 		}
 	}
