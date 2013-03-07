@@ -194,7 +194,7 @@ public class JSONLogger implements SensorChangeListener{
 		this.url = url;
 		this.interval = interval;
 		this.wifionly = wifionly;
-		handler.postDelayed(runnable, ((long) interval) * 1000);
+		handler.postDelayed(runnable, Math.min((long) interval * 1000, 300000));
 	}
 	
 	public void cancelautoupload(){
@@ -212,7 +212,7 @@ public class JSONLogger implements SensorChangeListener{
 			if (!wifionly || (wifionly && mWifi.isConnected())) {
 				SensorRegistry.getInstance().getJSONLogger().upload(url);
 			}
-			handler.postDelayed(this, ((long) interval) * 1000);
+			handler.postDelayed(this, Math.min((long) interval * 1000, 300000));
 		}
 	};
 }
