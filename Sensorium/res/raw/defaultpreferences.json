@@ -17,14 +17,14 @@
 	"at.univie.sensorium.sensors.WifiSensor": "false",
 	
 	
-	"at.univie.sensorium.sensors.BatterySensor-privacylevel": "NO",
-	"at.univie.sensorium.sensors.BluetoothSensor-privacylevel": "FULL",
-	"at.univie.sensorium.sensors.GPSLocationSensor-privacylevel": "NO",
-	"at.univie.sensorium.sensors.DeviceInfoSensor-privacylevel": "NO",
-	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel": "NO",
-	"at.univie.sensorium.sensors.RadioSensor-privacylevel": "NO",
-	"at.univie.sensorium.sensors.WifiConnectionSensor-privacylevel": "FULL",
-	"at.univie.sensorium.sensors.WifiSensor-privacylevel": "FULL"
+	"at.univie.sensorium.sensors.BatterySensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.BluetoothSensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.GPSLocationSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.DeviceInfoSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.RadioSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.WifiConnectionSensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.WifiSensor-privacylevel": "4"
 	 
    }
  ]

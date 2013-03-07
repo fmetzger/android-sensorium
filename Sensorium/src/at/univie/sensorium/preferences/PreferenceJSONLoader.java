@@ -1,7 +1,5 @@
 package at.univie.sensorium.preferences;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.message.BasicNameValuePair;
 
@@ -41,7 +40,9 @@ public class PreferenceJSONLoader {
 	String urlstring;
 	public void loadCampaignPreferences(final String u) {
 		urlstring = u;
-		prefretriever.run();
+		Thread x = new Thread(prefretriever);
+		x.start();
+		
 	}
 	
 	
@@ -54,6 +55,7 @@ public class PreferenceJSONLoader {
 				URLConnection urlConnection = url.openConnection();
 				urlConnection.setConnectTimeout(1000);
 				loadPrefsFromStream(urlConnection.getInputStream());
+				Log.d("SeattleSensors", "Done loading remote preferences");
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
@@ -65,7 +67,7 @@ public class PreferenceJSONLoader {
 	
 
 	private void loadPrefsFromStream(InputStream input) {
-		List<BasicNameValuePair> prefs = new LinkedList<BasicNameValuePair>();
+		List<BasicNameValuePair> preferencelist = new LinkedList<BasicNameValuePair>();
 		try {
 			InputStreamReader isreader = new InputStreamReader(input);
 			JsonReader reader = new JsonReader(isreader);
@@ -76,14 +78,29 @@ public class PreferenceJSONLoader {
 				String name = reader.nextName();
 				String value = reader.nextString();
 				BasicNameValuePair kv = new BasicNameValuePair(name, value);
-				prefs.add(kv);
+				preferencelist.add(kv);
 			}
 			reader.endObject();
 			reader.endArray();
 			reader.close();
 
-			for (BasicNameValuePair kv : prefs) {
-				Log.d("JSONPREFS", kv.getName() + ": " + kv.getValue());
+			for (BasicNameValuePair kv : preferencelist) {
+//				if (prefs.contains(kv.getName())){ // if we preconfigure, this will always be false, so dont use it
+				Log.d("SeattleSensors", "Setting pref " + kv.getName() + " from remote config to: " + kv.getValue());
+				
+				if(kv.getValue().toLowerCase(Locale.US).equals("true")){
+					prefs.edit().putBoolean(kv.getName(), true).commit();
+					Log.d("SeattleSensors", kv.getName() + " boolean true");
+				} else if (kv.getValue().toLowerCase(Locale.US).equals("false")){
+					prefs.edit().putBoolean(kv.getName(), false).commit();
+					Log.d("SeattleSensors", kv.getName() + " boolean false");
+				} else if (Integer.getInteger(kv.getValue()) != null){
+					prefs.edit().putInt(kv.getName(), Integer.getInteger(kv.getValue())).commit();
+					Log.d("SeattleSensors", kv.getName() + " int " + Integer.getInteger(kv.getValue()));
+				} else { // value is String
+					prefs.edit().putString(kv.getName(), kv.getValue()).commit();
+					Log.d("SeattleSensors", kv.getName() + " String " + kv.getValue());
+				}
 			}
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
@@ -97,4 +114,5 @@ public class PreferenceJSONLoader {
 			Log.d("SeattleSensors", sw.toString());
 		}
 	}
+
 }
