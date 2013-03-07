@@ -39,6 +39,7 @@ import android.os.Handler;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.extinterfaces.HTTPSUploader;
+import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;
@@ -180,27 +181,34 @@ public class JSONLogger implements SensorChangeListener{
 		}
 	}
 	
-	public void upload(String url){
+	public void upload(){
+		Preferences prefs = SensorRegistry.getInstance().getPreferences();
+		String uploadurl = prefs.getString(Preferences.UPLOAD_URL_PREF, "");
+		upload(uploadurl);
+	}
+	
+	public void upload(String uploadurl){
 		finalize(); // close the json objects
-		new HTTPSUploader(url, null, null).execute(files);
+		Preferences prefs = SensorRegistry.getInstance().getPreferences();
+		String uploadusername = prefs.getString(Preferences.UPLOAD_USERNAME, "");
+		String uploadpassword = prefs.getString(Preferences.UPLOAD_PASSWORD, "");
+		new HTTPSUploader(uploadurl, uploadusername, uploadpassword).execute(files);
 		init(); // restart the logging
 	}
 	
-	String url;
-	int interval;
-	boolean wifionly;
 	
 	public void autoupload(String url, int interval, boolean wifionly){
-		this.url = url;
 		this.interval = interval;
 		this.wifionly = wifionly;
-		handler.postDelayed(runnable, Math.min((long) interval * 1000, 300000));
+		handler.postDelayed(runnable, Math.max((long) interval * 1000, 300000));
 	}
 	
 	public void cancelautoupload(){
 		handler.removeCallbacks(runnable); // TODO: check if this really stops the queue
 	}
 	
+	private int interval;
+	private boolean wifionly;
 	private Handler handler = new Handler();
 	private Runnable runnable = new Runnable() {
 		@Override
@@ -210,9 +218,9 @@ public class JSONLogger implements SensorChangeListener{
 			NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
 			if (!wifionly || (wifionly && mWifi.isConnected())) {
-				SensorRegistry.getInstance().getJSONLogger().upload(url);
+				SensorRegistry.getInstance().getJSONLogger().upload();
 			}
-			handler.postDelayed(this, Math.min((long) interval * 1000, 300000));
+			handler.postDelayed(this, Math.max((long) interval * 1000, 300000));
 		}
 	};
 }

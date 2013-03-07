@@ -27,6 +27,8 @@ public class Preferences {
 	public static final String SENSOR_AUTOSTART_PREF = "sensor_autostart";
 	public static final String INTERFACES_XMLRPC_PREF = "xmlrpc_enabled";
 	public static final String UPLOAD_URL_PREF = "upload_url";
+	public static final String UPLOAD_USERNAME = "o3gm_upload_user";
+	public static final String UPLOAD_PASSWORD = "o3gm_upload_user_password";
 	public static final String UPLOAD_AUTOMATIC_PREF = "upload_automatic";
 	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
 	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";

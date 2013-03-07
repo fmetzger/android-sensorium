@@ -1,6 +1,8 @@
  [
    {
-     "upload_url": "http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php",
+     "upload_url": "https://skylla.fc.univie.ac.at/openlayers/sensorium/",
+     "upload_username": "o3gm_upload_user",
+     "upload_password": "o3gm_upload_user_password",
      "upload_automatic": "true",
      "upload_wifi": "false",
      "upload_interval": "3600",

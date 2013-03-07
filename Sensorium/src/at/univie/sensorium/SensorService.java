@@ -122,6 +122,7 @@ public class SensorService extends Service {
 			boolean wifi = prefs.getBoolean(Preferences.UPLOAD_WIFI_PREF, false);
 			String url = prefs.getString(Preferences.UPLOAD_URL_PREF, "");
 			registry.getJSONLogger().autoupload(url, interval, wifi);
+			
 		}
 	}
 
