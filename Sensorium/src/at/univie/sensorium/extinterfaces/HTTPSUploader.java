@@ -51,6 +51,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
@@ -105,14 +106,18 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
 				HttpPost httppost = new HttpPost(posturl);
 				MultipartEntity mpEntity = new MultipartEntity();
+//				MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+				
+
 				mpEntity.addPart("username", new StringBody(username));
 				mpEntity.addPart("password", new StringBody(password));
 				for (File file : files) {
+					Log.d("SeattleSensors", "preparing " + file.getName() + " for upload");
 					ContentBody cbFile = new FileBody(file, "application/json");
 					mpEntity.addPart(file.toString(), cbFile);
 				}
-				// reqEntity.setChunked(true); // Send in multiple parts if
-				// needed
+				httppost.addHeader("username", username);
+				httppost.addHeader("password", password);
 				httppost.setEntity(mpEntity);
 				HttpResponse response = httpclient.execute(httppost);
 				
