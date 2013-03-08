@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import at.univie.sensorium.o3gm.R;
+import at.univie.sensorium.o3gm.SensorRegistry;
 
 import com.google.gson.stream.JsonReader;
 
@@ -33,6 +34,7 @@ public class Preferences {
 	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
 	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
 	public static final String PRIVACY_HASH = "privacy_hash";
+	public static final String FIRST_RUN = "first_run";
 
 	private Context context;
 	private SharedPreferences prefs;
@@ -108,6 +110,11 @@ public class Preferences {
 	}
 
 	private void loadPrefsFromStream(InputStream input) {
+		if (!isFirstRun()){
+			Log.d(SensorRegistry.TAG, "Not first run, not loading external preferences");
+			return;
+		}
+		
 		List<BasicNameValuePair> preferencelist = new LinkedList<BasicNameValuePair>();
 		try {
 			InputStreamReader isreader = new InputStreamReader(input);
@@ -128,11 +135,11 @@ public class Preferences {
 			reader.close();
 
 			for (BasicNameValuePair kv : preferencelist) {
-				if (!prefs.contains(kv.getName())) // we shouldn't overwrite existing values
 					putPreference(kv.getName(), kv.getValue());
-				else
-					Log.d("Sensorium")
 			}
+			
+			putBoolean(FIRST_RUN, false); // only configure once
+			
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
@@ -144,6 +151,12 @@ public class Preferences {
 			e.printStackTrace(pw);
 			Log.d(SensorRegistry.TAG, sw.toString());
 		}
+	}
+	
+	private boolean isFirstRun(){
+		if(getBoolean(FIRST_RUN, true))
+			return true;
+		return false;
 	}
 
 	private String urlstring;

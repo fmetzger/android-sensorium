@@ -40,6 +40,9 @@ import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreference extends Preference implements OnSeekBarChangeListener {
 
+	// TODO: implement a SharedPreferences.OnSharedPreferenceChangeListener to
+	// react on privacylevel changes outside of this class
+
 	private final int mMaxValue = Privacy.PrivacyLevel.FULL.value();
 
 	/**

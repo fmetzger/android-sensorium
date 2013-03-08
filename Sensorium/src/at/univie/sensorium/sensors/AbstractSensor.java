@@ -168,6 +168,7 @@ public abstract class AbstractSensor {
 	}
 
 	public Privacy.PrivacyLevel getPrivacylevel() {
+		plevel = PrivacyLevel.fromInt(SensorRegistry.getInstance().getPreferences().getInt(this.getClass().getName() + "-privacylevel", plevel.value()));
 		return plevel;
 	}
 
