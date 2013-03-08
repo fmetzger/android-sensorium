@@ -47,63 +47,64 @@ import at.univie.sensorium.sensors.SensorValue;
 
 import com.google.gson.stream.JsonWriter;
 
-
 /**
- * Create one JSON output stream for every sensor
- * Use https://code.google.com/p/google-gson/ for compatibility with Android 2.x
+ * Create one JSON output stream for every sensor Use
+ * https://code.google.com/p/google-gson/ for compatibility with Android 2.x
  * 
- *
+ * 
  */
-public class JSONLogger implements SensorChangeListener{
-	
+public class JSONLogger implements SensorChangeListener {
+
 	private List<AbstractSensor> sensors;
-	
+
 	private Map<String, JsonWriter> jsonMap;
 	private Map<String, FileWriter> writerMap;
 	private List<File> files;
 	File extDir;
-	
-	
+
 	public JSONLogger() {
 	}
-	
-	public void init(List<AbstractSensor> sensors){
+
+	public void init(List<AbstractSensor> sensors) {
 		this.sensors = sensors;
 		init();
 	}
-	
-	private void init(){
+
+	private void init() {
 		jsonMap = new HashMap<String, JsonWriter>();
 		writerMap = new HashMap<String, FileWriter>();
 		files = new LinkedList<File>();
-		// TODO: needs to check if there is external storage, else die (toast message?) gracefully
-		extDir = new File (Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
+		// TODO: needs to check if there is external storage, else die (toast
+		// message?) gracefully
+		extDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sensorium");
 		extDir.mkdirs();
-		
-		for(AbstractSensor sensor: sensors){
+
+		for (AbstractSensor sensor : sensors) {
 			sensor.addListener(this);
 		}
 	}
-	
-	private JsonWriter getWriterForName(String sensorname){
+
+	private JsonWriter getWriterForName(String sensorname) {
 		JsonWriter writer = jsonMap.get(sensorname);
-		if (writer == null){
+		if (writer == null) {
 			try {
-				String filename = sensorname.substring(sensorname.lastIndexOf('.')+1) + ".json";
+				String filename = sensorname.substring(sensorname.lastIndexOf('.') + 1) + ".json";
 				File extFile = new File(extDir, filename);
 				if (extFile.exists()) {
-					  //get the first free filename.number
+					// get the first free filename.number
 					int i = 0;
 					boolean done = false;
-					while (!done) {				  
-						File f = new File(extDir, filename+"."+String.valueOf(i++));
+					while (!done) {
+						File f = new File(extDir, filename + "." + String.valueOf(i++));
 						if (f.exists())
 							continue;
 						extFile.renameTo(f);
-						extFile = new File(extDir, filename); // reset extFile to original pointer
+						extFile = new File(extDir, filename); // reset extFile
+																// to original
+																// pointer
 						done = true;
-					  }
 					}
+				}
 				FileWriter fw = new FileWriter(extFile);
 				writer = new JsonWriter(fw);
 				writer.beginArray();
@@ -124,35 +125,44 @@ public class JSONLogger implements SensorChangeListener{
 				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
-		
+
 		return writer;
 	}
-	
-	private void writeObject(AbstractSensor sensor){
-		JsonWriter jw = getWriterForName(sensor.getClass().getName());
-		List<SensorValue> valuelist = sensor.getSensorValues();
-		
-		if (jw != null){
-			try {
-				jw.beginObject();
-				jw.name("privacy-level").value(sensor.getPrivacylevel().name());
-				for(SensorValue value: valuelist){
-					SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
-					jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+
+	private boolean externalMediaWriteable() {
+		String state = Environment.getExternalStorageState();
+
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		Log.i(SensorRegistry.TAG, "External media not writeable, not attempting to write");
+		return false;
+	}
+
+	private void writeObject(AbstractSensor sensor) {
+		if(externalMediaWriteable()){
+			JsonWriter jw = getWriterForName(sensor.getClass().getName());
+			List<SensorValue> valuelist = sensor.getSensorValues();
+			if (jw != null) {
+				try {
+					jw.beginObject();
+					jw.name("privacy-level").value(sensor.getPrivacylevel().name());
+					for (SensorValue value : valuelist) {
+						SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
+						jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+					}
+					jw.endObject();
+					writerMap.get(sensor.getClass().getName()).flush();
+				} catch (IOException e) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d(SensorRegistry.TAG, sw.toString());
 				}
-				jw.endObject();
-				writerMap.get(sensor.getClass().getName()).flush();
-			} catch (IOException e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				Log.d(SensorRegistry.TAG, sw.toString());
+			} else {
+				Log.d(SensorRegistry.TAG, "Can't get write access to log file, skipping");
 			}
 		}
-		else {
-			Log.d(SensorRegistry.TAG, "Can't get write access to log file, skipping");
-		}
-
 	}
 
 	@Override
@@ -160,11 +170,11 @@ public class JSONLogger implements SensorChangeListener{
 		writeObject(sensor);
 	}
 
-	public void finalize(){
-		for (AbstractSensor s: SensorRegistry.getInstance().getSensors()){
+	public void finalize() {
+		for (AbstractSensor s : SensorRegistry.getInstance().getSensors()) {
 			s.removeListener(this);
 		}
-		for(JsonWriter js: jsonMap.values()){
+		for (JsonWriter js : jsonMap.values()) {
 			try {
 				js.endArray();
 			} catch (IOException e) {
@@ -174,7 +184,7 @@ public class JSONLogger implements SensorChangeListener{
 				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
-		for(FileWriter fw: writerMap.values()){
+		for (FileWriter fw : writerMap.values()) {
 			try {
 				fw.flush();
 				fw.close();
@@ -187,14 +197,14 @@ public class JSONLogger implements SensorChangeListener{
 
 		}
 	}
-	
-	public void upload(){
+
+	public void upload() {
 		Preferences prefs = SensorRegistry.getInstance().getPreferences();
 		String uploadurl = prefs.getString(Preferences.UPLOAD_URL_PREF, "");
 		upload(uploadurl);
 	}
-	
-	public void upload(String uploadurl){
+
+	public void upload(String uploadurl) {
 		finalize(); // close the json objects
 		Preferences prefs = SensorRegistry.getInstance().getPreferences();
 		String uploadusername = prefs.getString(Preferences.UPLOAD_USERNAME, "");
@@ -202,18 +212,18 @@ public class JSONLogger implements SensorChangeListener{
 		new HTTPSUploader(uploadurl, uploadusername, uploadpassword).execute(files);
 		init(); // restart the logging
 	}
-	
-	
-	public void autoupload(String url, int interval, boolean wifionly){
+
+	public void autoupload(String url, int interval, boolean wifionly) {
 		this.interval = interval;
 		this.wifionly = wifionly;
 		handler.postDelayed(runnable, Math.max((long) interval * 1000, 300000));
 	}
-	
-	public void cancelautoupload(){
-		handler.removeCallbacks(runnable); // TODO: check if this really stops the queue
+
+	public void cancelautoupload() {
+		handler.removeCallbacks(runnable); // TODO: check if this really stops
+											// the queue
 	}
-	
+
 	private int interval;
 	private boolean wifionly;
 	private Handler handler = new Handler();
