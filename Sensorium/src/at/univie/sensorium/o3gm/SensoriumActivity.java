@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.o3gm;
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import at.univie.sensorium.o3gm.R;
 import at.univie.sensorium.preferences.SensorPreferenceActivity;
 import at.univie.sensorium.sensors.AbstractSensor;
 

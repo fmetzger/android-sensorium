@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.o3gm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

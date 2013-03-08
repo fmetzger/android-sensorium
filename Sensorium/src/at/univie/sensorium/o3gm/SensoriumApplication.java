@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.o3gm;
 
 import android.app.Application;
 import android.content.ComponentName;

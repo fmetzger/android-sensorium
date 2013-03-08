@@ -32,7 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import at.univie.sensorium.R;
+import at.univie.sensorium.o3gm.R;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 import at.univie.sensorium.sensors.AbstractSensor;

@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium;
+package at.univie.sensorium.o3gm;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -34,6 +34,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import at.univie.sensorium.logging.JSONLogger;
+import at.univie.sensorium.o3gm.R;
 import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.sensors.AbstractSensor;
 

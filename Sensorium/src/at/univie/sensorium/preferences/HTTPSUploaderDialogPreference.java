@@ -37,8 +37,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import at.univie.sensorium.R;
-import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.o3gm.R;
+import at.univie.sensorium.o3gm.SensorRegistry;
 
 public class HTTPSUploaderDialogPreference extends DialogPreference {
 

@@ -18,7 +18,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import at.univie.sensorium.R;
+import at.univie.sensorium.o3gm.R;
 
 import com.google.gson.stream.JsonReader;
 
@@ -128,7 +128,8 @@ public class Preferences {
 			reader.close();
 
 			for (BasicNameValuePair kv : preferencelist) {
-				putPreference(kv.getName(), kv.getValue());
+				if (!prefs.contains(kv.getName())) // we shouldn't overwrite existing values
+					putPreference(kv.getName(), kv.getValue());
 			}
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();

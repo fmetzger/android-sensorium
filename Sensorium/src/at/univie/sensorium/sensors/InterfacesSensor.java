@@ -16,7 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.o3gm.SensorRegistry;
 
 public class InterfacesSensor extends AbstractSensor {
 
