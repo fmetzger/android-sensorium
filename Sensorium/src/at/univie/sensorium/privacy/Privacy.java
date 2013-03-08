@@ -28,8 +28,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
@@ -117,26 +115,27 @@ public class Privacy {
 	}
 
 	public static SensorValue anonymize(SensorValue val, PrivacyLevel l) {
-		switch (val.getType()) {
+		SensorValue retval = new SensorValue(val);
+		switch (retval.getType()) {
 		case LATITUDE:
 		case LONGITUDE:
-			return LocationPrivacy.anonymizeValue(val, l);
+			return LocationPrivacy.anonymizeValue(retval, l);
 			
 		case ADDRESS:
-			return LocationPrivacy.anonymizeAddress(val, l);
+			return LocationPrivacy.anonymizeAddress(retval, l);
 
 		case CID:
 		case LAC:
 		case MCC:
 		case MNC:
 		case NETWORKTYPE:
-			return anonymizeValue(val, l);
+			return anonymizeValue(retval, l);
 		case SIGNALSTRENGTH:
-			return anonymizesignalstrength(val, l);
+			return anonymizesignalstrength(retval, l);
 
 		default:
 //			Log.d("SeattleSensors", "No known privacy methods for type " + val.getType().getName());
-			return val;
+			return retval;
 		}
 	}
 

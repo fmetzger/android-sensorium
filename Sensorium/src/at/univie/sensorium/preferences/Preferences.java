@@ -117,6 +117,8 @@ public class Preferences {
 			reader.beginObject();
 			while (reader.hasNext()) {
 				String name = reader.nextName();
+				if (name.equals("_comment")) // skip comments
+					continue;
 				String value = reader.nextString();
 				BasicNameValuePair kv = new BasicNameValuePair(name, value);
 				preferencelist.add(kv);

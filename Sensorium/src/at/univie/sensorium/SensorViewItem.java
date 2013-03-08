@@ -22,8 +22,6 @@ package at.univie.sensorium;
 
 import java.util.List;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.widget.TextView;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorChangeListener;

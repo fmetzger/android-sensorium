@@ -28,15 +28,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Binder;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import at.univie.sensorium.logging.JSONLogger;
-import at.univie.sensorium.preferences.HTTPSUploaderDialogPreference;
 import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.sensors.AbstractSensor;
 
@@ -72,7 +69,7 @@ public class SensorService extends Service {
 		registry.setPreferences(preferences);
 		
 		preferences.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
-		
+//		preferences.loadDefaultPreferences();
 		
 		
 		startSensors();

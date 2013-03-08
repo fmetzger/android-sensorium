@@ -51,7 +51,6 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
@@ -71,8 +70,7 @@ import at.univie.sensorium.SensorRegistry;
 
 public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
-	// TODO: store and sync urls/user/pw with android properties
-	private String posturl;// = "https://www.example.com/foo.php";
+	private String posturl;
 	private String username;
 	private String password;
 

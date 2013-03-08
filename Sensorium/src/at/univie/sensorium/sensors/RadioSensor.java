@@ -201,6 +201,17 @@ public class RadioSensor extends AbstractSensor {
 				}
 
 				timestamp.setValue(System.currentTimeMillis());
+				
+				GsmCellLocation gsmCell = (GsmCellLocation) telephonyManager.getCellLocation();
+				if (gsmCell != null) {
+					String mccmnc = telephonyManager.getNetworkOperator();
+					mcc.setValue(mccmnc.substring(0, 3));
+					mnc.setValue(mccmnc.substring(3));
+					cid.setValue(gsmCell.getCid());
+					lac.setValue(gsmCell.getLac());
+				}
+				
+				
 				notifyListeners();
 			}
 		};
