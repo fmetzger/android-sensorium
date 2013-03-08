@@ -59,11 +59,11 @@ public abstract class AbstractSensor {
 				notifyListeners();
 			} catch (Exception e) {
 				disable();
-				Log.d("SeattleSensors", "Caught exception while enabling " + name + ": " + e.toString());
+				Log.d(SensorRegistry.TAG, "Caught exception while enabling " + name + ": " + e.toString());
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 	}
@@ -80,11 +80,11 @@ public abstract class AbstractSensor {
 			unsetallValues();
 			notifyListeners();
 		} catch (Exception e) {
-			Log.d("SeattleSensors", "Caught exception while disabling " + name + ": " + e.toString());
+			Log.d(SensorRegistry.TAG, "Caught exception while disabling " + name + ": " + e.toString());
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 		// }
 	}
@@ -135,12 +135,12 @@ public abstract class AbstractSensor {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (IllegalAccessException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 		return values;
 	}
@@ -164,7 +164,7 @@ public abstract class AbstractSensor {
 		}
 		SensorRegistry.getInstance().log(this.getClass().getCanonicalName(), sb.toString());
 
-		Log.d("SeattleSensors", sb.toString());
+		Log.d(SensorRegistry.TAG, sb.toString());
 	}
 
 	public Privacy.PrivacyLevel getPrivacylevel() {

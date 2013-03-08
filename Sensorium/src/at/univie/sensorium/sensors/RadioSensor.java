@@ -27,6 +27,7 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
+import at.univie.sensorium.o3gm.SensorRegistry;
 
 public class RadioSensor extends AbstractSensor {
 
@@ -186,7 +187,7 @@ public class RadioSensor extends AbstractSensor {
 					} else if (asu == 99) {
 						signalstrength.setValue("not detectable");
 					} else {
-						Log.d("SeattleSensors", "unexpected GSM signal strength value");
+						Log.d(SensorRegistry.TAG, "unexpected GSM signal strength value");
 					}
 				} else if (networktype.getValue().equals("UMTS") || networktype.getValue().equals("HSPA")
 						|| networktype.getValue().equals("HSPA+") || networktype.getValue().equals("HSUPA")

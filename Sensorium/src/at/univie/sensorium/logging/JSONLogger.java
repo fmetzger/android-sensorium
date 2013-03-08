@@ -114,12 +114,12 @@ public class JSONLogger implements SensorChangeListener{
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 		
@@ -143,7 +143,7 @@ public class JSONLogger implements SensorChangeListener{
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 
 	}
@@ -164,7 +164,7 @@ public class JSONLogger implements SensorChangeListener{
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 		for(FileWriter fw: writerMap.values()){
@@ -175,7 +175,7 @@ public class JSONLogger implements SensorChangeListener{
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 
 		}

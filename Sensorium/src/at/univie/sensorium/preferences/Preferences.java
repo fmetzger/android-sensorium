@@ -43,7 +43,7 @@ public class Preferences {
 	}
 
 	public void putPreference(String key, String value){
-		Log.d("SeattleSensors", "Setting pref " + key + " from remote config to: " + value);
+		Log.d(SensorRegistry.TAG, "Setting pref " + key + " from remote config to: " + value);
 
 		if (value.toLowerCase(Locale.US).equals("true")) {
 			putBoolean(key, true);
@@ -67,17 +67,17 @@ public class Preferences {
 
 	public void putBoolean(String key, Boolean value) {
 		prefs.edit().putBoolean(key, value).commit();
-		Log.d("SeattleSensors", key + " boolean " + String.valueOf(value));
+		Log.d(SensorRegistry.TAG, key + " boolean " + String.valueOf(value));
 	}
 
 	public void putInt(String key, Integer value) {
 		prefs.edit().putInt(key, value).commit();
-		Log.d("SeattleSensors", key + " int " + value);
+		Log.d(SensorRegistry.TAG, key + " int " + value);
 	}
 
 	public void putString(String key, String value) {
 		prefs.edit().putString(key, value).commit();
-		Log.d("SeattleSensors", key + " String " + value);
+		Log.d(SensorRegistry.TAG, key + " String " + value);
 	}
 
 	public Integer getInt(String key, Integer defaultvalue) {
@@ -130,17 +130,19 @@ public class Preferences {
 			for (BasicNameValuePair kv : preferencelist) {
 				if (!prefs.contains(kv.getName())) // we shouldn't overwrite existing values
 					putPreference(kv.getName(), kv.getValue());
+				else
+					Log.d("Sensorium")
 			}
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (IOException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 	}
 
@@ -153,12 +155,12 @@ public class Preferences {
 				URLConnection urlConnection = url.openConnection();
 				urlConnection.setConnectTimeout(1000);
 				loadPrefsFromStream(urlConnection.getInputStream());
-				Log.d("SeattleSensors", "Done loading remote preferences");
+				Log.d(SensorRegistry.TAG, "Done loading remote preferences");
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 	};

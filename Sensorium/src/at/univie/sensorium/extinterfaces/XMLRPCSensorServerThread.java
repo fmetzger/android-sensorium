@@ -60,7 +60,7 @@ public class XMLRPCSensorServerThread implements Runnable {
 				break;
 			}
 			SOCKET_PORT = portArray[i];
-			Log.d("SeattleSensors", "XMLRPC Server bonding on port... " + SOCKET_PORT);
+			Log.d(SensorRegistry.TAG, "XMLRPC Server bonding on port... " + SOCKET_PORT);
 
 			try {
 				InetAddress localhost = InetAddress.getLocalHost();
@@ -68,7 +68,7 @@ public class XMLRPCSensorServerThread implements Runnable {
 				socket.setSoTimeout(5000); // wait for 10s at max to allow
 											// interrupting the thread
 				XMLRPCServer server = new XMLRPCServer();
-				Log.d("SeattleSensors", "XMLRPC Server listening on port " + SOCKET_PORT);
+				Log.d(SensorRegistry.TAG, "XMLRPC Server listening on port " + SOCKET_PORT);
 
 				SensorRegistry sensorregistry = SensorRegistry.getInstance();
 
@@ -110,7 +110,7 @@ public class XMLRPCSensorServerThread implements Runnable {
 
 						}
 					} catch (SocketTimeoutException e) {
-						Log.d("SeattleSensors", "Listening socket timeout");
+						Log.d(SensorRegistry.TAG, "Listening socket timeout");
 						if (isstopped)
 							socket.close();
 							running = false;
@@ -122,12 +122,12 @@ public class XMLRPCSensorServerThread implements Runnable {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 
 		if (i == portArray.length) {
-			Log.e("SeattleSensors", "Could not locate a port in XMLRPC Server Thread!");
+			Log.e(SensorRegistry.TAG, "Could not locate a port in XMLRPC Server Thread!");
 		}
 	}
 

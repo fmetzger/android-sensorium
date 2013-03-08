@@ -134,7 +134,7 @@ public class Privacy {
 			return anonymizesignalstrength(retval, l);
 
 		default:
-//			Log.d("SeattleSensors", "No known privacy methods for type " + val.getType().getName());
+//			Log.d(SensorRegistry.TAG, "No known privacy methods for type " + val.getType().getName());
 			return retval;
 		}
 	}
@@ -154,17 +154,17 @@ public class Privacy {
 			byte[] sha1hash = md.digest();
 			sha1 = Base64.encodeToString(sha1hash, Base64.NO_WRAP | Base64.NO_PADDING);
 		} catch (NoSuchAlgorithmException e) {
-			Log.d("SeattleSensors", e.toString());
+			Log.d(SensorRegistry.TAG, e.toString());
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (UnsupportedEncodingException e) {
-			Log.d("SeattleSensors", e.toString());
+			Log.d(SensorRegistry.TAG, e.toString());
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 
 		ret.setValue(sha1);

@@ -33,6 +33,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import at.univie.sensorium.o3gm.R;
+import at.univie.sensorium.o3gm.SensorRegistry;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -115,9 +116,9 @@ public class SensorPreference extends Preference implements OnSeekBarChangeListe
 		sensor.setPrivacylevel(Privacy.PrivacyLevel.fromInt(newValue));
 		if (newValue == Privacy.PrivacyLevel.FULL.value() && sensor.isEnabled()) {
 			sensor.disable();
-			Log.d("SeattleSensors", "trying to disable " + sensor.getName());
+			Log.d(SensorRegistry.TAG, "trying to disable " + sensor.getName());
 		} else if (mCurrentValue == Privacy.PrivacyLevel.FULL.value() && mCurrentValue != newValue && !sensor.isEnabled()) {
-			Log.d("SeattleSensors", "trying to enable " + sensor.getName());
+			Log.d(SensorRegistry.TAG, "trying to enable " + sensor.getName());
 			sensor.enable();
 		}
 		mCurrentValue = newValue;

@@ -110,7 +110,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 				mpEntity.addPart("username", new StringBody(username));
 				mpEntity.addPart("password", new StringBody(password));
 				for (File file : files) {
-					Log.d("SeattleSensors", "preparing " + file.getName() + " for upload");
+					Log.d(SensorRegistry.TAG, "preparing " + file.getName() + " for upload");
 					ContentBody cbFile = new FileBody(file, "application/json");
 					mpEntity.addPart(file.toString(), cbFile);
 				}
@@ -133,33 +133,33 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 					in.close();
 				}
 
-				Log.d("SeattleSensors", "Http upload completed with response: " + response.getStatusLine().toString() + " " + reply);
+				Log.d(SensorRegistry.TAG, "Http upload completed with response: " + response.getStatusLine().toString() + " " + reply);
 
 
 			} else {
-				Log.d("SeattleSensors", "Invalid http upload url, aborting.");
+				Log.d(SensorRegistry.TAG, "Invalid http upload url, aborting.");
 			}
 
 		} catch (IllegalArgumentException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (ClientProtocolException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (IOException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
-			Log.d("SeattleSensors", sw.toString());
+			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 	}
 

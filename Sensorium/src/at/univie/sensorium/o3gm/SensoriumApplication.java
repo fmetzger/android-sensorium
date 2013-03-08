@@ -38,19 +38,19 @@ public class SensoriumApplication extends Application {
 	}
 
 	public void onDestroy() {
-		Log.d("SeattleSensors", "application exiting, unbinding service");
+		Log.d(SensorRegistry.TAG, "application exiting, unbinding service");
 		unbindService();
 	}
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			sensorService = ((SensorService.LocalBinder) service).getService();
-			Log.d("SeattleSensors", "service connected");
+			Log.d(SensorRegistry.TAG, "service connected");
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
 			sensorService = null;
-			Log.d("SeattleSensors", "service disconnected");
+			Log.d(SensorRegistry.TAG, "service disconnected");
 		}
 	};
 

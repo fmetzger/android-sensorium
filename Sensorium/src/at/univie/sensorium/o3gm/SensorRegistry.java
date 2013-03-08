@@ -35,15 +35,16 @@ import android.widget.TextView;
 import at.univie.sensorium.extinterfaces.XMLRPCSensorServerThread;
 import at.univie.sensorium.logging.JSONLogger;
 import at.univie.sensorium.preferences.Preferences;
-import at.univie.sensorium.preferences.SensorPreferenceActivity;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
 import at.univie.sensorium.sensors.SensorValue;
 
 public class SensorRegistry {
+	
+	public static final String TAG = "Sensorium";
 
 	private static SensorRegistry instance = null;
-
+	
 	private List<AbstractSensor> sensors;
 
 	private StringBuffer debugBuffer;
@@ -75,16 +76,16 @@ public class SensorRegistry {
 		for (AbstractSensor sensor : sensors) {
 			try {
 				boolean savedstate = prefs.getBoolean(sensor.getClass().getName(), true);
-				Log.d("SeattleSensors", sensor.getClass().getName() + ": " + savedstate);
+				Log.d(SensorRegistry.TAG, sensor.getClass().getName() + ": " + savedstate);
 				if (savedstate)
 					sensor.enable();
 			} catch (Exception e) {
 				sensor.disable();
-				Log.d("SeattleSensors", e.toString());
+				Log.d(SensorRegistry.TAG, e.toString());
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 
 		}
@@ -94,7 +95,7 @@ public class SensorRegistry {
 	public void registerSensor(AbstractSensor sensor) {
 		for (AbstractSensor s : sensors) {
 			if (s.getClass().equals(sensor.getClass())) {
-				Log.d("SeattleSensors", "Sensor of this class already present, not registering.");
+				Log.d(SensorRegistry.TAG, "Sensor of this class already present, not registering.");
 				return;
 			}
 		}
@@ -159,12 +160,12 @@ public class SensorRegistry {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				} catch (IllegalAccessException e) {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				}
 			}
 		}
@@ -241,12 +242,12 @@ public class SensorRegistry {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				} catch (IllegalAccessException e) {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				}
 			}
 
@@ -278,12 +279,12 @@ public class SensorRegistry {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				} catch (IllegalAccessException e) {
 					StringWriter sw = new StringWriter();
 					PrintWriter pw = new PrintWriter(sw);
 					e.printStackTrace(pw);
-					Log.d("SeattleSensors", sw.toString());
+					Log.d(SensorRegistry.TAG, sw.toString());
 				}
 			}
 		}
@@ -297,24 +298,24 @@ public class SensorRegistry {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		boolean xmlrpc_enabled = prefs.getBoolean(Preferences.INTERFACES_XMLRPC_PREF, true);
 		if(xmlrpc_enabled){
-			Log.d("SeattleSensors","starting XMLRPC interface");
+			Log.d(SensorRegistry.TAG,"starting XMLRPC interface");
 			xmlrpcserverthread = new XMLRPCSensorServerThread();
 			x = new Thread(xmlrpcserverthread);
 			x.start();
 			return;
 		} else {
-			Log.d("SeattleSensors","Not starting XMLRPC interface, preference disabled");
+			Log.d(SensorRegistry.TAG,"Not starting XMLRPC interface, preference disabled");
 		}
 		
 		
 		if (!XMLRPCSensorServerThread.running) {
-			Log.d("SeattleSensors","starting XMLRPC interface");
+			Log.d(SensorRegistry.TAG,"starting XMLRPC interface");
 			xmlrpcserverthread = new XMLRPCSensorServerThread();
 			x = new Thread(xmlrpcserverthread);
 			x.start();
 			//return;
 		} else {
-			Log.d("SeattleSensors", "XMLRPC thread already running, not spawning another one.");
+			Log.d(SensorRegistry.TAG, "XMLRPC thread already running, not spawning another one.");
 		}
 	}
 	
@@ -330,10 +331,10 @@ public class SensorRegistry {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		} else {
-			Log.d("SeattleSensors", "XMLRPC thread not running, not attempting to stop it.");
+			Log.d(SensorRegistry.TAG, "XMLRPC thread not running, not attempting to stop it.");
 		}
 	}
 	

@@ -91,17 +91,17 @@ public class SensorService extends Service {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			} catch (InstantiationException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			} catch (IllegalAccessException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
-				Log.d("SeattleSensors", sw.toString());
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class SensorService extends Service {
 		            .setSmallIcon(R.drawable.ic_launcher)
 		            .setWhen(System.currentTimeMillis())
 		            .setAutoCancel(true)
-		            .setContentTitle("SeattleSensors")
+		            .setContentTitle(SensorRegistry.TAG)
 		            .setContentText("running");
 		Notification n = builder.build();
 		nm.notify(NOTIFICATION, n);
@@ -144,7 +144,7 @@ public class SensorService extends Service {
 	public void onDestroy() {
 		registry.getJSONLogger().finalize();
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(NOTIFICATION);
-		Log.d("SeattleSensors", "SeattleSensors stopped");
+		Log.d(SensorRegistry.TAG, "SeattleSensors stopped");
 	}
 
 	public SensorRegistry getSensorRegistry() {
