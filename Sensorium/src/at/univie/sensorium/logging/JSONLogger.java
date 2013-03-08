@@ -115,6 +115,8 @@ public class JSONLogger implements SensorChangeListener{
 				PrintWriter pw = new PrintWriter(sw);
 				e.printStackTrace(pw);
 				Log.d(SensorRegistry.TAG, sw.toString());
+				jsonMap.remove(sensorname);
+				writerMap.remove(sensorname);
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
@@ -130,20 +132,25 @@ public class JSONLogger implements SensorChangeListener{
 		JsonWriter jw = getWriterForName(sensor.getClass().getName());
 		List<SensorValue> valuelist = sensor.getSensorValues();
 		
-		try {
-			jw.beginObject();
-			jw.name("privacy-level").value(sensor.getPrivacylevel().name());
-			for(SensorValue value: valuelist){
-				SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
-				jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+		if (jw != null){
+			try {
+				jw.beginObject();
+				jw.name("privacy-level").value(sensor.getPrivacylevel().name());
+				for(SensorValue value: valuelist){
+					SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
+					jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+				}
+				jw.endObject();
+				writerMap.get(sensor.getClass().getName()).flush();
+			} catch (IOException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d(SensorRegistry.TAG, sw.toString());
 			}
-			jw.endObject();
-			writerMap.get(sensor.getClass().getName()).flush();
-		} catch (IOException e) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			Log.d(SensorRegistry.TAG, sw.toString());
+		}
+		else {
+			Log.d(SensorRegistry.TAG, "Can't get write access to log file, skipping");
 		}
 
 	}
