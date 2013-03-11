@@ -98,9 +98,10 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
+		Log.d(SensorRegistry.TAG, "dialog closed");
 		super.onDialogClosed(positiveResult);
 
-		if (positiveResult) {
+//		if (positiveResult) { // save it even on cancel, to be on the safe side
 			Editor editor = getEditor();
 
 			editor.putString(Preferences.UPLOAD_URL_PREF, url.getText().toString());
@@ -108,7 +109,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			editor.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
 			editor.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 			editor.commit();
-		}
+//		}
 	}
 
 	protected void populateDialog() {
@@ -160,6 +161,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		// TODO: update persisted values only when OK button pressed
 
 		if (which == Dialog.BUTTON_POSITIVE) {
+			Log.d(SensorRegistry.TAG, "OK pressed");
 			if (automatic.isChecked()) {
 				// update the prefs first
 				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), retrieveInterval(), wifi.isChecked());
@@ -169,6 +171,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		} else if (which == Dialog.BUTTON_NEGATIVE) {
 			// don't change anything
 		}
+		getDialog().dismiss();
 	}
 
 }
