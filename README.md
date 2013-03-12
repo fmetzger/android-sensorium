@@ -28,7 +28,7 @@ Bitte kommen Sie uns w&auml;hrend der Demo-Session besuchen. Wir stehen gerne f&
 
 
 # Hello and thanks for coming here! #
-We would like to use sensor data from your Android device in our demo ``Sensorium -- The Generic Sensor Framework'' on Wednesday March 13, starting at 1 PM, in room GS-Pool or 38.03. If you want to participate, please install ``Sensorium'' [from Google Play][101].
+We would like to use sensor data from your Android device in our demo \`\`Sensorium -- The Generic Sensor Framework'' on Wednesday March 13, starting at 1 PM, in room GS-Pool or 38.03. If you want to participate, please install \`\`Sensorium'' [from Google Play][101].
 
 The app collects sensor values (such as 3G, GPS, battery charge) that you allow us to access. You can control the level of detail of the data collected from within the app. The app comes preconfigured for collecting data for our open 3G connectivity map, [``Open3GMap''][102]. For this, we store your GPS location and details about current 3G coverage such as signal strength and access technology on our server (in case you choose to share this data with us). If you care about privacy, be sure to read on.
 
