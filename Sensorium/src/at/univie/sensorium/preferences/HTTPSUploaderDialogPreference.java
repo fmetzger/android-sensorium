@@ -109,6 +109,13 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			editor.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
 			editor.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 			editor.commit();
+			
+			// alternative var storing
+			Preferences prefs = SensorRegistry.getInstance().getPreferences();
+			prefs.putString(Preferences.UPLOAD_URL_PREF, url.getText().toString());
+			prefs.putBoolean(Preferences.UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
+			prefs.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
+			prefs.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 //		}
 	}
 
