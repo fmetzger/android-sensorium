@@ -58,7 +58,6 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		super.onBindDialogView(view);
 
 		url = (EditText) view.findViewById(R.id.uploadurl_text);
-		// url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 
 		intervalSel = (Spinner) view.findViewById(R.id.upload_interval_selection);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.upload_intervals, android.R.layout.simple_spinner_item);
@@ -68,7 +67,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				String selected = parent.getItemAtPosition(pos).toString();
-				Log.d("SEATTLESPINNER", selected);
+				Log.d(SensorRegistry.TAG, "new http upload interval selected: " + selected);
 			}
 
 			@Override
@@ -95,6 +94,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		populateDialog();
 
 	}
+	
 
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
