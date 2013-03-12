@@ -82,7 +82,7 @@ public class SensoriumActivity extends Activity {
 			AlertDialog alertDialog;
 			alertDialog = new AlertDialog.Builder(this).create();
 			alertDialog.setTitle("About Sensorium");
-			alertDialog.setMessage(Html.fromHtml("To use Sensorium you first have to configure the privacy level of each individual sensor. Then you can connect to localhost TCP port 63090 (-63099) and use XMLRPC calls to interact with Sensorium. Visit <a href=\"https://github.com/fmetzger/android-sensorium\">https://github.com/fmetzger/android-sensorium</a> for further info. Have fun!"));
+			alertDialog.setMessage(Html.fromHtml("Sensorium shows you sensor information available on your device. It can also provide this data on external interfaces while attempting to preserve your privacy. You should take a look at the preferences to configure this to your needs. Visit <a href=\"https://github.com/fmetzger/android-sensorium\">https://github.com/fmetzger/android-sensorium</a> for further information. Have fun!"));
 			alertDialog.show();
 			return true;
 		default:

@@ -38,6 +38,8 @@ public abstract class AbstractSensor {
 	private List<SensorChangeListener> listeners;
 	private String description = "";
 	private Privacy.PrivacyLevel plevel;
+	
+	//protected SensorValue timestamp;
 
 	protected String name = "";
 
@@ -49,6 +51,7 @@ public abstract class AbstractSensor {
 	public void enable() {
 		if (!enabled) {
 			try {
+//				timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 				_enable();
 
 				SensorRegistry.getInstance().getPreferences().putBoolean(this.getClass().getName(), true);
