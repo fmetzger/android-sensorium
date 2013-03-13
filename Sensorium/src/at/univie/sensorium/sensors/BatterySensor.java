@@ -31,7 +31,6 @@ public class BatterySensor extends AbstractSensor {
 	public static BroadcastReceiver batteryReceiver;
 	public static Intent batteryIntent;
 	
-	private SensorValue timestamp;
 	private SensorValue level;
 	private SensorValue temperature;
 	private SensorValue voltage;
@@ -44,7 +43,6 @@ public class BatterySensor extends AbstractSensor {
 		super();
 		name = "Battery Information";
 		
-		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		level = new SensorValue(SensorValue.UNIT.RELATIVE, SensorValue.TYPE.CHARGE);
 		temperature = new SensorValue(SensorValue.UNIT.TEMPERATURE, SensorValue.TYPE.TEMPERATURE);
 		voltage = new SensorValue(SensorValue.UNIT.VOLTAGE, SensorValue.TYPE.VOLTAGE);
@@ -57,7 +55,6 @@ public class BatterySensor extends AbstractSensor {
         batteryReceiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
                 
-            	timestamp.setValue(System.currentTimeMillis());
             	int plug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
             	
                 if (plug == BatteryManager.BATTERY_PLUGGED_AC) {

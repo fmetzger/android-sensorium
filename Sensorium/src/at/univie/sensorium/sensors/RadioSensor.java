@@ -34,7 +34,6 @@ public class RadioSensor extends AbstractSensor {
 	private TelephonyManager telephonyManager;
 	private PhoneStateListener phoneStateListener;
 
-	private SensorValue timestamp;
 	private SensorValue mcc;
 	private SensorValue mnc;
 	private SensorValue cid;
@@ -52,7 +51,6 @@ public class RadioSensor extends AbstractSensor {
 		super();
 		name = "Radio Cell Information";
 
-		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		mcc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MCC);
 		mnc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MNC);
 		lac = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.LAC);
@@ -72,7 +70,6 @@ public class RadioSensor extends AbstractSensor {
 		telephonyManager = ((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE));
 		GsmCellLocation gsmCell = (GsmCellLocation) telephonyManager.getCellLocation();
 
-		timestamp.setValue(System.currentTimeMillis());
 		if (gsmCell != null) {
 			String mccmnc = telephonyManager.getNetworkOperator();
 			mcc.setValue(mccmnc.substring(0, 3));
@@ -105,7 +102,6 @@ public class RadioSensor extends AbstractSensor {
 				servicestate.setValue(state);
 				operator.setValue(serviceState.getOperatorAlphaLong());
 				roaming.setValue(serviceState.getRoaming());
-				timestamp.setValue(System.currentTimeMillis());
 				notifyListeners();
 			}
 			

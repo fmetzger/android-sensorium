@@ -42,7 +42,6 @@ public class GPSLocationSensor extends AbstractSensor {
 	private LocationListener locationListener;
 	private GpsStatus.Listener gpsStatusListener;
 
-	private SensorValue timestamp;
 	private SensorValue longitude;
 	private SensorValue latitude;
 	private SensorValue altitude;
@@ -51,6 +50,8 @@ public class GPSLocationSensor extends AbstractSensor {
 	private SensorValue speed;
 	private SensorValue satellites;
 	private SensorValue address;
+	
+	private long timeMillis;
 	
 	private static final long GPS_UPDATE_TIME_INTERVAL=10000; // milliseconds
 	private static final long GPS_UPDATE_MINIMAL_DISTANCE=30; // meters
@@ -61,7 +62,6 @@ public class GPSLocationSensor extends AbstractSensor {
 
 		name = "GPS Location";
 		
-		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);
 		altitude = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ALTITUDE);
@@ -86,7 +86,7 @@ public class GPSLocationSensor extends AbstractSensor {
 				accuracy.setValue(loc.getAccuracy());
 				bearing.setValue(loc.getBearing());
 				speed.setValue(loc.getSpeed());
-				timestamp.setValue(loc.getTime());
+				timeMillis = loc.getTime();
 				
 				Geocoder myLocation = new Geocoder(getContext().getApplicationContext(), Locale.getDefault());
 				List<Address> list = null;
@@ -149,6 +149,10 @@ public class GPSLocationSensor extends AbstractSensor {
 		locationManager.addGpsStatusListener(gpsStatusListener);
 	}
 
+	@Override
+	protected void updateTimestamp(){
+		timestamp.setValue(timeMillis);
+	}
 	@Override
 	protected void _disable() {
 		if (locationManager != null)

@@ -38,20 +38,20 @@ public class NetworkLocationSensor extends AbstractSensor {
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 
-	private SensorValue timestamp;
 	private SensorValue longitude;
 	private SensorValue latitude;
 	private SensorValue altitude;
 	private SensorValue accuracy;
 	private SensorValue address;
 	private SensorValue speed;
+	
+	private long timeMillis;
 
 	public NetworkLocationSensor() {
 		super();
 
 		name = "Network Location";
 		
-		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);
 		altitude = new SensorValue(SensorValue.UNIT.METER, SensorValue.TYPE.ALTITUDE);
@@ -69,8 +69,8 @@ public class NetworkLocationSensor extends AbstractSensor {
 				latitude.setValue(loc.getLatitude());
 				altitude.setValue(loc.getAltitude());
 				accuracy.setValue(loc.getAccuracy());
-				timestamp.setValue(loc.getTime());
 				speed.setValue(loc.getSpeed());
+				timeMillis = loc.getTime();
 				
 				Geocoder myLocation = new Geocoder(getContext().getApplicationContext(), Locale.getDefault());
 				List<Address> list = null;
@@ -114,5 +114,9 @@ public class NetworkLocationSensor extends AbstractSensor {
 	protected void _disable() {
 		if (locationManager != null)
 			locationManager.removeUpdates(locationListener);
+	}
+	
+	protected void updateTimestamp(){
+		timestamp.setValue(timeMillis);
 	}
 }
