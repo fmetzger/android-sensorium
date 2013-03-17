@@ -2,7 +2,7 @@
 
 ### Guten Tag und danke, dass Sie vorbeischauen! ###
 
-Wir w&uuml;rden gerne Sensordaten Ihres Android-Smartphones oder -Tablets f&uuml;r unsere Demo ,,Sensorium -- The Generic Sensor Framework'' (Mittwoch ab 13:00 in den R&auml;umen GS-Pool oder 38.03) nutzen. Wenn Sie mitmachen wollen, installieren Sie bitte unsere Android-App ,,Sensorium'' auf Ihrem Ger&auml;t [aus Google Play][101]. 
+Wir w&uuml;rden gerne Sensordaten Ihres Android-Smartphones oder -Tablets f&uuml;r unsere Demo ,,Sensorium -- The Generic Sensor Framework'' (Mittwoch ab 13:00 im Raum GS-Pool) nutzen. Wenn Sie mitmachen wollen, installieren Sie bitte unsere Android-App ,,Sensorium'' auf Ihrem Ger&auml;t [aus Google Play][101]. 
 
 Die App speichert Sensorwerte (3G, GPS, Akkustand usw.), die Sie uns erlauben auszulesen; Sie k&ouml;nnen die Aufl&ouml;sung der gesammelten Daten in der App beliebig steuern. Die oben verlinkte Version der App ist vorkonfiguriert, Daten f&uuml;r unsere offene 3G-Netzabdeckungskarte [,,Open3GMap''][102] zu sammeln. Daf&uuml;r speichern wir Ihre aktuelle GPS-Position sowie einige Details &uuml;ber die Empfangsst&auml;rke und Verbindungstechnologie Ihrer Mobilnetz-Anbindung auf unserem Server (falls Sie diese Daten zur Verf&uuml;gung stellen wollen). Weitere Details zum Datenschutz finden Sie im Folgenden.
 
@@ -28,7 +28,7 @@ Bitte kommen Sie uns w&auml;hrend der Demo-Session besuchen. Wir stehen gerne f&
 
 
 # Hello and thanks for coming here! #
-We would like to use sensor data from your Android device in our demo ``Sensorium -- The Generic Sensor Framework'' on Wednesday March 13, starting at 1 PM, in room GS-Pool or 38.03. If you want to participate, please install ``Sensorium'' [from Google Play][101].
+We would like to use sensor data from your Android device in our demo \`\`Sensorium -- The Generic Sensor Framework'' on Wednesday March 13, starting at 1 PM, in room GS-Pool. If you want to participate, please install \`\`Sensorium'' [from Google Play][101].
 
 The app collects sensor values (such as 3G, GPS, battery charge) that you allow us to access. You can control the level of detail of the data collected from within the app. The app comes preconfigured for collecting data for our open 3G connectivity map, [``Open3GMap''][102]. For this, we store your GPS location and details about current 3G coverage such as signal strength and access technology on our server (in case you choose to share this data with us). If you care about privacy, be sure to read on.
 
