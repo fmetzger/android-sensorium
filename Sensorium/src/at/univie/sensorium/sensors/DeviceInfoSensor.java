@@ -36,6 +36,7 @@ import android.telephony.TelephonyManager;
  */
 public class DeviceInfoSensor extends AbstractSensor {
 	
+	private SensorValue androidversion;
 	private SensorValue tac;
 	private SensorValue vendorname;
 	private SensorValue modelname;
@@ -51,6 +52,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 		super();
 
 		name = "Device Information";
+		androidversion = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.ANDROID_VERSION);
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);
 		vendorname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.VENDOR_NAME);
@@ -79,6 +81,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 		if (imei != null)
 				tac.setValue(imei.substring(0, 6));
 		
+		androidversion.setValue(Build.VERSION.RELEASE);
 		vendorname.setValue(Build.MANUFACTURER);
 		modelname.setValue(Build.MODEL);
 		
