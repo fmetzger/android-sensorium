@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -171,11 +172,15 @@ public class JSONLogger implements SensorChangeListener {
 	}
 
 	public void finalize() {
+//		String id = UUID.randomUUID().toString();
 		for (AbstractSensor s : SensorRegistry.getInstance().getSensors()) {
 			s.removeListener(this);
 		}
 		for (JsonWriter js : jsonMap.values()) {
 			try {
+//				js.beginObject();
+//				js.name("id").value(id);
+//				js.endObject();
 				js.endArray();
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
@@ -205,6 +210,7 @@ public class JSONLogger implements SensorChangeListener {
 	}
 
 	public void upload(String uploadurl) {
+		
 		finalize(); // close the json objects
 		Preferences prefs = SensorRegistry.getInstance().getPreferences();
 		String uploadusername = prefs.getString(Preferences.UPLOAD_USERNAME, "");

@@ -58,7 +58,6 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		super.onBindDialogView(view);
 
 		url = (EditText) view.findViewById(R.id.uploadurl_text);
-		// url.setText("http://homepage.univie.ac.at/lukas.puehringer/multipart/multipart.php");
 
 		intervalSel = (Spinner) view.findViewById(R.id.upload_interval_selection);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(view.getContext(), R.array.upload_intervals, android.R.layout.simple_spinner_item);
@@ -68,7 +67,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 				String selected = parent.getItemAtPosition(pos).toString();
-				Log.d("SEATTLESPINNER", selected);
+				Log.d(SensorRegistry.TAG, "new http upload interval selected: " + selected);
 			}
 
 			@Override
@@ -95,12 +94,14 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		populateDialog();
 
 	}
+	
 
 	@Override
 	protected void onDialogClosed(boolean positiveResult) {
+		Log.d(SensorRegistry.TAG, "dialog closed");
 		super.onDialogClosed(positiveResult);
 
-		if (positiveResult) {
+//		if (positiveResult) { // save it even on cancel, to be on the safe side
 			Editor editor = getEditor();
 
 			editor.putString(Preferences.UPLOAD_URL_PREF, url.getText().toString());
@@ -108,7 +109,14 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 			editor.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
 			editor.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
 			editor.commit();
-		}
+			
+			// alternative var storing
+			Preferences prefs = SensorRegistry.getInstance().getPreferences();
+			prefs.putString(Preferences.UPLOAD_URL_PREF, url.getText().toString());
+			prefs.putBoolean(Preferences.UPLOAD_AUTOMATIC_PREF, automatic.isChecked());
+			prefs.putBoolean(Preferences.UPLOAD_WIFI_PREF, wifi.isChecked());
+			prefs.putInt(Preferences.UPLOAD_INTERVAL_PREF, intervalSel.getSelectedItemPosition());
+//		}
 	}
 
 	protected void populateDialog() {
@@ -160,6 +168,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		// TODO: update persisted values only when OK button pressed
 
 		if (which == Dialog.BUTTON_POSITIVE) {
+			Log.d(SensorRegistry.TAG, "OK pressed");
 			if (automatic.isChecked()) {
 				// update the prefs first
 				SensorRegistry.getInstance().getJSONLogger().autoupload(url.getText().toString(), retrieveInterval(), wifi.isChecked());
@@ -169,6 +178,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		} else if (which == Dialog.BUTTON_NEGATIVE) {
 			// don't change anything
 		}
+		getDialog().dismiss();
 	}
 
 }

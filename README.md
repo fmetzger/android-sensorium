@@ -1,19 +1,39 @@
 # Sensorium #
 
-Android Application to connect locally available sensors to a [Seattle][1] 
-installation on the device via XMLRPC. Sensors include:
-* Device Info 
-* Radio Cell Info Sensor 
-* Network Location
-* GPS Location
-* Battery (or power usage)
-* Wifi Scan result
-* Wifi Connection Details
-* Bluetooth Scan Result
+Sensorium is an Android Application that collects "sensor" information from your device ("Sensor data") and provides external interfaces to gather and process the data for scientific experiments. This is done in a privacy-preserving way. Only the data and only in the level of detail you allow will be made available.
 
-## Usage ##
+Sensorium can be remotely pre-configured to suite the needs for your experiment campaign. If you want to implement further sensors or interfaces, please do so. 
+
+All our code is available under the GNU Lesser GPL 3.0. We would appreciate it if you contributed back to the Sensorium project. 
+
+### Currently Available Sensors ###
+
+* Radio Cell Coverage Information Sensor
+* Network Location Sensor determines location based on availability of cellular 
+tower and Wifi access points. 
+* GPS Location Sensor determines location using satellites.
+* Wifi Scan Sensor periodically scans the current 802.11 network for all the 
+access points nearby.
+* Wifi Connection Sensor displays the current active Wifi connection status. 
+* Bluetooth Sensor displays local Bluetooth chip information, list of bonded 
+and (periodically) scanned device.
+
+### External Interfaces ###
+
+* Local XMLRPC. You could use this to talk to programs running outside of the Android Framework, e.g. we use this to talk to the [Seattle Testbed][1]
+* automatic JSON log generation and upload to HTTPS sites
+
+### Sensor, Interfaces and Privacy Configuration ###
+
+Users can also configure each sensor individually to suite their privacy needs. Also, can prevent Sensorium from running at boot or disable individual interfaces,
+
+* Full privacy: the sensor will not share any information on the external interfaces
+* High-Low privacy: Depending on the exact level of privacy, some information might not be shared at all, some data points might be rounded (e.g. longitude/latitude, i.e. only your coarse location will be seen), or salted and hashed (so you only can compare these hashes against each other). 
+* No privacy: All information available to the sensor will be shared.
 
 ## Develop ##
+
+Apart from improving the core Sensorium code, you are probably mostly interesting in writing your own Sensor or Interface classes. The following might help you with that.
 
 ### Implementing New Sensors ###
 
@@ -26,37 +46,7 @@ installation on the device via XMLRPC. Sensors include:
 
 Currently, we either talk through XMLRPC to your locally running code or we push JSON data to Web Servers.
 
-Have better ways of communicating your sensors? Implement it! Here's what you need to do:
-
-1. ...
-
-## Available Sensors ##
-
-To enable sensors, either altogether or individually, go to the "SETTINGS" menu. 
-Under "GENERAL PREFERENCE", users can select whether to start the sensor 
-application upon boot is completed
-.
-Users can also configure each sensor individually. As the user scrolling the 
-bar underneath each sensor from left to right, the sensor will be disabled 
-(leftmost), provide information with high/medium/low privacy, or full access 
-(rightmost). 
-
-Note:
-* Radio Cell Info Sensor (needs to be in the range of a cellular tower?)
-* Network Location Sensor determines location based on availability of cellular 
-tower and Wifi access points. Hence the device has to either be in the range 
-of a cellular tower or connected to a Wifi access point.
-* GPS Location Sensor determines location using satellites. GPS has to be 
-enabled on the device. Depending on conditions, this sensor may take a while 
-to return a location result. Also works better outdoors.
-* Wifi Scan Sensor periodically scans the current 802.11 network for all the 
-access points nearby. Therefore Wifi capability must be enabled on the device. 
-* Wifi Connection Sensor displays the current active Wifi connection status. 
-E.g., supplicant status shows the detailed state of the device's negotiation 
-with an access point.
-* Bluetooth Sensor displays local Bluetooth chip information, list of bonded 
-and (periodically) scanned device. Without doubt Bluetooth has to be enabled. 
-
+Have better ways of communicating your sensors? Implement it! At the moment, it would be best if you read the code to understand what you would need to do. We are still working on a small tutorial to get you started.
 
 
 ## Third Party Libraries ##

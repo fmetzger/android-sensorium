@@ -36,7 +36,6 @@ import android.telephony.TelephonyManager;
  */
 public class DeviceInfoSensor extends AbstractSensor {
 	
-	private SensorValue timestamp;
 	private SensorValue tac;
 	private SensorValue vendorname;
 	private SensorValue modelname;
@@ -52,7 +51,6 @@ public class DeviceInfoSensor extends AbstractSensor {
 		super();
 
 		name = "Device Information";
-		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);
 		vendorname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.VENDOR_NAME);
@@ -66,7 +64,6 @@ public class DeviceInfoSensor extends AbstractSensor {
 	private Runnable memCPUTask = new Runnable() {
 		@Override
 		public void run() {
-			timestamp.setValue(System.currentTimeMillis());
 			availMem.setValue(memoryInfo.availMem/1048576L);
 			cpu.setValue(cpuUpdate()*100);
 			
@@ -82,7 +79,6 @@ public class DeviceInfoSensor extends AbstractSensor {
 		if (imei != null)
 				tac.setValue(imei.substring(0, 6));
 		
-		timestamp.setValue(System.currentTimeMillis());
 		vendorname.setValue(Build.MANUFACTURER);
 		modelname.setValue(Build.MODEL);
 		
