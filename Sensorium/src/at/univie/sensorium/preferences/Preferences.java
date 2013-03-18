@@ -18,8 +18,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import at.univie.sensorium.o3gm.R;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.R;
+import at.univie.sensorium.SensorRegistry;
 
 import com.google.gson.stream.JsonReader;
 

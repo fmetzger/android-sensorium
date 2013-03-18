@@ -30,7 +30,7 @@ import java.security.SecureRandom;
 
 import android.util.Base64;
 import android.util.Log;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.sensors.SensorValue;
 

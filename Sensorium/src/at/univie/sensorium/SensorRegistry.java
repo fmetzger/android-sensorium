@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium.o3gm;
+package at.univie.sensorium;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

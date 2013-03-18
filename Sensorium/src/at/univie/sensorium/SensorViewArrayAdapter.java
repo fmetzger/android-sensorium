@@ -18,7 +18,7 @@
  * 
  */
 
-package at.univie.sensorium.o3gm;
+package at.univie.sensorium;
 
 import java.util.List;
 
@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import at.univie.sensorium.o3gm.R;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorViewArrayAdapter extends ArrayAdapter<AbstractSensor> {

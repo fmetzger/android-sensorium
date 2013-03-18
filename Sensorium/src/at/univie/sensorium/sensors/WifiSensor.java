@@ -11,7 +11,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.util.Log;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 
 public class WifiSensor extends AbstractSensor {
 	

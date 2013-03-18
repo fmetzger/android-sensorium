@@ -32,7 +32,7 @@ import org.xmlrpc.android.MethodCall;
 import org.xmlrpc.android.XMLRPCServer;
 
 import android.util.Log;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 
 public class XMLRPCSensorServerThread implements Runnable {
 

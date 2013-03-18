@@ -27,7 +27,7 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.Log;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 
 public class RadioSensor extends AbstractSensor {
 
@@ -41,6 +41,8 @@ public class RadioSensor extends AbstractSensor {
 	private SensorValue lac;
 	private SensorValue networktype;
 	private SensorValue signalstrength;
+	
+	private SensorValue subscriberid;
 	
 	private SensorValue roaming;
 	private SensorValue servicestate;
@@ -63,6 +65,8 @@ public class RadioSensor extends AbstractSensor {
 		roaming = new SensorValue(SensorValue.UNIT.OTHER, SensorValue.TYPE.ROAMING);
 		servicestate = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SERVICESTATE);
 		operator = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OPERATOR);
+		
+		subscriberid = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SUBSCRIBER_ID);
 		
 	}
 
@@ -106,6 +110,7 @@ public class RadioSensor extends AbstractSensor {
 				operator.setValue(serviceState.getOperatorAlphaLong());
 				roaming.setValue(serviceState.getRoaming());
 				timestamp.setValue(System.currentTimeMillis());
+				subscriberid.setValue(telephonyManager.getSubscriberId());
 				notifyListeners();
 			}
 			

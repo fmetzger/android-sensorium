@@ -32,8 +32,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.widget.Toast;
-import at.univie.sensorium.o3gm.SensorRegistry;
-import at.univie.sensorium.o3gm.SensoriumApplication;
+import at.univie.sensorium.SensorRegistry;
+import at.univie.sensorium.SensoriumApplication;
 import at.univie.sensorium.sensors.AbstractSensor;
 
 public class SensorPreferenceActivity extends PreferenceActivity {

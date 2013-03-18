@@ -28,7 +28,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.privacy.Privacy.PrivacyLevel;
 

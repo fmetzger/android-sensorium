@@ -18,12 +18,11 @@
  * 
  */
 
-package at.univie.sensorium.o3gm;
+package at.univie.sensorium;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
-import at.univie.sensorium.o3gm.R;
 
 public class SensorDebugActivity extends Activity {
 

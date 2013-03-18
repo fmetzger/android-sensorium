@@ -66,7 +66,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.webkit.URLUtil;
 import android.widget.Toast;
-import at.univie.sensorium.o3gm.SensorRegistry;
+import at.univie.sensorium.SensorRegistry;
 
 public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
