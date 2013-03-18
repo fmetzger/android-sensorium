@@ -47,6 +47,7 @@ public class SensorViewArrayAdapter extends ArrayAdapter<AbstractSensor> {
 		TextView sValue;
 		TextView sName;
 		TextView sPrivacyLevel;
+		TextView sTimestamp;
 		TextView sUnit;
 		TextView sType;
 		
@@ -58,10 +59,11 @@ public class SensorViewArrayAdapter extends ArrayAdapter<AbstractSensor> {
 			sValue = (TextView) convertView.findViewById(R.id.sensorValues);
 			sName = (TextView) convertView.findViewById(R.id.sensorName);
 			sPrivacyLevel = (TextView) convertView.findViewById(R.id.sensorPrivacyLevel);
+			sTimestamp = (TextView) convertView.findViewById(R.id.sensorTimestamp);
 			sUnit = (TextView) convertView.findViewById(R.id.sensorUnits);
 			sType = (TextView) convertView.findViewById(R.id.sensorTypes);
 
-			svi = new SensorViewItem(sName, sPrivacyLevel, sValue, sUnit, sType);
+			svi = new SensorViewItem(sName, sPrivacyLevel, sTimestamp, sValue, sUnit, sType);
 			convertView.setTag(svi);
 			
 		} else {

@@ -20,7 +20,10 @@
 
 package at.univie.sensorium;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import android.widget.TextView;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -34,14 +37,16 @@ public class SensorViewItem implements SensorChangeListener {
 	private TextView textViewSensorTypes;
 	private TextView textViewSensorName;
 	private TextView textViewSensorPrivacyLevel;
+	private TextView textViewSensorTimestamp;
 
-	public SensorViewItem(TextView sName, TextView sPrivacyLevel, TextView sValues, TextView sUnits, TextView sTypes) {
+	public SensorViewItem(TextView sName, TextView sPrivacyLevel, TextView sTimestamp, TextView sValues, TextView sUnits, TextView sTypes) {
 
 		this.textViewSensorValues = sValues;
 		this.textViewSensorUnits = sUnits;
 		this.textViewSensorTypes = sTypes;
 		this.textViewSensorName = sName;
 		this.textViewSensorPrivacyLevel = sPrivacyLevel;
+		this.textViewSensorTimestamp = sTimestamp;
 	}
 
 	public void attachto(AbstractSensor sensor, List<AbstractSensor> sensors) {
@@ -49,6 +54,7 @@ public class SensorViewItem implements SensorChangeListener {
 			s.removeListener(this);
 		sensor.addListener(this);
 	}
+
 	public void updateDisplay(AbstractSensor sensor) {
 		StringBuffer sValues = new StringBuffer();
 		StringBuffer sUnits = new StringBuffer();
@@ -57,12 +63,18 @@ public class SensorViewItem implements SensorChangeListener {
 		List<SensorValue> values = sensor.getSensorValues();
 
 		for (SensorValue v : values) {
-			sValues.append(v.getValueRepresentation() + "\n");
-			sUnits.append(v.getUnit().getName() + "\n");
-			sTypes.append(v.getType().getName() + "\n");
+			if (v != null) {
+				if (v.getType().equals(SensorValue.TYPE.TIMESTAMP)) {
+					textViewSensorTimestamp.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date((Long) v.getValue())));
+					continue;
+				}
+				sValues.append(v.getValueRepresentation() + "\n");
+				sUnits.append(v.getUnit().getName() + "\n");
+				sTypes.append(v.getType().getName() + "\n");
+			}
 		}
 		textViewSensorName.setText(sensor.getName());
-		
+
 		textViewSensorPrivacyLevel.setText(sensor.getSensorStateDescription());
 		textViewSensorValues.setText(sValues.toString());
 		textViewSensorUnits.setText(" " + sUnits.toString());

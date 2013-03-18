@@ -38,7 +38,7 @@ public abstract class AbstractSensor {
 	private List<SensorChangeListener> listeners;
 	private String description = "";
 	private Privacy.PrivacyLevel plevel;
-	
+
 	protected SensorValue timestamp;
 
 	protected String name = "";
@@ -100,8 +100,8 @@ public abstract class AbstractSensor {
 		else
 			enable();
 	}
-	
-	protected void updateTimestamp(){
+
+	protected void updateTimestamp() {
 		timestamp.setValue(System.currentTimeMillis());
 	}
 
@@ -126,6 +126,10 @@ public abstract class AbstractSensor {
 
 	public List<SensorValue> getSensorValues() {
 		List<SensorValue> values = new LinkedList<SensorValue>();
+
+		values.add(timestamp); // as long as timestamp is the only sensorvalue
+								// in the AbstractSensor superclass we should
+								// add it manually
 
 		Field[] fields = this.getClass().getDeclaredFields();
 
@@ -186,32 +190,33 @@ public abstract class AbstractSensor {
 		notifyListeners();
 	}
 
-
 	private void unsetallValues() {
 		for (SensorValue s : getSensorValues()) {
 			s.unsetValue();
 		}
 	}
-	
+
 	/**
-	 * Convenience method to access the application context.
-	 * However, you should not call this in your sensor constructor,
-	 * the value might not be initialized yet
+	 * Convenience method to access the application context. However, you should
+	 * not call this in your sensor constructor, the value might not be
+	 * initialized yet
+	 * 
 	 * @return
 	 */
-	protected Context getContext(){
+	protected Context getContext() {
 		return SensorRegistry.getInstance().getContext();
 	}
-	
-	public String getSensorStateDescription(){
+
+	public String getSensorStateDescription() {
 		String sensorstate = "state unavailable";
-//		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(SensorRegistry.getInstance().getContext());
-//		boolean enabled = prefs.getBoolean(this.getClass().getName(), true);
-		if(!enabled)
+		// SharedPreferences prefs =
+		// PreferenceManager.getDefaultSharedPreferences(SensorRegistry.getInstance().getContext());
+		// boolean enabled = prefs.getBoolean(this.getClass().getName(), true);
+		if (!enabled)
 			sensorstate = "Sensor disabled";
 		else
 			sensorstate = this.getPrivacylevel().toString();
-		
+
 		return sensorstate;
 	}
 }
