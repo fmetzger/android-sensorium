@@ -23,7 +23,7 @@ public class WifiConnectionSensor extends AbstractSensor {
 
 	public WifiConnectionSensor(){
 		super();
-		name = "Wifi Connections";
+		setName("Wifi Connections");
 		
 		ssid = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SSID);
 		ssid_hidden = new SensorValue(SensorValue.UNIT.OTHER, SensorValue.TYPE.SSID_HIDDEN);

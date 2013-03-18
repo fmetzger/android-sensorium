@@ -38,10 +38,11 @@ public abstract class AbstractSensor {
 	private List<SensorChangeListener> listeners;
 	private String description = "";
 	private Privacy.PrivacyLevel plevel;
+	private String name = "Unnamed Sensor";
 
 	protected SensorValue timestamp;
 
-	protected String name = "";
+	
 
 	public AbstractSensor() {
 		this.listeners = new LinkedList<SensorChangeListener>();
@@ -122,6 +123,10 @@ public abstract class AbstractSensor {
 
 	public String getName() {
 		return name;
+	}
+	
+	protected void setName(String name){
+		this.name = name;
 	}
 
 	public List<SensorValue> getSensorValues() {

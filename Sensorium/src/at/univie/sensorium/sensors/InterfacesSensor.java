@@ -38,7 +38,7 @@ public class InterfacesSensor extends AbstractSensor {
 
 	public InterfacesSensor() {
 		super();
-		name = "Network Interfaces";
+		setName("Network Interfaces");
 		ipaddresses = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.DEVICE_IP);
 		
 

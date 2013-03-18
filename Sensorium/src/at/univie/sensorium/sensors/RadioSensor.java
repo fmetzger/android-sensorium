@@ -51,7 +51,7 @@ public class RadioSensor extends AbstractSensor {
 	
 	public RadioSensor() {
 		super();
-		name = "Radio Cell Information";
+		setName("Radio Cell Information");
 
 		mcc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MCC);
 		mnc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MNC);

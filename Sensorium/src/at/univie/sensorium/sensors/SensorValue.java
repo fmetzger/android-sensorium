@@ -31,7 +31,7 @@ public class SensorValue {
 	public static enum UNIT {
 		DEGREE("°"), MILLISECONDS("ms"), METER("m"), HASH(" "), STRING(" "), MEM("MB"),
 		OTHER(" "), NUMBER(" "), RELATIVE("%"), VOLTAGE("V"), TEMPERATURE("°C"),METERSPERSECOND("m/s"),
-		STATE("state"), NAME("name"), LIST(""), DBM("dBm"), MBPS("Mbps"), ASU("asu");
+		STATE("state"), NAME("name"), LIST(""), DBM("dBm"), MBPS("Mbps"), ASU("asu"), PRESSURE("mbar");
 
 		private String name;
 
@@ -57,7 +57,8 @@ public class SensorValue {
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
 		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),VOLTAGE("voltage"),
-		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)"), SUBSCRIBER_ID("subscriber id"), ANDROID_VERSION("android version");
+		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)"), SUBSCRIBER_ID("subscriber id"), ANDROID_VERSION("android version"),
+		ATMOSPHERIC_PRESSURE("atmospheric pressure");
 
 		private String name;
 

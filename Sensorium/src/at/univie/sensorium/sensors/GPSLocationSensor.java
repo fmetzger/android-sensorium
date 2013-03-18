@@ -60,7 +60,7 @@ public class GPSLocationSensor extends AbstractSensor {
 	public GPSLocationSensor() {
 		super();
 
-		name = "GPS Location";
+		setName("GPS Location");
 		
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);

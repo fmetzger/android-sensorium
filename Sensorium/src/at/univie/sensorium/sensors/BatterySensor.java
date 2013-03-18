@@ -41,7 +41,7 @@ public class BatterySensor extends AbstractSensor {
 
 	public BatterySensor() {
 		super();
-		name = "Battery Information";
+		setName("Battery Information");
 		
 		level = new SensorValue(SensorValue.UNIT.RELATIVE, SensorValue.TYPE.CHARGE);
 		temperature = new SensorValue(SensorValue.UNIT.TEMPERATURE, SensorValue.TYPE.TEMPERATURE);

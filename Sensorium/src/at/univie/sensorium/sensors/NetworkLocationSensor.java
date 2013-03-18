@@ -50,7 +50,7 @@ public class NetworkLocationSensor extends AbstractSensor {
 	public NetworkLocationSensor() {
 		super();
 
-		name = "Network Location";
+		setName("Network Location");
 		
 		longitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LONGITUDE);
 		latitude = new SensorValue(SensorValue.UNIT.DEGREE, SensorValue.TYPE.LATITUDE);

@@ -51,7 +51,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 	public DeviceInfoSensor() {
 		super();
 
-		name = "Device Information";
+		setName("Device Information");
 		androidversion = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.ANDROID_VERSION);
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);

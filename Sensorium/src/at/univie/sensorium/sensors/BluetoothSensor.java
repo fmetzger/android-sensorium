@@ -41,7 +41,7 @@ public class BluetoothSensor extends AbstractSensor {
 
 	public BluetoothSensor() {
 		super();
-		name = "Bluetooth Sensor";
+		setName("Bluetooth Sensor");
 		
 		localDeviceName = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
 		localMAC = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);

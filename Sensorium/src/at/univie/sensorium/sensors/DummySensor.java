@@ -33,7 +33,7 @@ public class DummySensor extends AbstractSensor {
 
 	public DummySensor() {
 		super();
-		this.name = "Test Sensor";
+		setName("Test Sensor");
 	}
 	
 	@Override
