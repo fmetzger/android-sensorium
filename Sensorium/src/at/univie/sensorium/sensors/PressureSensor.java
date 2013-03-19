@@ -5,46 +5,57 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 
-public class PressureSensor extends AbstractSensor implements SensorEventListener {
-	
-    private SensorManager mSensorManager;
-    private Sensor mPressure;
-    
-    private SensorValue pressure;
+public class PressureSensor extends AbstractSensor {
 
-    public PressureSensor() {
-    	setName("Barometer");
-    	pressure = new SensorValue(SensorValue.UNIT.PRESSURE, SensorValue.TYPE.ATMOSPHERIC_PRESSURE);
-    }
-    
+	private final int scan_interval_millis = 30000; // 30s
+	private Handler handler = new Handler();
+
+	private SensorManager mSensorManager;
+	private Sensor mPressure;
+
+	private SensorValue pressure;
+
+	public PressureSensor() {
+		setName("Barometer");
+		pressure = new SensorValue(SensorValue.UNIT.PRESSURE, SensorValue.TYPE.ATMOSPHERIC_PRESSURE);
+	}
+
 	@Override
 	protected void _enable() {
-        mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
-        mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
-		mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager = (SensorManager) getContext().getSystemService(Context.SENSOR_SERVICE);
+		mPressure = mSensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+		mSensorManager.registerListener(pressurelistener, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
 	protected void _disable() {
-		mSensorManager.unregisterListener(this);
+		mSensorManager.unregisterListener(pressurelistener);
 	}
 
+	private Runnable enablePressureSensor = new Runnable() {
 
-	@Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    }
+		@Override
+		public void run() {
+			mSensorManager.registerListener(pressurelistener, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
+		}
+	};
 
+	private SensorEventListener pressurelistener = new SensorEventListener() {
 
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		// Sensor.TYPE_PRESSURE:
-	    // values[0]: Atmospheric pressure in hPa (millibar)
-		
-		// TODO: implement own update timer to decrease update frequency
-		pressure.setValue(event.values[0]);
-		notifyListeners();
-	}
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		}
 
-
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			// Sensor.TYPE_PRESSURE:
+			// values[0]: Atmospheric pressure in hPa (millibar)
+			pressure.setValue(event.values[0]);
+			notifyListeners();
+			mSensorManager.unregisterListener(this);
+			handler.postDelayed(enablePressureSensor, scan_interval_millis);
+		}
+	};
 }

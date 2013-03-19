@@ -1,6 +1,6 @@
 # Sensorium #
 
-(Note: if you were looking for information on our NetSys2013 demonstration, please look [here][5])
+(Note: If you were looking for information on our NetSys2013 demonstration, please look [here][5].)
 
 Sensorium is an Android Application that collects "sensor" information from your device ("Sensor data") and provides external interfaces to gather and process the data for scientific experiments. This is done in a privacy-preserving way. Only the data and only in the level of detail you allow will be made available.
 
