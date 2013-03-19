@@ -60,7 +60,7 @@
         </receiver>
 
         <receiver
-            android:name="at.univie.sensorium.preferences.CampaignTrackingReceiver"
+            android:name="at.univie.sensorium.preferences.CampaignTrackingBroadcastReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />

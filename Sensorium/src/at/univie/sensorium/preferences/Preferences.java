@@ -99,6 +99,10 @@ public class Preferences {
 //	}
 
 	public void loadDefaultPreferences() {
+		if (!isFirstRun()){
+			Log.d(SensorRegistry.TAG, "Not first run, not loading external preferences");
+			return;
+		}
 		loadPrefsFromStream(context.getResources().openRawResource(R.raw.defaultpreferences));
 	}
 
@@ -110,11 +114,6 @@ public class Preferences {
 	}
 
 	private void loadPrefsFromStream(InputStream input) {
-		if (!isFirstRun()){
-			Log.d(SensorRegistry.TAG, "Not first run, not loading external preferences");
-			return;
-		}
-		
 		List<BasicNameValuePair> preferencelist = new LinkedList<BasicNameValuePair>();
 		try {
 			InputStreamReader isreader = new InputStreamReader(input);

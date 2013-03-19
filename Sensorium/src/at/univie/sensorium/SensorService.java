@@ -68,8 +68,8 @@ public class SensorService extends Service {
 		registry = SensorRegistry.getInstance();
 		registry.setPreferences(preferences);
 		
-		preferences.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
-//		preferences.loadDefaultPreferences();
+//		preferences.loadCampaignPreferences("http://homepage.univie.ac.at/florian.metzger/defaultpreferences.json");
+		preferences.loadDefaultPreferences();
 		
 		
 		startSensors();
