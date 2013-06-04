@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -182,6 +181,8 @@ public class JSONLogger implements SensorChangeListener {
 //				js.name("id").value(id);
 //				js.endObject();
 				js.endArray();
+				js.flush();		// added on 2013-04-09; does this help in fixing the missing ]?
+				js.close();   	// added on 2013-04-09; does this help in fixing the missing ]?
 			} catch (IOException e) {
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
