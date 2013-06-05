@@ -72,7 +72,7 @@ public abstract class AbstractSensor {
 		}
 	}
 
-	protected abstract void _enable();
+	protected abstract void _enable() throws SensorException;
 
 	public void disable() {
 		// if(enabled){

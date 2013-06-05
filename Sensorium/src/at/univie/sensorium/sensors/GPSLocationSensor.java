@@ -21,6 +21,8 @@
 package at.univie.sensorium.sensors;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +37,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import at.univie.sensorium.SensorRegistry;
 
 public class GPSLocationSensor extends AbstractSensor {
 
@@ -103,7 +106,10 @@ public class GPSLocationSensor extends AbstractSensor {
 					else
 						address.setValue("n/a");
 				} catch (IOException e) {
-					e.printStackTrace();
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					e.printStackTrace(pw);
+					Log.d(SensorRegistry.TAG, sw.toString());
 				}
 
 				notifyListeners();

@@ -1,11 +1,11 @@
  [
    {
-    "upload_url": "",
-    "upload_username": "",
-    "upload_password": "",
-    "upload_automatic": "false",
-    "upload_wifi": "false",
-    "upload_interval": "3600",
+    "upload_url": "https://skylla.fc.univie.ac.at/openlayers/sensorium/",
+    "upload_username": "o3gm_upload_user",
+    "upload_password": "o3gm_upload_user_password",
+    "upload_automatic": "true",
+    "upload_wifi": "true",
+    "upload_interval": "86400",
      
     "xmlrpc_enabled": "true",
      
@@ -14,19 +14,23 @@
 	"at.univie.sensorium.sensors.BatterySensor": "true",
 	"at.univie.sensorium.sensors.GPSLocationSensor": "true",
 	"at.univie.sensorium.sensors.DeviceInfoSensor": "true",
+	"at.univie.sensorium.sensors.FusedLocationSensor": "true",
 	"at.univie.sensorium.sensors.NetworkLocationSensor": "true",
 	"at.univie.sensorium.sensors.RadioSensor": "true",
+	"at.univie.sensorium.sensors.PressureSensor": "true",
 	"at.univie.sensorium.sensors.BluetoothSensor": "true",
 	"at.univie.sensorium.sensors.WifiConnectionSensor": "true",
 	"at.univie.sensorium.sensors.WifiSensor": "true",
 	
 	
-	"at.univie.sensorium.sensors.BatterySensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.BatterySensor-privacylevel": "0",
 	"at.univie.sensorium.sensors.BluetoothSensor-privacylevel": "4",
-	"at.univie.sensorium.sensors.GPSLocationSensor-privacylevel": "4",
-	"at.univie.sensorium.sensors.DeviceInfoSensor-privacylevel": "4",
-	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel": "4",
-	"at.univie.sensorium.sensors.RadioSensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.GPSLocationSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.FusedLocationSensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.DeviceInfoSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.PressureSensor-privacylevel": "4",
+	"at.univie.sensorium.sensors.RadioSensor-privacylevel": "0",
 	"at.univie.sensorium.sensors.WifiConnectionSensor-privacylevel": "4",
 	"at.univie.sensorium.sensors.WifiSensor-privacylevel": "4"
 	 
