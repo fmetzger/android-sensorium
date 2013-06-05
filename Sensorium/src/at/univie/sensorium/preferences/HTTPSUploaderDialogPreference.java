@@ -139,7 +139,7 @@ public class HTTPSUploaderDialogPreference extends DialogPreference {
 		} else if (intervalSel.getSelectedItem().equals("1d")) {
 			interval = 86400; // 24*3600s
 		} else { // default value
-			interval = 3600;
+			interval = 86400;
 		}
 		return interval;
 	}

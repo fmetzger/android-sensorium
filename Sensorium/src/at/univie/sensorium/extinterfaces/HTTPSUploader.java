@@ -82,8 +82,8 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
 	@Override
 	protected String doInBackground(List<File>... params) {
-		uploadFiles(params[0]);
-		return "upload complete";
+		String result = uploadFiles(params[0]);
+		return "Sensorium: Upload finished with: " + result;
 	}
 
 	protected void onPostExecute(String result) {
@@ -93,10 +93,11 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting upload...", Toast.LENGTH_SHORT).show();
+		Toast.makeText(SensorRegistry.getInstance().getContext(), "Sensorium: Starting log upload.", Toast.LENGTH_SHORT).show();
 	}
 
-	private void uploadFiles(List<File> files) {
+	private String uploadFiles(List<File> files) {
+		String result = "";
 		try {
 
 			if (URLUtil.isValidUrl(posturl)) {
@@ -132,14 +133,14 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 				} finally {
 					in.close();
 				}
-
-				Log.d(SensorRegistry.TAG, "Http upload completed with response: " + response.getStatusLine().toString() + " " + reply);
+				result = response.getStatusLine().toString();
+				Log.d(SensorRegistry.TAG, "Http upload completed with response: " + result + " " + reply);
 
 
 			} else {
+				result = "URL invalid";
 				Log.d(SensorRegistry.TAG, "Invalid http upload url, aborting.");
 			}
-
 		} catch (IllegalArgumentException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
@@ -161,6 +162,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 			e.printStackTrace(pw);
 			Log.d(SensorRegistry.TAG, sw.toString());
 		}
+		return result;
 	}
 
 	public HttpClient getNewHttpClient() {

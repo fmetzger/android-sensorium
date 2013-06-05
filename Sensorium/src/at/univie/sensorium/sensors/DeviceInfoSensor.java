@@ -21,14 +21,20 @@
 package at.univie.sensorium.sensors;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.StringWriter;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.TextView;
+import at.univie.sensorium.SensorRegistry;
 
 /**
  * Provides information tied to the device/model, i.e. vendor and model name, TAC, ...
@@ -37,6 +43,7 @@ import android.telephony.TelephonyManager;
 public class DeviceInfoSensor extends AbstractSensor {
 	
 	private SensorValue androidversion;
+	private SensorValue sensoriumversion;
 	private SensorValue tac;
 	private SensorValue vendorname;
 	private SensorValue modelname;
@@ -53,6 +60,7 @@ public class DeviceInfoSensor extends AbstractSensor {
 
 		setName("Device Information");
 		androidversion = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.ANDROID_VERSION);
+		sensoriumversion = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SENSORIUM_VERSION);
 		tac = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.TAC);
 		modelname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MODEL_NAME);
 		vendorname = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.VENDOR_NAME);
@@ -82,6 +90,17 @@ public class DeviceInfoSensor extends AbstractSensor {
 				tac.setValue(imei.substring(0, 6));
 		
 		androidversion.setValue(Build.VERSION.RELEASE);
+		
+		try {
+			String versionName = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
+			sensoriumversion.setValue(versionName);
+		} catch (NameNotFoundException e) {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			Log.d(SensorRegistry.TAG, sw.toString());
+		}
+		
 		vendorname.setValue(Build.MANUFACTURER);
 		modelname.setValue(Build.MODEL);
 		

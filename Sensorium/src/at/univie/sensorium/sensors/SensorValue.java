@@ -58,7 +58,7 @@ public class SensorValue {
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
 		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),VOLTAGE("voltage"),
 		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)"), SUBSCRIBER_ID("subscriber id"), ANDROID_VERSION("android version"),
-		ATMOSPHERIC_PRESSURE("atmospheric pressure");
+		ATMOSPHERIC_PRESSURE("atmospheric pressure"), SENSORIUM_VERSION("Sensorium version");
 
 		private String name;
 
