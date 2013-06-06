@@ -4,6 +4,7 @@
         <item>at.univie.sensorium.sensors.DeviceInfoSensor</item>
         <item>at.univie.sensorium.sensors.BatterySensor</item>
         <item>at.univie.sensorium.sensors.RadioSensor</item>
+        <item>at.univie.sensorium.sensors.SIMSensor</item>
         <item>at.univie.sensorium.sensors.NetworkLocationSensor</item>
         <item>at.univie.sensorium.sensors.GPSLocationSensor</item>
         <item>at.univie.sensorium.sensors.FusedLocationSensor</item>

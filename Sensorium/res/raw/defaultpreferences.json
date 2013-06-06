@@ -17,6 +17,7 @@
 	"at.univie.sensorium.sensors.FusedLocationSensor": "true",
 	"at.univie.sensorium.sensors.NetworkLocationSensor": "true",
 	"at.univie.sensorium.sensors.RadioSensor": "true",
+	"at.univie.sensorium.sensors.SIMsSensor": "true",
 	"at.univie.sensorium.sensors.PressureSensor": "true",
 	"at.univie.sensorium.sensors.BluetoothSensor": "true",
 	"at.univie.sensorium.sensors.WifiConnectionSensor": "true",
@@ -31,6 +32,7 @@
 	"at.univie.sensorium.sensors.NetworkLocationSensor-privacylevel": "0",
 	"at.univie.sensorium.sensors.PressureSensor-privacylevel": "4",
 	"at.univie.sensorium.sensors.RadioSensor-privacylevel": "0",
+	"at.univie.sensorium.sensors.SIMSensor-privacylevel": "0",
 	"at.univie.sensorium.sensors.WifiConnectionSensor-privacylevel": "4",
 	"at.univie.sensorium.sensors.WifiSensor-privacylevel": "4"
 	 
