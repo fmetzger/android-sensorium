@@ -1,6 +1,0 @@
-- FEATURE: sensor data logging
-- FEATURE: built-in data upload
-- CHANGE: improve preference layout
-- CHANGE: PrivacyHelper anonymization method improvements
-- FEATURE: SensorValue needs to support list values; the sensor views also need to be able to handle this
-- FEATURE: privacy methods and sensor repository?
