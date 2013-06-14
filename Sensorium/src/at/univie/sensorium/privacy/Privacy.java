@@ -50,7 +50,7 @@ public class Privacy {
 		public int value() {
 			return value;
 		}
-		
+
 		@Override
 		public String toString() {
 			return name;
@@ -73,8 +73,6 @@ public class Privacy {
 		}
 	}
 
-
-
 	protected static SensorValue anonymizeValue(SensorValue val, PrivacyLevel l) {
 		switch (l) {
 		case NO:
@@ -89,6 +87,11 @@ public class Privacy {
 			val.setValue("n/a");
 			return val;
 		}
+	}
+
+	protected static SensorValue anonymizestrict(SensorValue val, PrivacyLevel l) {
+		val.setValue("n/a");
+		return val;
 	}
 
 	protected static SensorValue anonymizesignalstrength(SensorValue val, PrivacyLevel l) {
@@ -120,7 +123,7 @@ public class Privacy {
 		case LATITUDE:
 		case LONGITUDE:
 			return LocationPrivacy.anonymizeValue(retval, l);
-			
+
 		case ADDRESS:
 			return LocationPrivacy.anonymizeAddress(retval, l);
 
@@ -132,14 +135,16 @@ public class Privacy {
 			return anonymizeValue(retval, l);
 		case SIGNALSTRENGTH:
 			return anonymizesignalstrength(retval, l);
+		case SIM_SERIAL:
+		case SUBSCRIBER_ID:
+			return anonymizestrict(retval, l);
 
 		default:
-//			Log.d(SensorRegistry.TAG, "No known privacy methods for type " + val.getType().getName());
+			// Log.d(SensorRegistry.TAG, "No known privacy methods for type " +
+			// val.getType().getName());
 			return retval;
 		}
 	}
-
-
 
 	protected static SensorValue hash(SensorValue val) {
 		SensorValue ret = new SensorValue(val);
@@ -174,13 +179,13 @@ public class Privacy {
 	protected static SensorValue salt(SensorValue val) {
 		// load stored seed or generate a new one
 		String salt = SensorRegistry.getInstance().getPreferences().getString(Preferences.PRIVACY_HASH, "");
-		if (salt.equals("")){
+		if (salt.equals("")) {
 			SecureRandom random = new SecureRandom();
 			salt = (new BigInteger(130, random)).toString(32);
 			SensorRegistry.getInstance().getPreferences().putString(Preferences.PRIVACY_HASH, salt);
 		}
-		Log.d("Sensorium", "Salt is "+salt);
-		
+		Log.d("Sensorium", "Salt is " + salt);
+
 		SensorValue ret = new SensorValue(val);
 		ret.setValue(salt + val.getValue().toString());
 		return ret;
