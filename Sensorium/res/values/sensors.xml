@@ -7,7 +7,9 @@
         <item>at.univie.sensorium.sensors.SIMSensor</item>
         <item>at.univie.sensorium.sensors.NetworkLocationSensor</item>
         <item>at.univie.sensorium.sensors.GPSLocationSensor</item>
-        <!-- <item>at.univie.sensorium.sensors.FusedLocationSensor</item> -->
+        <!--@IF_PLAY_SERVICES@
+        <item>at.univie.sensorium.sensors.FusedLocationSensor</item>
+        @ENDIF_PLAY_SERVICES@-->
         <item>at.univie.sensorium.sensors.PressureSensor</item>
         <!-- <item>at.univie.sensorium.sensors.InterfacesSensor</item> -->
         <item>at.univie.sensorium.sensors.WifiConnectionSensor</item>

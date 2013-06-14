@@ -18,7 +18,7 @@
  * 
  */
 
-//@IF_PLAY_SERVICES@
+/*@IF_PLAY_SERVICES@
  
 package at.univie.sensorium.sensors;
 
@@ -218,4 +218,4 @@ public class FusedLocationSensor extends AbstractSensor implements LocationListe
 	};
 }
  
-//@ENDIF_PLAY_SERVICES@
+@ENDIF_PLAY_SERVICES@*/

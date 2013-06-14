@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Sensorium" default="help">
-    <property file="local.properties" />
+	<property file="local.properties" />
 
-    <!-- The ant.properties file can be created by you. It is only edited by the
+	<!-- The ant.properties file can be created by you. It is only edited by the
          'android' tool to add properties to it.
          This is the place to change some Ant specific build properties.
          Here are some properties you may want to change/update:
@@ -22,26 +22,23 @@
          application and should be checked into Version Control Systems.
 
          -->
-    <property file="ant.properties" />
+	<property file="ant.properties" />
 
-    <property environment="env" />
-    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
-        <isset property="env.ANDROID_HOME" />
-    </condition>
+	<property environment="env" />
+	<condition property="sdk.dir" value="${env.ANDROID_HOME}">
+		<isset property="env.ANDROID_HOME" />
+	</condition>
 
 
-    <loadproperties srcFile="project.properties" />
-    <fail
-            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
-            unless="sdk.dir"
-    />
+	<loadproperties srcFile="project.properties" />
+	<fail message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable." unless="sdk.dir" />
 
-    <import file="custom_rules.xml" optional="true" />
-	
+	<import file="custom_rules.xml" optional="true" />
 
 
 
-    <!-- Import the actual build file.
+
+	<!-- Import the actual build file.
 
          To customize existing targets, there are two options:
          - Customize only one target:
@@ -59,22 +56,49 @@
          In all cases you must update the value of version-tag below to read 'custom' instead of an integer,
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
-    <!-- version-tag: custom -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
-	
+	<!-- version-tag: custom -->
+	<import file="${sdk.dir}/tools/ant/build.xml" />
 
-        <if condition="${play_services_available}">
-            <then>
-            	<replace dir="${source.dir}" value="//@IF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>/*@IF_PLAY_SERVICES@</replacetoken></replace>
-            	<replace dir="${source.dir}" value="//@ENDIF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>@ENDIF_PLAY_SERVICES@*/</replacetoken></replace>
-            </then>
-            <else>
-            	<replace dir="${source.dir}" value="/*@IF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>//@IF_PLAY_SERVICES@</replacetoken></replace>
-            	<replace dir="${source.dir}" value="@ENDIF_PLAY_SERVICES@*/"> <include name="**/*.java"/><replacetoken>//@ENDIF_PLAY_SERVICES@</replacetoken></replace>
 
-            </else>
-        </if>
-	
-	
+	<if condition="${play_services_available}">
+		<then>
+			<replace dir="${source.dir}" value="//@IF_PLAY_SERVICES@">
+				<include name="**/*.java" />
+				<replacetoken>/*@IF_PLAY_SERVICES@</replacetoken>
+			</replace>
+			<replace dir="${source.dir}" value="//@ENDIF_PLAY_SERVICES@">
+				<include name="**/*.java" />
+				<replacetoken>@ENDIF_PLAY_SERVICES@*/</replacetoken>
+			</replace>
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@IF_PLAY_SERVICES@--&gt;">
+				<include name="**/*.xml" />
+				<replacetoken><![CDATA[<!--@IF_PLAY_SERVICES@]]></replacetoken>
+			</replace>
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@ENDIF_PLAY_SERVICES@--&gt;">
+				<include name="**/*.xml" />
+				<replacetoken><![CDATA[@ENDIF_PLAY_SERVICES@-->]]></replacetoken>
+			</replace>
+		</then>
+		<else>
+			<replace dir="${source.dir}" value="/*@IF_PLAY_SERVICES@">
+				<include name="**/*.java" />
+				<replacetoken>//@IF_PLAY_SERVICES@</replacetoken>
+			</replace>
+			<replace dir="${source.dir}" value="@ENDIF_PLAY_SERVICES@*/">
+				<include name="**/*.java" />
+				<replacetoken>//@ENDIF_PLAY_SERVICES@</replacetoken>
+			</replace>
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@IF_PLAY_SERVICES@">
+				<include name="**/*.xml" />
+				<replacetoken><![CDATA[<!--@IF_PLAY_SERVICES@-->]]></replacetoken>
+			</replace>
+			<replace dir="${resource.absolute.dir}" value="@ENDIF_PLAY_SERVICES@--&gt;">
+				<include name="**/*.xml" />
+				<replacetoken><![CDATA[<!--@ENDIF_PLAY_SERVICES@-->]]></replacetoken>
+			</replace>
+		</else>
+	</if>
+
+
 
 </project>
