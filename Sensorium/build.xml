@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Sensorium" default="help">
-
-    <!-- The local.properties file is created and updated by the 'android' tool.
-         It contains the path to the SDK. It should *NOT* be checked into
-         Version Control Systems. -->
     <property file="local.properties" />
 
     <!-- The ant.properties file can be created by you. It is only edited by the
@@ -28,45 +24,22 @@
          -->
     <property file="ant.properties" />
 
-    <!-- if sdk.dir was not set from one of the property file, then
-         get it from the ANDROID_HOME env var.
-         This must be done before we load project.properties since
-         the proguard config can use sdk.dir -->
     <property environment="env" />
     <condition property="sdk.dir" value="${env.ANDROID_HOME}">
         <isset property="env.ANDROID_HOME" />
     </condition>
 
-    <!-- The project.properties file is created and updated by the 'android'
-         tool, as well as ADT.
 
-         This contains project specific properties such as project target, and library
-         dependencies. Lower level build properties are stored in ant.properties
-         (or in .classpath for Eclipse projects).
-
-         This file is an integral part of the build system for your
-         application and should be checked into Version Control Systems. -->
     <loadproperties srcFile="project.properties" />
-
-    <!-- quick check on sdk.dir -->
     <fail
             message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
             unless="sdk.dir"
     />
 
-    <!--
-        Import per project custom build rules if present at the root of the project.
-        This is the place to put custom intermediary targets such as:
-            -pre-build
-            -pre-compile
-            -post-compile (This is typically used for code obfuscation.
-                           Compiled code location: ${out.classes.absolute.dir}
-                           If this is not done in place, override ${out.dex.input.absolute.dir})
-            -post-package
-            -post-build
-            -pre-clean
-    -->
     <import file="custom_rules.xml" optional="true" />
+	
+
+
 
     <!-- Import the actual build file.
 
@@ -88,5 +61,20 @@
     -->
     <!-- version-tag: custom -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+	
+
+        <if condition="${play_services_available}">
+            <then>
+            	<replace dir="${source.dir}" value="//@IF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>/*@IF_PLAY_SERVICES@</replacetoken></replace>
+            	<replace dir="${source.dir}" value="//@ENDIF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>@ENDIF_PLAY_SERVICES@*/</replacetoken></replace>
+            </then>
+            <else>
+            	<replace dir="${source.dir}" value="/*@IF_PLAY_SERVICES@"> <include name="**/*.java"/><replacetoken>//@IF_PLAY_SERVICES@</replacetoken></replace>
+            	<replace dir="${source.dir}" value="@ENDIF_PLAY_SERVICES@*/"> <include name="**/*.java"/><replacetoken>//@ENDIF_PLAY_SERVICES@</replacetoken></replace>
+
+            </else>
+        </if>
+	
+	
 
 </project>

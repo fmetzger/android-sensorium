@@ -18,7 +18,8 @@
  * 
  */
 
-/* //[endef]
+//@IF_PLAY_SERVICES@
+ 
 package at.univie.sensorium.sensors;
 
 import java.io.IOException;
@@ -216,4 +217,5 @@ public class FusedLocationSensor extends AbstractSensor implements LocationListe
 		}
 	};
 }
-//[ifdef] */
+ 
+//@ENDIF_PLAY_SERVICES@
