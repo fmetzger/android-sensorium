@@ -19,7 +19,12 @@
  */
 package at.univie.sensorium.sensors;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import android.content.Context;
+import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
@@ -38,17 +43,18 @@ public class RadioSensor extends AbstractSensor {
 	private SensorValue mnc;
 	private SensorValue cid;
 	private SensorValue lac;
+
+	private SensorValue networkpreference;
+
 	private SensorValue networktype;
 	private SensorValue signalstrength;
-	
+
 	private SensorValue subscriberid;
-	
+
 	private SensorValue roaming;
 	private SensorValue servicestate;
 	private SensorValue operator;
 
-
-	
 	public RadioSensor() {
 		super();
 		setName("Radio Cell Information");
@@ -57,15 +63,16 @@ public class RadioSensor extends AbstractSensor {
 		mnc = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.MNC);
 		lac = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.LAC);
 		cid = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.CID);
+		networkpreference = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.NETWORK_PREFERENCE);
 		networktype = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.NETWORKTYPE);
 		signalstrength = new SensorValue(SensorValue.UNIT.DBM, SensorValue.TYPE.SIGNALSTRENGTH);
-		
+
 		roaming = new SensorValue(SensorValue.UNIT.OTHER, SensorValue.TYPE.ROAMING);
 		servicestate = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SERVICESTATE);
 		operator = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OPERATOR);
-		
+
 		subscriberid = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SUBSCRIBER_ID);
-		
+
 	}
 
 	@Override
@@ -82,15 +89,17 @@ public class RadioSensor extends AbstractSensor {
 			lac.setValue(gsmCell.getLac());
 		}
 
+		setPreferredNetworkModeValue();
+
 		phoneStateListener = new PhoneStateListener() {
-			
+
 			@Override
 			public void onServiceStateChanged(ServiceState serviceState) {
 				super.onServiceStateChanged(serviceState);
-				
+
 				String state = "";
-				switch(serviceState.getState()){
-				case ServiceState.STATE_EMERGENCY_ONLY: 
+				switch (serviceState.getState()) {
+				case ServiceState.STATE_EMERGENCY_ONLY:
 					state = "emergency calls only";
 					break;
 				case ServiceState.STATE_IN_SERVICE:
@@ -109,22 +118,21 @@ public class RadioSensor extends AbstractSensor {
 				subscriberid.setValue(telephonyManager.getSubscriberId());
 				notifyListeners();
 			}
-			
-			
+
 			@Override
 			public void onCellLocationChanged(CellLocation location) {
 				GsmCellLocation gsmCell = (GsmCellLocation) location;
 				timestamp.setValue(System.currentTimeMillis());
 
 				String mccmnc = telephonyManager.getNetworkOperator();
-				if ((mccmnc == null || mccmnc.equals("")) || !servicestate.getValue().equals("in service")){
+				if ((mccmnc == null || mccmnc.equals("")) || !servicestate.getValue().equals("in service")) {
 					mcc.setValue("n/a");
 					mnc.setValue("n/a");
 					cid.setValue("n/a");
 					lac.setValue("n/a");
 					signalstrength.setValue("n/a");
 					networktype.setValue("n/a");
-					
+
 				} else {
 					mcc.setValue(mccmnc.substring(0, 3));
 					mnc.setValue(mccmnc.substring(3));
@@ -137,36 +145,6 @@ public class RadioSensor extends AbstractSensor {
 
 			}
 
-			private String decodenetworktype(int networkType) {
-				switch (networkType) {
-				case (TelephonyManager.NETWORK_TYPE_CDMA):
-					return "CDMA";
-				case (TelephonyManager.NETWORK_TYPE_EDGE):
-					return "EDGE";
-				case (TelephonyManager.NETWORK_TYPE_GPRS):
-					return "GPRS";
-				case (TelephonyManager.NETWORK_TYPE_HSPA):
-					return "HSPA";
-				case (TelephonyManager.NETWORK_TYPE_HSDPA):
-					return "HSDPA";
-				case (TelephonyManager.NETWORK_TYPE_HSPAP):
-					return "HSPA+";
-				case (TelephonyManager.NETWORK_TYPE_HSUPA):
-					return "HSUPA";
-				case (TelephonyManager.NETWORK_TYPE_LTE):
-					return "LTE";
-				case (TelephonyManager.NETWORK_TYPE_UMTS):
-					return "UMTS";
-				case (TelephonyManager.NETWORK_TYPE_EVDO_0):
-				case (TelephonyManager.NETWORK_TYPE_EVDO_A):
-				case (TelephonyManager.NETWORK_TYPE_EVDO_B):
-					return "EVDO";
-				case (TelephonyManager.NETWORK_TYPE_UNKNOWN):
-				default:
-					return "unknown";
-				}
-			}
-
 			@Override
 			public void onSignalStrengthsChanged(SignalStrength sStrength) {
 				// In GSM networks, ASU is equal to the RSSI
@@ -177,10 +155,10 @@ public class RadioSensor extends AbstractSensor {
 				// dBm = ASU - 116, ASU in the range of -5..91
 
 				int asu = sStrength.getGsmSignalStrength();
-				
-				if(networktype.getValue().equals("GPRS") || networktype.getValue().equals("EDGE")){
+
+				if (networktype.getValue().equals("GPRS") || networktype.getValue().equals("EDGE")) {
 					signalstrength.setUnit(SensorValue.UNIT.DBM);
-					
+
 					if (asu < 31) {
 						signalstrength.setValue(-113 + (asu * 2));
 					} else if (asu == 31) {
@@ -190,12 +168,10 @@ public class RadioSensor extends AbstractSensor {
 					} else {
 						Log.d(SensorRegistry.TAG, "unexpected GSM signal strength value");
 					}
-				} else if (networktype.getValue().equals("UMTS") || networktype.getValue().equals("HSPA")
-						|| networktype.getValue().equals("HSPA+") || networktype.getValue().equals("HSUPA")
-						|| networktype.getValue().equals("HSDPA")){
+				} else if (networktype.getValue().equals("UMTS") || networktype.getValue().equals("HSPA") || networktype.getValue().equals("HSPA+") || networktype.getValue().equals("HSUPA") || networktype.getValue().equals("HSDPA")) {
 					signalstrength.setUnit(SensorValue.UNIT.DBM);
-					if (asu >= -5 && asu <= 91){
-						signalstrength.setValue(asu-116);
+					if (asu >= -5 && asu <= 91) {
+						signalstrength.setValue(asu - 116);
 					}
 				} else {
 					signalstrength.setUnit(SensorValue.UNIT.ASU);
@@ -203,7 +179,7 @@ public class RadioSensor extends AbstractSensor {
 				}
 
 				timestamp.setValue(System.currentTimeMillis());
-				
+
 				GsmCellLocation gsmCell = (GsmCellLocation) telephonyManager.getCellLocation();
 				if (gsmCell != null) {
 					String mccmnc = telephonyManager.getNetworkOperator();
@@ -212,8 +188,7 @@ public class RadioSensor extends AbstractSensor {
 					cid.setValue(gsmCell.getCid());
 					lac.setValue(gsmCell.getLac());
 				}
-				
-				
+
 				notifyListeners();
 			}
 		};
@@ -226,6 +201,73 @@ public class RadioSensor extends AbstractSensor {
 
 		if (telephonyManager != null) {
 			telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+		}
+	}
+
+	private void setPreferredNetworkModeValue() {
+		try {
+			// setting is not official sdk, may change without warning
+			int value = Settings.Secure.getInt(getContext().getContentResolver(), "preferred_network_mode");
+			switch (value) {
+			case (0):
+				networkpreference.setValue("GSM/WCDMA preferred");
+				break;
+			case (1):
+				networkpreference.setValue("GSM only");
+				break;
+			case (2):
+				networkpreference.setValue("WCDMA only");
+				break;
+			case (3):
+				networkpreference.setValue("GSM/WCDMA auto");
+				break;
+			case (4):
+				networkpreference.setValue("CDMA/EVDO auto");
+				break;
+			case (5):
+				networkpreference.setValue("CDMA without EVDO");
+				break;
+			case (6):
+				networkpreference.setValue("EVDO only");
+				break;
+			case (7):
+				networkpreference.setValue("Global");
+				break;
+			}
+		} catch (SettingNotFoundException e) {
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			Log.d(SensorRegistry.TAG, sw.toString());
+		}
+	}
+
+	private String decodenetworktype(int networkType) {
+		switch (networkType) {
+		case (TelephonyManager.NETWORK_TYPE_CDMA):
+			return "CDMA";
+		case (TelephonyManager.NETWORK_TYPE_EDGE):
+			return "EDGE";
+		case (TelephonyManager.NETWORK_TYPE_GPRS):
+			return "GPRS";
+		case (TelephonyManager.NETWORK_TYPE_HSPA):
+			return "HSPA";
+		case (TelephonyManager.NETWORK_TYPE_HSDPA):
+			return "HSDPA";
+		case (TelephonyManager.NETWORK_TYPE_HSPAP):
+			return "HSPA+";
+		case (TelephonyManager.NETWORK_TYPE_HSUPA):
+			return "HSUPA";
+		case (TelephonyManager.NETWORK_TYPE_LTE):
+			return "LTE";
+		case (TelephonyManager.NETWORK_TYPE_UMTS):
+			return "UMTS";
+		case (TelephonyManager.NETWORK_TYPE_EVDO_0):
+		case (TelephonyManager.NETWORK_TYPE_EVDO_A):
+		case (TelephonyManager.NETWORK_TYPE_EVDO_B):
+			return "EVDO";
+		case (TelephonyManager.NETWORK_TYPE_UNKNOWN):
+		default:
+			return "unknown";
 		}
 	}
 }
