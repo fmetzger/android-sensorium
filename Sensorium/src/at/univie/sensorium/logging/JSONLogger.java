@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -190,18 +191,8 @@ public class JSONLogger implements SensorChangeListener {
 				Log.d(SensorRegistry.TAG, sw.toString());
 			}
 		}
-		for (FileWriter fw : writerMap.values()) {
-			try {
-				fw.flush();
-				fw.close();
-			} catch (IOException e) {
-				StringWriter sw = new StringWriter();
-				PrintWriter pw = new PrintWriter(sw);
-				e.printStackTrace(pw);
-				Log.d(SensorRegistry.TAG, sw.toString());
-			}
-
-		}
+		// JSONWriter.close() already flushes/closes underlying writer,
+		// so explicity closing the FileWriter would always throw an exception
 	}
 
 	public void upload() {

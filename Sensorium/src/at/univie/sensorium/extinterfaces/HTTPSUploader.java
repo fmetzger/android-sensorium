@@ -58,6 +58,7 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
@@ -157,6 +158,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 			e.printStackTrace(pw);
 			Log.d(SensorRegistry.TAG, sw.toString());
 		} catch (IOException e) {
+			result = "upload failed due to timeout";
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			e.printStackTrace(pw);
@@ -174,6 +176,9 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 			sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
 			HttpParams params = new BasicHttpParams();
+			int timeout = 10 * 1000;
+			HttpConnectionParams.setConnectionTimeout(params, timeout);
+			HttpConnectionParams.setSoTimeout(params, timeout);
 			HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 			HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 
