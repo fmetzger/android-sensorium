@@ -1,7 +1,6 @@
 package at.univie.sensorium.sensors;
 
 import android.content.Context;
-import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;

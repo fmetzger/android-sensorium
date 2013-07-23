@@ -3,6 +3,8 @@ package at.univie.sensorium.sensors;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.xmlrpc.android.XMLRPCSerializable;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -94,7 +96,7 @@ public class WifiSensor extends AbstractSensor {
 		scannedDevicesSV.setValue(scannedDevices);
 	}
 	
-	public class WifiDevice{
+	public class WifiDevice implements XMLRPCSerializable{
 		private SensorValue DeviceID = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.OTHER);
 		private SensorValue SSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
 		private SensorValue BSSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);
@@ -147,6 +149,11 @@ public class WifiSensor extends AbstractSensor {
 					BSSID.getValueRepresentation() + "; freq: " + frequency.getValueRepresentation() + 
 					" GHz; RSS: " + RSSI.getValueRepresentation() + " dBm; " + capabilities.getValueRepresentation()
 					+ (Integer.parseInt(DeviceID.getValue().toString()) == (totalSize) ? "" : '\n');
+		}
+
+		@Override
+		public Object getSerializable() {
+			return toString();
 		}
 	}
 }
