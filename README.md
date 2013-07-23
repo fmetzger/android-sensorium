@@ -6,6 +6,8 @@ Sensorium is an Android Application that collects "sensor" information from your
 
 Sensorium can be remotely pre-configured to suite the needs for your experiment campaign. If you want to implement further sensors or interfaces, please do so. 
 
+We are using some of the sensor values for [Open 3G Map][6].
+
 All our code is available under the GNU Lesser GPL 3.0. We would appreciate it if you contributed back to the Sensorium project. 
 
 ### Currently Available Sensors ###
@@ -64,3 +66,4 @@ Have better ways of communicating your sensors? Implement it! At the moment, it 
 [3]: https://code.google.com/p/google-gson/
 [4]: https://hc.apache.org/httpcomponents-client-ga/index.html
 [5]: https://github.com/fmetzger/android-sensorium/blob/master/netsys.md
+[6]: https://o3gm.cs.univie.ac.at/o3gm/
