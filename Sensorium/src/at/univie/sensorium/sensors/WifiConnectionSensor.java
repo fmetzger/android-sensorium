@@ -1,6 +1,7 @@
 package at.univie.sensorium.sensors;
 
 import android.content.Context;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -50,6 +51,8 @@ public class WifiConnectionSensor extends AbstractSensor {
 			rssi.setValue(info.getRssi());
 			speed.setValue(info.getLinkSpeed());
 			
+			
+			
 //			List<WifiConfiguration> configs = mainWifi.getConfiguredNetworks();
 //			for (WifiConfiguration config : configs) {
 //				AP += "\n" + config.toString();
@@ -71,4 +74,8 @@ public class WifiConnectionSensor extends AbstractSensor {
 		handler.removeCallbacks(scanTask);
         //notifyListeners();
 	}
+	
+//	private String getSupplicantStateString(SupplicantState s){
+//		
+//	}
 }
