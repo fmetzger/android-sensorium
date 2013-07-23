@@ -70,13 +70,13 @@
 				<include name="**/*.java" />
 				<replacetoken>@ENDIF_PLAY_SERVICES@*/</replacetoken>
 			</replace>
-			<replace dir="${resource.absolute.dir}" value="&lt;!--@IF_PLAY_SERVICES@--&gt;">
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@PLAY_SERVICES@--&gt;">
 				<include name="**/*.xml" />
-				<replacetoken><![CDATA[<!--@IF_PLAY_SERVICES@]]></replacetoken>
+				<replacetoken><![CDATA[<!--@NO_PLAY_SERVICES@]]></replacetoken>
 			</replace>
-			<replace dir="${resource.absolute.dir}" value="&lt;!--@ENDIF_PLAY_SERVICES@--&gt;">
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@END_PLAY_SERVICES@--&gt;">
 				<include name="**/*.xml" />
-				<replacetoken><![CDATA[@ENDIF_PLAY_SERVICES@-->]]></replacetoken>
+				<replacetoken><![CDATA[@END_NO_PLAY_SERVICES@-->]]></replacetoken>
 			</replace>
 		</then>
 		<else>
@@ -88,13 +88,13 @@
 				<include name="**/*.java" />
 				<replacetoken>//@ENDIF_PLAY_SERVICES@</replacetoken>
 			</replace>
-			<replace dir="${resource.absolute.dir}" value="&lt;!--@IF_PLAY_SERVICES@">
+			<replace dir="${resource.absolute.dir}" value="&lt;!--@NO_PLAY_SERVICES@">
 				<include name="**/*.xml" />
-				<replacetoken><![CDATA[<!--@IF_PLAY_SERVICES@-->]]></replacetoken>
+				<replacetoken><![CDATA[<!--@PLAY_SERVICES@-->]]></replacetoken>
 			</replace>
-			<replace dir="${resource.absolute.dir}" value="@ENDIF_PLAY_SERVICES@--&gt;">
+			<replace dir="${resource.absolute.dir}" value="@END_NO_PLAY_SERVICES@--&gt;">
 				<include name="**/*.xml" />
-				<replacetoken><![CDATA[<!--@ENDIF_PLAY_SERVICES@-->]]></replacetoken>
+				<replacetoken><![CDATA[<!--@END_PLAY_SERVICES@-->]]></replacetoken>
 			</replace>
 		</else>
 	</if>

@@ -54,7 +54,8 @@ public class Preferences {
 	public static final String UPLOAD_WIFI_PREF = "upload_wifi";
 	public static final String UPLOAD_INTERVAL_PREF = "upload_interval";
 	public static final String PRIVACY_HASH = "privacy_hash";
-	public static final String FIRST_RUN = "first_run";
+	// public static final String FIRST_RUN = "first_run";
+	public static final String PREFERENCES_VERSION = "preferences_version";
 
 	private Context context;
 	private SharedPreferences prefs;
@@ -64,7 +65,7 @@ public class Preferences {
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public void putPreference(String key, String value){
+	public void putPreference(String key, String value) {
 		Log.d(SensorRegistry.TAG, "Setting pref " + key + " from remote config to: " + value);
 
 		if (value.toLowerCase(Locale.US).equals("true")) {
@@ -114,15 +115,8 @@ public class Preferences {
 		return prefs.getString(key, defaultvalue);
 	}
 
-//	public Long getLong(String key, Long defaultvalue) {
-//		return prefs.getLong(key, defaultvalue);
-//	}
 
 	public void loadDefaultPreferences() {
-		if (!isFirstRun()){
-			Log.d(SensorRegistry.TAG, "Not first run, not loading external preferences");
-			return;
-		}
 		loadPrefsFromStream(context.getResources().openRawResource(R.raw.defaultpreferences));
 	}
 
@@ -138,14 +132,15 @@ public class Preferences {
 		try {
 			InputStreamReader isreader = new InputStreamReader(input);
 			JsonReader reader = new JsonReader(isreader);
-			reader.beginArray(); // do we have an array or just a single object?
+			String jsonVersion = "";
 
+			reader.beginArray(); // do we have an array or just a single object?
 			reader.beginObject();
 			while (reader.hasNext()) {
 				String name = reader.nextName();
-				if (name.equals("_comment")) // skip comments
-					continue;
 				String value = reader.nextString();
+				if (name.equalsIgnoreCase(PREFERENCES_VERSION))
+					jsonVersion = value;
 				BasicNameValuePair kv = new BasicNameValuePair(name, value);
 				preferencelist.add(kv);
 			}
@@ -153,12 +148,15 @@ public class Preferences {
 			reader.endArray();
 			reader.close();
 
-			for (BasicNameValuePair kv : preferencelist) {
+			if (newerPrefsAvailable(jsonVersion)) {
+				Log.d(SensorRegistry.TAG, "Newer preferences available in json, overwriting existing.");
+				for (BasicNameValuePair kv : preferencelist) {
 					putPreference(kv.getName(), kv.getValue());
+				}
+			} else {
+				Log.d(SensorRegistry.TAG, "Preferences are recent, not overwriting.");
 			}
-			
-			putBoolean(FIRST_RUN, false); // only configure once
-			
+
 		} catch (FileNotFoundException e) {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
@@ -171,9 +169,9 @@ public class Preferences {
 			Log.d(SensorRegistry.TAG, sw.toString());
 		}
 	}
-	
-	private boolean isFirstRun(){
-		if(getBoolean(FIRST_RUN, true))
+
+	private boolean newerPrefsAvailable(String jsonVersion) {
+		if (Integer.valueOf(jsonVersion) > getInt(PREFERENCES_VERSION, 0))
 			return true;
 		return false;
 	}
