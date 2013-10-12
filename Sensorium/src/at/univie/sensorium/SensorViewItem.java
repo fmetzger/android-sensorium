@@ -65,7 +65,12 @@ public class SensorViewItem implements SensorChangeListener {
 		for (SensorValue v : values) {
 			if (v != null) {
 				if (v.getType().equals(SensorValue.TYPE.TIMESTAMP)) {
-					textViewSensorTimestamp.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date((Long) v.getValue())));
+					if(v.getValue() instanceof String){
+						textViewSensorTimestamp.setText((String) v.getValue());
+					} else {
+						textViewSensorTimestamp.setText(new SimpleDateFormat("HH:mm", Locale.US).format(new Date((Long) v.getValue())));
+					}
+					
 					continue;
 				}
 				sValues.append(v.getValueRepresentation() + "\n");
