@@ -38,7 +38,10 @@ public class PressureSensor extends AbstractSensor {
 	private SensorValue pressure;
 
 	public PressureSensor() {
+		super();
+		
 		setName("Barometer");
+		
 		pressure = new SensorValue(SensorValue.UNIT.PRESSURE, SensorValue.TYPE.ATMOSPHERIC_PRESSURE);
 	}
 

@@ -45,6 +45,7 @@ public abstract class AbstractSensor {
 	
 
 	public AbstractSensor() {
+		timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 		this.listeners = new LinkedList<SensorChangeListener>();
 		this.plevel = Privacy.PrivacyLevel.FULL;
 	}
@@ -52,7 +53,6 @@ public abstract class AbstractSensor {
 	public void enable() {
 		if (!enabled) {
 			try {
-				timestamp = new SensorValue(SensorValue.UNIT.MILLISECONDS, SensorValue.TYPE.TIMESTAMP);
 				_enable();
 
 				SensorRegistry.getInstance().getPreferences().putBoolean(this.getClass().getName(), true);
