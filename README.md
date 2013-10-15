@@ -1,7 +1,5 @@
 # Sensorium #
 
-(Note: If you were looking for information on our NetSys2013 demonstration, please look [here][5].)
-
 Sensorium is an Android Application that collects "sensor" information from your device ("Sensor data") and provides external interfaces to gather and process the data for scientific experiments. This is done in a privacy-preserving way. Only the data and only in the level of detail you allow will be made available.
 
 Sensorium can be remotely pre-configured to suite the needs for your experiment campaign. If you want to implement further sensors or interfaces, please do so. 
@@ -59,6 +57,8 @@ Have better ways of communicating your sensors? Implement it! At the moment, it 
 * Uses [google-gson][3] (APL 2.0)  to provide JSON logging support for Android 2.3.x support. 
 * Apache [HTTPClient][4] and related libs (APL 2.0)  for Multipart Entity HTTP POST support in 2.3.x.
 
+
+(Note: If you were looking for information on our NetSys2013 demonstration, please look [here][5].)
 
 
 [1]: https://seattle.cs.washington.edu/html/

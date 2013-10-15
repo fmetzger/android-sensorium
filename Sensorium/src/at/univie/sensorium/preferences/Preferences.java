@@ -56,6 +56,8 @@ public class Preferences {
 	public static final String PRIVACY_HASH = "privacy_hash";
 	// public static final String FIRST_RUN = "first_run";
 	public static final String PREFERENCES_VERSION = "preferences_version";
+	
+	public static final String WELCOME_SCREEN_SHOWN = "welcome_screen_shown";
 
 	private Context context;
 	private SharedPreferences prefs;
@@ -132,7 +134,7 @@ public class Preferences {
 		try {
 			InputStreamReader isreader = new InputStreamReader(input);
 			JsonReader reader = new JsonReader(isreader);
-			String jsonVersion = "";
+//			String jsonVersion = "";
 
 			reader.beginArray(); // do we have an array or just a single object?
 			reader.beginObject();
@@ -140,7 +142,7 @@ public class Preferences {
 				String name = reader.nextName();
 				String value = reader.nextString();
 				if (name.equalsIgnoreCase(PREFERENCES_VERSION))
-					jsonVersion = value;
+					currentPrefVersion = Integer.valueOf(value);
 				BasicNameValuePair kv = new BasicNameValuePair(name, value);
 				preferencelist.add(kv);
 			}
@@ -148,11 +150,13 @@ public class Preferences {
 			reader.endArray();
 			reader.close();
 
-			if (newerPrefsAvailable(jsonVersion)) {
+			if (newerPrefsAvailable()) {
 				Log.d(SensorRegistry.TAG, "Newer preferences available in json, overwriting existing.");
 				for (BasicNameValuePair kv : preferencelist) {
 					putPreference(kv.getName(), kv.getValue());
 				}
+				// also reset the welcome screen
+				putBoolean(WELCOME_SCREEN_SHOWN, false);
 			} else {
 				Log.d(SensorRegistry.TAG, "Preferences are recent, not overwriting.");
 			}
@@ -170,10 +174,13 @@ public class Preferences {
 		}
 	}
 
-	private boolean newerPrefsAvailable(String jsonVersion) {
-		if (Integer.valueOf(jsonVersion) > getInt(PREFERENCES_VERSION, 0))
-			return true;
-		return false;
+	private int currentPrefVersion;
+	private boolean newerprefsavailable = false;
+	public boolean newerPrefsAvailable() {
+		if (currentPrefVersion > getInt(PREFERENCES_VERSION, 0))
+			newerprefsavailable = true;
+//		return false;
+		return newerprefsavailable;
 	}
 
 	private String urlstring;
