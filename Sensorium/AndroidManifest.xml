@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="at.univie.sensorium"
-    android:versionCode="13"
-    android:versionName="1.1.10" >
+    android:versionCode="14"
+    android:versionName="1.1.11" >
 
     <uses-sdk
         android:minSdkVersion="8"
