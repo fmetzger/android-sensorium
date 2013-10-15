@@ -38,6 +38,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -196,6 +197,27 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
 	private class MySSLSocketFactory extends SSLSocketFactory {
 		SSLContext sslContext = SSLContext.getInstance("TLS");
+		
+		final String ENABLED_CIPHERS[] = {
+	        "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+	        "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+	        "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+	        "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+	        "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+	        "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
+	        "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
+	        "TLS_ECDHE_RSA_WITH_RC4_128_SHA",
+	        "TLS_ECDHE_ECDSA_WITH_RC4_128_SHA",
+	        "TLS_RSA_WITH_AES_128_CBC_SHA",
+	        "TLS_RSA_WITH_AES_256_CBC_SHA",
+	        "SSL_RSA_WITH_3DES_EDE_CBC_SHA",
+	        "SSL_RSA_WITH_RC4_128_SHA",
+	        "SSL_RSA_WITH_RC4_128_MD5",
+	    };
+
+		final String ENABLED_PROTOCOLS[] = {
+		        "TLSv1.2", "TLSv1.1", "TLSv1"
+		    };
 
 		public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
 			super(truststore);
@@ -214,7 +236,10 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 
 		@Override
 		public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
-			return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+			SSLSocket s = (SSLSocket) sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+	        s.setEnabledProtocols(ENABLED_PROTOCOLS);
+	        s.setEnabledCipherSuites(ENABLED_CIPHERS);
+	        return s;
 		}
 
 		@Override
