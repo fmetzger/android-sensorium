@@ -33,7 +33,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.TextView;
 import at.univie.sensorium.SensorRegistry;
 
 /**

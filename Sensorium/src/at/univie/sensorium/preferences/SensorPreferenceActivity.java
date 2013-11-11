@@ -20,12 +20,9 @@
 
 package at.univie.sensorium.preferences;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.DialogPreference;
@@ -34,9 +31,6 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
-import android.util.Log;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.SensoriumApplication;

@@ -30,13 +30,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.preferences.SensorPreferenceActivity;
 import at.univie.sensorium.sensors.AbstractSensor;
@@ -132,7 +130,7 @@ public class SensoriumActivity extends Activity {
 	private void showNagScreen(){
 		
 		// only show the dialog if auto upload is actually enabled (even if we are on the first run)
-		final Preferences prefs = SensorRegistry.getInstance().getPreferences();
+		//final Preferences prefs = SensorRegistry.getInstance().getPreferences();
 
 		
 	    final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);

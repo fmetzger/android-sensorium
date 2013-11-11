@@ -1,10 +1,19 @@
 package at.univie.sensorium.sensors;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
+
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.text.format.Formatter;
+import android.util.Log;
+import at.univie.sensorium.SensorRegistry;
 
 public class WifiConnectionSensor extends AbstractSensor {
 	private WifiManager mainWifi;
@@ -44,7 +53,21 @@ public class WifiConnectionSensor extends AbstractSensor {
 			ssid.setValue(info.getSSID());
 			ssid_hidden.setValue(info.getHiddenSSID());
 			bssid.setValue(info.getBSSID());
-			ip.setValue(Formatter.formatIpAddress(info.getIpAddress()));
+			
+			int addr = info.getIpAddress();
+		    if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+		    	addr = Integer.reverseBytes(addr);
+		    }
+		    byte[] ipByteArray = BigInteger.valueOf(addr).toByteArray();
+		    
+		    try {
+		        ip.setValue(InetAddress.getByAddress(ipByteArray).getHostAddress());
+		    } catch (UnknownHostException e) {
+				StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw);
+				e.printStackTrace(pw);
+				Log.d(SensorRegistry.TAG, sw.toString());
+		    }
 			mac.setValue(info.getMacAddress());
 			supplicant_state.setValue(info.getSupplicantState());
 			rssi.setValue(info.getRssi());
