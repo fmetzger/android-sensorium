@@ -231,7 +231,7 @@ public class SensorRegistry {
 								} else if (rettype.equals("class java.lang.Short")) {
 									signature.add("ex:i2");
 								} else {
-									signature.add(rettype.toString());
+									signature.add(rettype);
 								}
 								// add method parameters: always nil
 								signature.add("ex:nil");

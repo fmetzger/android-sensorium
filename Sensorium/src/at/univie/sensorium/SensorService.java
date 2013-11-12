@@ -140,7 +140,7 @@ public class SensorService extends Service {
 
 	@Override
 	public void onDestroy() {
-		registry.getJSONLogger().finalize();
+		registry.getJSONLogger().finalizeLog();
 		((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).cancel(NOTIFICATION);
 		Log.d(SensorRegistry.TAG, "SeattleSensors stopped");
 	}

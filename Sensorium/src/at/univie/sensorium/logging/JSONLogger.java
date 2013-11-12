@@ -170,7 +170,7 @@ public class JSONLogger implements SensorChangeListener {
 		writeObject(sensor);
 	}
 
-	public void finalize() {
+	public void finalizeLog() {
 //		String id = UUID.randomUUID().toString();
 		for (AbstractSensor s : SensorRegistry.getInstance().getSensors()) {
 			s.removeListener(this);
@@ -202,7 +202,7 @@ public class JSONLogger implements SensorChangeListener {
 
 	public void upload(String uploadurl) {
 		
-		finalize(); // close the json objects
+		finalizeLog(); // close the json objects
 		Preferences prefs = SensorRegistry.getInstance().getPreferences();
 		String uploadusername = prefs.getString(Preferences.UPLOAD_USERNAME, "");
 		String uploadpassword = prefs.getString(Preferences.UPLOAD_PASSWORD, "");

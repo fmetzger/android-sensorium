@@ -11,7 +11,6 @@ import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-import android.text.format.Formatter;
 import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 

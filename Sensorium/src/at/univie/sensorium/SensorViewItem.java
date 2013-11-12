@@ -73,9 +73,9 @@ public class SensorViewItem implements SensorChangeListener {
 					
 					continue;
 				}
-				sValues.append(v.getValueRepresentation() + "\n");
-				sUnits.append(v.getUnit().getName() + "\n");
-				sTypes.append(v.getType().getName() + "\n");
+				sValues.append(v.getValueRepresentation()).append("\n");
+				sUnits.append(v.getUnit().getName()).append("\n");
+				sTypes.append(v.getType().getName()).append("\n");
 			}
 		}
 		textViewSensorName.setText(sensor.getName());
