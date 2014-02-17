@@ -77,7 +77,7 @@ public class SensorPreferenceActivity extends PreferenceActivity {
 
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if (newValue instanceof Boolean && (Boolean) newValue == true) {
+				if (newValue instanceof Boolean && (Boolean) newValue) {
 					SensorRegistry.getInstance().startXMLRPCInterface();
 					Toast.makeText(SensorRegistry.getInstance().getContext(), "Starting XMLRPC interface.", Toast.LENGTH_SHORT).show();
 				} else {

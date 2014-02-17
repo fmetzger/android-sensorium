@@ -94,7 +94,7 @@ public class BluetoothSensor extends AbstractSensor {
 					if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 						BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 						String name = device.getName();
-						if (name != null && devices.contains(name) == false) {
+						if (name != null && !devices.contains(name)) {
 							short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
 							devices += name + "\t/" + device.getAddress() 
 									+ "\tRSSI: " + String.valueOf(rssi) + " dBm\n";

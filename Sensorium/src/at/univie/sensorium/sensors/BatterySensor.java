@@ -68,9 +68,9 @@ public class BatterySensor extends AbstractSensor {
                 }
                 
                 technology.setValue(intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY));
-                Float f = Float.valueOf(intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0));
+                Float f = (float) intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
                 temperature.setValue(f/10);
-                f = Float.valueOf(intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0));
+                f = (float) intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
                 voltage.setValue(f/1000);
                 
                 int rawlevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);

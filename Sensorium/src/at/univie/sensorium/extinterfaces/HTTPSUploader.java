@@ -125,7 +125,7 @@ public class HTTPSUploader extends AsyncTask<List<File>, Void, String> {
 				String reply;
 				InputStream in = response.getEntity().getContent();
 
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				try {
 					int chr;
 					while ((chr = in.read()) != -1) {

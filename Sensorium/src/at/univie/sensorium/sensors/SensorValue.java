@@ -96,7 +96,7 @@ public class SensorValue {
 	
 	public String getValueRepresentation(){
 		if(value instanceof List){
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for (Object o: (List) value){
 				sb.append(o.toString());
 				sb.append("\n");

@@ -51,23 +51,20 @@ class XMLRPCSerializer implements IXMLRPCSerializer {
 		} else if (object instanceof List) {
 			serializer.startTag(null, TYPE_ARRAY).startTag(null, TAG_DATA);
 			List<Object> list = (List<Object>) object;
-			Iterator<Object> iter = list.iterator();
-			while (iter.hasNext()) {
-				Object o = iter.next();
-				serializer.startTag(null, TAG_VALUE);
-				serialize(serializer, o);
-				serializer.endTag(null, TAG_VALUE);
-			}
+            for (Object o : list) {
+                serializer.startTag(null, TAG_VALUE);
+                serialize(serializer, o);
+                serializer.endTag(null, TAG_VALUE);
+            }
 			serializer.endTag(null, TAG_DATA).endTag(null, TYPE_ARRAY);
 		} else if (object instanceof Object[]) {
 			serializer.startTag(null, TYPE_ARRAY).startTag(null, TAG_DATA);
 			Object[] objects = (Object[]) object;
-			for (int i = 0; i < objects.length; i++) {
-				Object o = objects[i];
-				serializer.startTag(null, TAG_VALUE);
-				serialize(serializer, o);
-				serializer.endTag(null, TAG_VALUE);
-			}
+            for (Object o : objects) {
+                serializer.startTag(null, TAG_VALUE);
+                serialize(serializer, o);
+                serializer.endTag(null, TAG_VALUE);
+            }
 			serializer.endTag(null, TAG_DATA).endTag(null, TYPE_ARRAY);
 		} else if (object instanceof Map) {
 			serializer.startTag(null, TYPE_STRUCT);
@@ -148,7 +145,7 @@ class XMLRPCSerializer implements IXMLRPCSerializer {
 				String value = parser.nextText();
 				BufferedReader reader = new BufferedReader(new StringReader(value));
 				String line;
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				while ((line = reader.readLine()) != null) {
 					sb.append(line);
 				}

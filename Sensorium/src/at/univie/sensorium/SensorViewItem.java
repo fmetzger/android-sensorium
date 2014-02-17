@@ -56,9 +56,9 @@ public class SensorViewItem implements SensorChangeListener {
 	}
 
 	public void updateDisplay(AbstractSensor sensor) {
-		StringBuffer sValues = new StringBuffer();
-		StringBuffer sUnits = new StringBuffer();
-		StringBuffer sTypes = new StringBuffer();
+		StringBuilder sValues = new StringBuilder();
+		StringBuilder sUnits = new StringBuilder();
+		StringBuilder sTypes = new StringBuilder();
 
 		List<SensorValue> values = sensor.getSensorValues();
 
