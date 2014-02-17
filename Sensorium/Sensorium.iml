@@ -69,15 +69,15 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="apache-mime4j-dom-0.7.2" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4-sources" level="project" />
     <orderEntry type="library" exported="" name="commons-codec-1.6" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="httpcore-4.2.2" level="project" />
     <orderEntry type="library" exported="" name="httpclient-cache-4.2.3" level="project" />
     <orderEntry type="library" exported="" name="apache-mime4j-storage-0.7.2" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.2.2-javadoc" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4-javadoc" level="project" />
     <orderEntry type="library" exported="" name="apache-mime4j-core-0.7.2" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.2.2-sources" level="project" />
     <orderEntry type="library" exported="" name="httpclient-4.2.3" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.2.3" level="project" />
     <orderEntry type="library" exported="" name="fluent-hc-4.2.3" level="project" />

@@ -26,7 +26,7 @@ public class WifiSensor extends AbstractSensor {
 	private Handler handler = new Handler();
 	
 	private List<WifiDevice> scannedDevices;
-	private SensorValue scannedDevicesSV;
+	private SensorValue wifiNetworks;
 	
 	private int defaultSize = 5;
 	private int totalSize;
@@ -36,7 +36,7 @@ public class WifiSensor extends AbstractSensor {
 		super();
 		setName("Wifi Scan");
 		
-		scannedDevicesSV = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.DEVICE_IP);	
+		wifiNetworks = new SensorValue(SensorValue.UNIT.LIST, SensorValue.TYPE.WIFI_NETWORK);
 		scannedDevices = new LinkedList<WifiDevice>();
 	}
 	
@@ -80,7 +80,7 @@ public class WifiSensor extends AbstractSensor {
 		        	scannedDevices.add(new WifiDevice(i+1, result.SSID, result.BSSID, result.capabilities, 
 		        			result.level, (float)result.frequency/1000));
 		        }
-		        scannedDevicesSV.setValue(scannedDevices);
+		        wifiNetworks.setValue(scannedDevices);
 		        notifyListeners();
 			}
 		};			
@@ -93,16 +93,17 @@ public class WifiSensor extends AbstractSensor {
 			getContext().getApplicationContext().unregisterReceiver(wifiReceiver);
 		handler.removeCallbacks(scanTask);
 		scannedDevices.clear();
-		scannedDevicesSV.setValue(scannedDevices);
+		wifiNetworks.setValue(scannedDevices);
 	}
 	
-	public class WifiDevice implements XMLRPCSerializable{
-		private SensorValue DeviceID = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.OTHER);
-		private SensorValue SSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.DEVICE_NAME);
-		private SensorValue BSSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.MAC_ADDRESS);
-		private SensorValue capabilities = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.OTHER);
-		private SensorValue frequency = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.OTHER);
-		private SensorValue RSSI = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.SIGNALSTRENGTH);
+	public class WifiDevice implements XMLRPCSerializable,NestedSensorValue{
+		private SensorValue DeviceID = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.ID);
+		private SensorValue SSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.SSID);
+		private SensorValue BSSID = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.BSSID);
+		private SensorValue capabilities = new SensorValue(SensorValue.UNIT.STRING, SensorValue.TYPE.WIFI_CAPABILITIES);
+		private SensorValue frequency = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.FREQEUENCY);
+		private SensorValue RSSI = new SensorValue(SensorValue.UNIT.NUMBER, SensorValue.TYPE.RSSI);
+        private List<SensorValue> valuelist;
 		
 		public WifiDevice() {
 		}
@@ -117,6 +118,14 @@ public class WifiSensor extends AbstractSensor {
 			this.DeviceID.setValue(id);
 			this.frequency.setValue(freq);
 			this.RSSI.setValue(rssi);
+
+            valuelist = new LinkedList<SensorValue>();
+            valuelist.add(SSID);
+            valuelist.add(BSSID);
+            valuelist.add(capabilities);
+            valuelist.add(DeviceID);
+            valuelist.add(frequency);
+            valuelist.add(RSSI);
 		}
 		
 		public Object getID(){
@@ -155,5 +164,10 @@ public class WifiSensor extends AbstractSensor {
 		public Object getSerializable() {
 			return toString();
 		}
-	}
+
+        @Override
+        public List<SensorValue> getInnerSensorValues() {
+            return valuelist;
+        }
+    }
 }

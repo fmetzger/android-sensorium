@@ -20,6 +20,15 @@
 
 package at.univie.sensorium.logging;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
+import android.os.Handler;
+import android.util.Log;
+
+import com.google.gson.stream.JsonWriter;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -31,21 +40,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Environment;
-import android.os.Handler;
-import android.util.Log;
 import at.univie.sensorium.SensorRegistry;
 import at.univie.sensorium.extinterfaces.HTTPSUploader;
 import at.univie.sensorium.preferences.Preferences;
 import at.univie.sensorium.privacy.Privacy;
 import at.univie.sensorium.sensors.AbstractSensor;
+import at.univie.sensorium.sensors.NestedSensorValue;
 import at.univie.sensorium.sensors.SensorChangeListener;
 import at.univie.sensorium.sensors.SensorValue;
 
-import com.google.gson.stream.JsonWriter;
 
 /**
  * Create one JSON output stream for every sensor Use
@@ -148,8 +151,25 @@ public class JSONLogger implements SensorChangeListener {
 					jw.beginObject();
 					jw.name("privacy-level").value(sensor.getPrivacylevel().name());
 					for (SensorValue value : valuelist) {
-						SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
-						jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+                        if(value.isNested()){
+                            jw.name(value.getType().getName());
+                            jw.beginArray();
+                            List<NestedSensorValue> nested = (List<NestedSensorValue>) value.getValue();
+                            for(NestedSensorValue nsv: nested){
+                                List<SensorValue> values = nsv.getInnerSensorValues();
+                                jw.beginObject();
+                                for(SensorValue nestedvalue: values){
+                                    SensorValue privatized = Privacy.anonymize(nestedvalue, sensor.getPrivacylevel());
+                                    jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+                                }
+                                jw.endObject();
+
+                            }
+                            jw.endArray();
+                        } else{
+                            SensorValue privatized = Privacy.anonymize(value, sensor.getPrivacylevel());
+                            jw.name(privatized.getType().getName()).value(privatized.getValueRepresentation());
+                        }
 					}
 					jw.endObject();
 					writerMap.get(sensor.getClass().getName()).flush();

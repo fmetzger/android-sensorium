@@ -56,7 +56,8 @@ public class SensorValue {
 		DEVICE_NAME("device name"), MAC_ADDRESS("MAC address"),BEARING("bearing"),VELOCITY("speed"),
 		WIFI_CONNECTION("Wifi connection"), SSID("SSID"), SSID_HIDDEN("SSID hidden"),
 		BSSID("BSSID"), DEVICE_IP("device IP"), STATE("Supplicant State"), SPEED("link speed"),
-		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),VOLTAGE("voltage"),
+        WIFI_NETWORK("Wifi networks"),FREQEUENCY("frequency"),RSSI("RSSI"),WIFI_CAPABILITIES("WiFi capabilities"),
+		ROAMING("roaming"),SERVICESTATE("radio state"),OPERATOR("operator"),VOLTAGE("voltage"),ID("ID"),
 		BONDED_DEV("bonded device(s)"), SCANNED_DEV("scanned device(s)"), SUBSCRIBER_ID("subscriber id"), ANDROID_VERSION("android version"),
 		ATMOSPHERIC_PRESSURE("atmospheric pressure"), SENSORIUM_VERSION("Sensorium version"), SIM_SERIAL("SIM serial"), SIM_STATE("SIM state"), SIM_COUNTRY("country code"), NETWORK_PREFERENCE("preferred network");
 
@@ -133,4 +134,10 @@ public class SensorValue {
 	public void unsetValue(){
 		this.value = "n/a";
 	}
+
+    public boolean isNested(){
+        if (this.type == TYPE.WIFI_NETWORK)
+            return true;
+        return false;
+    }
 }
