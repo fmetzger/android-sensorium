@@ -33,7 +33,7 @@ public class SensoriumApplication extends Application {
 	private boolean mIsBound = false;
 
 	public void onCreate() {
-		Log.d("SettleSensors", "application starting, binding service");
+		Log.d(SensorRegistry.TAG, "application starting, binding service");
 		bindService();
 	}
 
@@ -56,7 +56,7 @@ public class SensoriumApplication extends Application {
 
 	public void bindService() {
 		if (!mIsBound) {
-			Log.d("SettleSensors", "application starting, binding service");
+			Log.d(SensorRegistry.TAG, "application starting, binding service");
 			bindService(new Intent(this, SensorService.class), mConnection, Context.BIND_AUTO_CREATE);
 			mIsBound = true;
 		}
