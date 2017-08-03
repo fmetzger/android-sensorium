@@ -1,0 +1,25 @@
+<resources>
+
+    <string name="app_name">Sensorium</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="title_activity_main">Sensorium</string>
+    <string name="enable_sensors">Habilitar</string>
+    <string name="disable_sensors">Deshabilitar</string>
+    <string name="seattle_donate_thanks">Obrigado por doar para Seattle</string>
+    <string name="sensors">Sensores</string>
+    <string name="sensor_config">Configurações do Sensorium</string>
+    <string name="service_autostart">Habilitar na inicialização</string>
+    <string name="autostart_button">BotãoDeAutoIniciar</string>
+    <string name="debug_out_button">Saída da Depuração</string>
+    <string name="sensor_view_button">Visualizações do Sensor</string>
+    <string name="title_activity_sensor_config">Configuração Sensorium Configuration</string>
+    <string name="sensor_config_string">Habilitar/Desabilitar Sensores</string>
+    <string name="title_activity_sensor_debug">Log Sensorium</string>
+    <string name="debug_out">Saída de Depuração dos Sensores</string>
+    <string name="title_activity_sensors_view">Sensoresium</string>
+    <string name="current_values">Valores atuais do sensor:</string>
+    <string name="sensor_name">Nome do sensor</string>
+    <string name="menu_debug">Depurar</string>
+    <string name="menu_about">Sobre</string>
+
+</resources>
